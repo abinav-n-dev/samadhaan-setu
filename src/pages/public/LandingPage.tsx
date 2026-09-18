@@ -562,11 +562,11 @@ export const LandingPage: React.FC = () => {
 
           <div className="rounded-2xl overflow-hidden border border-brand-border bg-gray-100 shadow-subtle">
             <img
-              src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80"
+              src="/images/water-remediated.svg"
               onError={(e) => {
                 const target = e.currentTarget;
                 target.onerror = null;
-                target.src = "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=1200&q=80";
+                target.src = "/images/water-turbid.svg";
               }}
               alt="Solar water micro-filtration installation in Dumka"
               className="w-full h-72 object-cover"

@@ -1,4 +1,4 @@
-import { CitizenReport } from '../types';
+import { CitizenReport, Challenge } from '../types';
 
 export function calculateDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Earth's radius in km
@@ -12,6 +12,22 @@ export function calculateDistanceKm(lat1: number, lon1: number, lat2: number, lo
   return R * c;
 }
 
+export const DUPLICATE_DETECTION_KEYWORDS = [
+  'water', 'turbidity', 'fluoride', 'yellow', 'smell', 'road', 'culvert', 
+  'bridge', 'solar', 'hospital', 'ash',
+  // Hindi transliterations
+  'paani', 'sadak', 'bijli', 'aspatal', 'nal', 'handpump',
+  // Civic infrastructure and health markers
+  'contamination', 'pipeline', 'drainage', 'borewell', 'swasthya',
+  'transformer', 'pothole', 'arsenic', 'sewage', 'kooda', 'kachra', 'tanki',
+  'mud', 'leakage'
+];
+
+/**
+ * Smart rule-based matching engine for clustering citizen submissions.
+ * Uses deterministic weighted scoring across category (30%), geographic proximity (40%),
+ * and semantic keyword overlap (30%).
+ */
 export function analyzeReportSimilarity(
   newReport: Partial<CitizenReport>,
   existingReports: CitizenReport[]
@@ -26,8 +42,7 @@ export function analyzeReportSimilarity(
   }
 
   const queryText = `${newReport.title || ''} ${newReport.description || ''}`.toLowerCase();
-  const keywords = ['water', 'turbidity', 'fluoride', 'yellow', 'smell', 'road', 'culvert', 'bridge', 'solar', 'hospital', 'ash'];
-  const presentKeywords = keywords.filter(k => queryText.includes(k));
+  const presentKeywords = DUPLICATE_DETECTION_KEYWORDS.filter(k => queryText.includes(k));
 
   const matchingReports: CitizenReport[] = [];
   let maxScore = 0;
@@ -81,3 +96,53 @@ export function analyzeReportSimilarity(
   };
 }
 
+/**
+ * Pure function to process a citizen report submission, run rule-based similarity,
+ * cluster it with an existing challenge if similarity >= 80%, and bump report count.
+ */
+export function processReportSubmission(
+  reportData: Omit<CitizenReport, 'id' | 'trackingId' | 'status' | 'createdAt' | 'updatedAt'>,
+  existingReports: CitizenReport[],
+  existingChallenges: Challenge[]
+): {
+  newReport: CitizenReport;
+  updatedChallenges: Challenge[];
+  similarityScore: number;
+  matchedClusterId?: string;
+} {
+  const id = `RPT-CIT-${Date.now().toString().slice(-4)}`;
+  const trackingId = `SS-RPT-${Math.floor(20500 + Math.random() * 9000)}`;
+  const now = new Date().toISOString();
+
+  const similarity = analyzeReportSimilarity(reportData, existingReports);
+
+  const newReport: CitizenReport = {
+    ...reportData,
+    id,
+    trackingId,
+    evidencePhotos: (reportData.evidencePhotos || []).slice(0, 3),
+    status: similarity.similarityScore >= 80 ? 'Clustered' : 'Submitted',
+    challengeId: similarity.recommendedClusterId,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const updatedChallenges = existingChallenges.map(c => {
+    if (similarity.recommendedClusterId && (c.id === similarity.recommendedClusterId || c.code === similarity.recommendedClusterId)) {
+      return {
+        ...c,
+        reportCount: c.reportCount + 1,
+        affectedPopulation: c.affectedPopulation + (reportData.affectedCountEstimate || 50),
+        updatedAt: now,
+      };
+    }
+    return c;
+  });
+
+  return {
+    newReport,
+    updatedChallenges,
+    similarityScore: similarity.similarityScore,
+    matchedClusterId: similarity.recommendedClusterId,
+  };
+}

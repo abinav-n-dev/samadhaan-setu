@@ -38,8 +38,9 @@ export const ImpactVerificationPage: React.FC = () => {
     }
   };
 
-  const handleVerifyImpact = () => {
-    const cred = verifyImpact(selectedChallenge.id, {
+  const handleVerifyImpact = async () => {
+    if (!selectedChallenge) return;
+    const cred = await verifyImpact(selectedChallenge.id, {
       actualReachedCount: Number(actualReached),
       remarks,
     });

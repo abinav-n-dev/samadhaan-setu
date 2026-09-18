@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppState } from '../../context/StateContext';
-import { CitizenReport } from '../../types';
+import { StatusBadge } from '../../components/common/StatusBadge';
 import { 
   FileText, 
   MapPin, 
@@ -17,32 +17,43 @@ import {
 import { Link } from 'react-router-dom';
 
 export const CitizenReportsPage: React.FC = () => {
-  const { reports, challenges } = useAppState();
+  const { reports, challenges, t } = useAppState();
   const [selectedReportId, setSelectedReportId] = useState<string>(reports[0]?.id || '');
   const selectedReport = reports.find(r => r.id === selectedReportId) || reports[0] || null;
   const linkedChallenge = challenges.find(c => c.id === selectedReport?.challengeId);
 
+  const getCategoryLabel = (cat: string) => {
+    if (cat.includes('Water')) return t('category.water', cat);
+    if (cat.includes('Road')) return t('category.roads', cat);
+    if (cat.includes('Electricity') || cat.includes('Solar')) return t('category.power', cat);
+    if (cat.includes('Health')) return t('category.health', cat);
+    if (cat.includes('Education')) return t('category.education', cat);
+    if (cat.includes('Waste') || cat.includes('Drainage')) return t('category.waste', cat);
+    if (cat.includes('Agri')) return t('category.agriculture', cat);
+    return cat;
+  };
+
   const trackingStages = [
-    { label: 'Report Submitted', done: true, desc: 'Logged with photo and GPS location' },
-    { label: 'Duplicate Analysis', done: selectedReport?.status !== 'Submitted', desc: 'Clustered with nearby community reports' },
-    { label: 'Government Review', done: selectedReport?.status !== 'Submitted' && selectedReport?.status !== 'Under Review', desc: 'District Officer reviewed veracity' },
-    { label: 'Administrative Verification', done: linkedChallenge?.verificationStatus === 'verified' || selectedReport?.status === 'Verified' || selectedReport?.status === 'Clustered' || selectedReport?.status === 'Resolved', desc: 'Published to academic innovation catalog' },
-    { label: 'University Adoption', done: !!linkedChallenge?.adoption, desc: 'Student engineering team assigned' },
-    { label: 'Field Implementation', done: !!linkedChallenge?.fieldEvidence || linkedChallenge?.status === 'implementation' || linkedChallenge?.status === 'impact_verification' || linkedChallenge?.status === 'resolved', desc: 'NGO prototype installation completed' },
-    { label: 'Government Impact Sign-off', done: !!linkedChallenge?.impactVerification || linkedChallenge?.status === 'resolved', desc: 'Certified population benefit audited' },
+    { label: t('tracking.stage_submitted', 'Report Submitted'), done: true, desc: t('tracking.stage_submitted_desc', 'Logged with photo and GPS location') },
+    { label: t('tracking.stage_duplicate', 'Duplicate Analysis'), done: selectedReport?.status !== 'Submitted', desc: t('tracking.stage_duplicate_desc', 'Clustered with nearby community reports') },
+    { label: t('tracking.stage_gov_review', 'Government Review'), done: selectedReport?.status !== 'Submitted' && selectedReport?.status !== 'Under Review', desc: t('tracking.stage_gov_review_desc', 'District Officer reviewed veracity') },
+    { label: t('tracking.stage_verification', 'Administrative Verification'), done: linkedChallenge?.verificationStatus === 'verified' || selectedReport?.status === 'Verified' || selectedReport?.status === 'Clustered' || selectedReport?.status === 'Resolved', desc: t('tracking.stage_verification_desc', 'Published to academic innovation catalog') },
+    { label: t('tracking.stage_adoption', 'University Adoption'), done: !!linkedChallenge?.adoption, desc: t('tracking.stage_adoption_desc', 'Student engineering team assigned') },
+    { label: t('tracking.stage_implementation', 'Field Implementation'), done: !!linkedChallenge?.fieldEvidence || linkedChallenge?.status === 'implementation' || linkedChallenge?.status === 'impact_verification' || linkedChallenge?.status === 'resolved', desc: t('tracking.stage_implementation_desc', 'NGO prototype installation completed') },
+    { label: t('tracking.stage_signoff', 'Government Impact Sign-off'), done: !!linkedChallenge?.impactVerification || linkedChallenge?.status === 'resolved', desc: t('tracking.stage_signoff_desc', 'Certified population benefit audited') },
   ];
 
   return (
     <div className="space-y-6">
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-brand-textMuted">
-          Citizen Tracking Center
+          {t('tracking.center_tag', 'Citizen Tracking Center')}
         </span>
         <h1 className="text-2xl font-extrabold text-brand-text mt-0.5">
-          My Submissions & Status Tracking
+          {t('tracking.title', 'My Submissions & Status Tracking')}
         </h1>
         <p className="text-xs text-brand-textMuted mt-1">
-          Follow your community reports through the administrative verification and university engineering pipeline.
+          {t('tracking.desc', 'Follow your community reports through the administrative verification and university engineering pipeline.')}
         </p>
       </div>
 
@@ -65,9 +76,7 @@ export const CitizenReportsPage: React.FC = () => {
                   <span className="font-mono font-bold text-brand-dark text-xs bg-brand-bg px-2 py-0.5 rounded border border-brand-border">
                     {rep.trackingId}
                   </span>
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-                    {rep.status}
-                  </span>
+                  <StatusBadge status={rep.status} size="sm" />
                 </div>
 
                 <h4 className="font-bold text-sm text-brand-text leading-snug">{rep.title}</h4>
@@ -94,24 +103,24 @@ export const CitizenReportsPage: React.FC = () => {
                     <span className="font-mono font-bold text-xs text-brand-dark bg-brand-bg px-2 py-0.5 rounded border border-brand-border">
                       #{selectedReport.trackingId}
                     </span>
-                    <span className="text-xs text-brand-textMuted">{selectedReport.category}</span>
+                    <span className="text-xs text-brand-textMuted">{getCategoryLabel(selectedReport.category)}</span>
                   </div>
                   <h3 className="font-bold text-base text-brand-text mt-1">{selectedReport.title}</h3>
                 </div>
               </div>
 
               <div className="space-y-1 text-xs">
-                <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Description:</span>
+                <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">{t('tracking.description_label', 'Description:')}</span>
                 <p className="text-brand-textMuted leading-relaxed">{selectedReport.description}</p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-brand-bg border border-brand-border text-xs grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Locality</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block">{t('tracking.locality_label', 'Locality')}</span>
                   <span className="font-semibold text-brand-text">{selectedReport.locality}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">District</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block">{t('tracking.district_label', 'District')}</span>
                   <span className="font-semibold text-brand-text">{selectedReport.district}</span>
                 </div>
               </div>
@@ -119,7 +128,7 @@ export const CitizenReportsPage: React.FC = () => {
               {/* Problem-to-Impact Lifecycle Timeline */}
               <div className="space-y-3 pt-2">
                 <h4 className="font-bold text-xs uppercase tracking-wider text-brand-text">
-                  Lifecycle Progress Timeline
+                  {t('tracking.timeline_heading', 'Lifecycle Progress Timeline')}
                 </h4>
 
                 <div className="space-y-3">
@@ -145,7 +154,7 @@ export const CitizenReportsPage: React.FC = () => {
                     to={`/challenges/${selectedReport.challengeId}`}
                     className="w-full inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint text-xs font-bold py-2.5 rounded-xl hover:bg-brand-darkSecondary transition"
                   >
-                    <span>View Master Challenge Page</span>
+                    <span>{t('tracking.view_challenge', 'View Master Challenge Page')}</span>
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -153,7 +162,7 @@ export const CitizenReportsPage: React.FC = () => {
             </div>
           ) : (
             <div className="p-12 text-center text-xs text-brand-textMuted bg-white rounded-3xl border border-dashed border-brand-border">
-              Select a report from the left to view detailed lifecycle tracking.
+              {t('tracking.select_prompt', 'Select a report from the left to view detailed lifecycle tracking.')}
             </div>
           )}
         </div>

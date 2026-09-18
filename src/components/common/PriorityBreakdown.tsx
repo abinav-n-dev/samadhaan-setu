@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PriorityBreakdown as PriorityBreakdownType, GovernmentOverride } from '../../types';
-import { ShieldAlert, Info, UserCheck } from 'lucide-react';
+import { ShieldAlert, Info, UserCheck, HelpCircle } from 'lucide-react';
 
 interface PriorityBreakdownProps {
   breakdown: PriorityBreakdownType;
@@ -15,6 +15,8 @@ export const PriorityBreakdown: React.FC<PriorityBreakdownProps> = ({
   onOpenOverrideModal,
   canOverride = false,
 }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const factors = [
     { label: 'Severity', weight: '30%', score: breakdown.severity, color: 'bg-red-500' },
     { label: 'Population Impact', weight: '25%', score: breakdown.populationImpact, color: 'bg-orange-500' },
@@ -32,9 +34,46 @@ export const PriorityBreakdown: React.FC<PriorityBreakdownProps> = ({
             <ShieldAlert className="w-5 h-5 text-brand-dark" />
             AI-Assisted Priority Assessment
           </h3>
-          <p className="text-xs text-brand-textMuted mt-0.5">
-            Algorithmic multi-factor decision support model
-          </p>
+          <div className="flex items-center gap-2 mt-0.5">
+            <p className="text-xs text-brand-textMuted">
+              Smart rule-based decision support model
+            </p>
+            <span className="text-gray-300">•</span>
+            <div className="relative inline-block">
+              <button
+                type="button"
+                onClick={() => setShowTooltip(!showTooltip)}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                className="inline-flex items-center gap-1 text-[11px] text-brand-primary font-semibold hover:underline"
+                aria-label="How this score is calculated"
+              >
+                <HelpCircle className="w-3.5 h-3.5 text-brand-primary" />
+                <span>How this score is calculated</span>
+              </button>
+              {showTooltip && (
+                <div className="absolute left-0 top-full mt-1.5 w-72 p-3.5 bg-slate-950 text-white rounded-xl shadow-2xl z-50 text-[11px] space-y-2 border border-slate-700 animate-in fade-in duration-150">
+                  <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+                    <span>Factor Weights Breakdown</span>
+                  </div>
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    Prioritization is determined via smart rule-based weighting across six governance factors:
+                  </p>
+                  <div className="space-y-1 font-mono text-[10px] bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                    <div className="flex justify-between"><span>• Severity</span> <strong className="text-red-400">30%</strong></div>
+                    <div className="flex justify-between"><span>• Population Impact</span> <strong className="text-orange-400">25%</strong></div>
+                    <div className="flex justify-between"><span>• Geographic Spread</span> <strong className="text-amber-400">15%</strong></div>
+                    <div className="flex justify-between"><span>• Urgency</span> <strong className="text-rose-400">15%</strong></div>
+                    <div className="flex justify-between"><span>• Duplicates / Signal</span> <strong className="text-emerald-400">10%</strong></div>
+                    <div className="flex justify-between"><span>• Feasibility</span> <strong className="text-blue-400">5%</strong></div>
+                  </div>
+                  <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+                    Total Score = (Sev×0.30) + (Pop×0.25) + (Spread×0.15) + (Urg×0.15) + (Dup×0.10) + (Feas×0.05)
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         <div className="text-right">
           <div className="text-2xl font-black font-mono text-brand-dark">

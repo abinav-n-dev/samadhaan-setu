@@ -3,8 +3,14 @@ import {
   INITIAL_CHALLENGES, 
   MOCK_CITIZEN_REPORTS_JH_1042 
 } from '../src/data/mockData';
-import { analyzeReportSimilarity } from '../src/services/duplicateService';
+import { analyzeReportSimilarity, processReportSubmission } from '../src/services/duplicateService';
 import { calculatePriorityScore } from '../src/services/priorityService';
+import { 
+  buildCredentialRecordData, 
+  computeHash, 
+  verifyHash 
+} from '../src/services/credentialService';
+import { safeParseJSON } from '../src/context/StateContext';
 import { 
   Challenge, 
   CitizenReport, 
@@ -30,7 +36,7 @@ describe('SamadhanSetu End-to-End Civic Innovation Workflow', () => {
       coordinates: { lat: 24.2692, lng: 87.2482 },
       affectedCountEstimate: 150,
       urgencyLevel: 'Emergency' as const,
-      evidencePhotos: ['https://images.unsplash.com/photo-water.jpg'],
+      evidencePhotos: ['/images/water-turbid.svg'],
       submittedBy: 'Sunita Soren',
     };
 
@@ -165,7 +171,7 @@ describe('SamadhanSetu End-to-End Civic Innovation Workflow', () => {
     const groundEvidence: FieldEvidence = {
       partnerName: 'Pratham Gramin Vikas Trust',
       ngoName: 'Pratham Gramin Vikas Trust',
-      photos: ['https://images.unsplash.com/kiosk.jpg'],
+      photos: ['/images/field-evidence.svg'],
       installationReport: 'Solar filtration unit active. 1,200 L/hr capacity.',
       measuredTdsBefore: 890,
       measuredTdsAfter: 142,
@@ -225,6 +231,198 @@ describe('SamadhanSetu End-to-End Civic Innovation Workflow', () => {
     expect(credential.status).toBe('VERIFIED');
     expect(credential.impactPopulation).toBe(2615);
     expect(credential.verificationHash.startsWith('0x')).toBe(true);
+  });
+
+  it('verifyImpact builds credential from the correct challenge data without hardcoded fallbacks', () => {
+    const customChallenge = {
+      code: 'JH-ROD-2026',
+      title: 'Damaged Culvert Bridge in Shikaripara',
+      district: 'Dumka',
+      state: 'Jharkhand',
+      department: 'Rural Works Department',
+      affectedPopulation: 1400,
+      adoption: {
+        university: 'National Institute of Technology (NIT) Jamshedpur',
+        teamName: 'BridgeCraft Innovators',
+        teamMembers: ['Aman Verma', 'Pooja Rani'],
+        facultyMentor: 'Dr. S. K. Choudhary',
+      },
+      industrySupport: {
+        partnerName: 'Larsen & Toubro CSR',
+      },
+      fieldEvidence: {
+        ngoName: 'Gram Vikas Kendra',
+        beneficiariesCount: 1350,
+      },
+    };
+
+    const cred = buildCredentialRecordData(
+      customChallenge,
+      {
+        actualReachedCount: 1350,
+        verifiedByOfficer: 'A. K. Mishra, Executive Engineer',
+        department: 'Rural Works Department',
+      },
+      '2026-09-18T10:00:00Z',
+      'SS-2026-ROD-01'
+    );
+
+    expect(cred.university).toBe('National Institute of Technology (NIT) Jamshedpur');
+    expect(cred.teamName).toBe('BridgeCraft Innovators');
+    expect(cred.industryPartner).toBe('Larsen & Toubro CSR');
+    expect(cred.fieldPartner).toBe('Gram Vikas Kendra');
+    expect(cred.impactPopulation).toBe(1350);
+    expect(cred.verifiedByOfficer).toBe('A. K. Mishra, Executive Engineer');
+  });
+
+  it('computes real SHA-256 hash and verifies via verifyHash', async () => {
+    const credBase = {
+      id: 'SS-2026-TEST-99',
+      challengeCode: 'JH-WTR-TEST',
+      teamName: 'CleanWater Pioneers',
+      university: 'IIT ISM Dhanbad',
+      teamMembers: ['Ravi Kumar', 'Sneha Roy'],
+      impactPopulation: 1200,
+      issuedAt: '2026-09-19T00:00:00Z',
+      verifiedByOfficer: 'DC Dumka',
+      governmentDepartment: 'Drinking Water & Sanitation Dept',
+    };
+
+    const hash = await computeHash(credBase);
+    expect(hash).toMatch(/^0x[a-f0-9]{64}$/);
+
+    const fullCred: CredentialRecord = {
+      ...credBase,
+      title: 'Test Clean Water',
+      district: 'Dumka',
+      state: 'Jharkhand',
+      facultyMentor: 'Dr. Mentor',
+      industryPartner: 'CSR Partner',
+      fieldPartner: 'NGO Partner',
+      verificationHash: hash,
+      status: 'VERIFIED',
+    };
+
+    const isValid = await verifyHash(fullCred);
+    expect(isValid).toBe(true);
+  });
+
+  it('tampering with a single field in a credential makes verifyHash return false', async () => {
+    const credBase = {
+      id: 'SS-2026-TEST-99',
+      challengeCode: 'JH-WTR-TEST',
+      teamName: 'CleanWater Pioneers',
+      university: 'IIT ISM Dhanbad',
+      teamMembers: ['Ravi Kumar', 'Sneha Roy'],
+      impactPopulation: 1200,
+      issuedAt: '2026-09-19T00:00:00Z',
+      verifiedByOfficer: 'DC Dumka',
+      governmentDepartment: 'Drinking Water & Sanitation Dept',
+    };
+
+    const hash = await computeHash(credBase);
+
+    const legitCred: CredentialRecord = {
+      ...credBase,
+      title: 'Test Clean Water',
+      district: 'Dumka',
+      state: 'Jharkhand',
+      facultyMentor: 'Dr. Mentor',
+      industryPartner: 'CSR Partner',
+      fieldPartner: 'NGO Partner',
+      verificationHash: hash,
+      status: 'VERIFIED',
+    };
+
+    // Tamper with impact population (e.g. claim 50,000 instead of 1,200)
+    const tamperedCred = { ...legitCred, impactPopulation: 50000 };
+    const isTamperedValid = await verifyHash(tamperedCred);
+    expect(isTamperedValid).toBe(false);
+
+    // Tamper with university name
+    const tamperedUni = { ...legitCred, university: 'Fake University' };
+    expect(await verifyHash(tamperedUni)).toBe(false);
+  });
+
+  it('safeParseJSON returns fallback when JSON is corrupted or null', () => {
+    const fallback = [{ id: 'fallback-1' }];
+    expect(safeParseJSON('invalid json {{{', fallback)).toEqual(fallback);
+    expect(safeParseJSON(null, fallback)).toEqual(fallback);
+    expect(safeParseJSON('', fallback)).toEqual(fallback);
+    expect(safeParseJSON('{"valid": true}', { valid: false })).toEqual({ valid: true });
+  });
+
+  it('processReportSubmission clusters duplicate report and increments challenge reportCount', () => {
+    const challenge: Challenge = {
+      id: 'c-wtr-1042',
+      code: 'JH-WTR-1042',
+      title: 'Contaminated Well Drinking Water in Hansdiha',
+      description: 'High fluoride and arsenic contamination reported in public well',
+      category: 'Water & Sanitation',
+      district: 'Dumka',
+      block: 'Hansdiha',
+      locality: 'Hansdiha Ward 4',
+      coordinates: { lat: 24.2690, lng: 87.2480 },
+      status: 'published',
+      priorityScore: 88,
+      priorityLevel: 'CRITICAL',
+      breakdown: { overallScore: 88, level: 'CRITICAL', factors: { severity: 90, populationImpact: 85, geographicSpread: 75, urgency: 90, duplicateSignal: 80, feasibility: 80 } },
+      reportCount: 5,
+      affectedPopulation: 1200,
+      affectedVillages: ['Hansdiha'],
+      department: 'Drinking Water & Sanitation Dept',
+      requiredSkills: [],
+      suggestedDepartments: [],
+      verificationStatus: 'verified',
+      photos: [],
+      createdAt: '2026-09-01T00:00:00Z',
+      updatedAt: '2026-09-01T00:00:00Z',
+    };
+
+    const existingReport: CitizenReport = {
+      id: 'RPT-001',
+      trackingId: 'SS-RPT-1001',
+      challengeId: 'c-wtr-1042',
+      title: 'Yellow water in Hansdiha handpump',
+      description: 'Drinking water is contaminated with pungent smell and yellowish color.',
+      category: 'Water & Sanitation',
+      district: 'Dumka',
+      block: 'Hansdiha',
+      locality: 'Hansdiha Ward 4',
+      coordinates: { lat: 24.2691, lng: 87.2481 },
+      affectedCountEstimate: 100,
+      urgencyLevel: 'Emergency',
+      evidencePhotos: [],
+      status: 'Submitted',
+      submittedBy: 'Resident A',
+      createdAt: '2026-09-02T00:00:00Z',
+      updatedAt: '2026-09-02T00:00:00Z',
+    };
+
+    const newReportInput = {
+      title: 'Severe contamination in village drinking water pump',
+      description: 'Turbid smelly water in the main well affecting residents.',
+      category: 'Water & Sanitation',
+      district: 'Dumka',
+      block: 'Hansdiha',
+      locality: 'Hansdiha Ward 4',
+      coordinates: { lat: 24.2692, lng: 87.2482 },
+      affectedCountEstimate: 150,
+      urgencyLevel: 'Emergency' as const,
+      evidencePhotos: ['/images/water-turbid.svg'],
+      submittedBy: 'Resident B',
+    };
+
+    const result = processReportSubmission(
+      newReportInput,
+      [existingReport],
+      [challenge]
+    );
+
+    expect(result.newReport.status).toBe('Clustered');
+    expect(result.newReport.challengeId).toBe('c-wtr-1042');
+    expect(result.updatedChallenges[0].reportCount).toBe(6);
+    expect(result.updatedChallenges[0].affectedPopulation).toBe(1200 + 150);
   });
 });
 

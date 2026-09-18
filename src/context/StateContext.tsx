@@ -21,6 +21,7 @@ import {
   INITIAL_NOTIFICATIONS 
 } from '../data/mockData';
 import { analyzeReportSimilarity } from '../services/duplicateService';
+import { buildCredentialRecordData, computeHash } from '../services/credentialService';
 import { translate, Language } from '../services/i18n';
 
 export const ROLE_PROFILES: Record<UserRole, UserProfile> = {
@@ -117,54 +118,88 @@ interface StateContextType {
   approveMentorProposal: (challengeId: string, mentorNotes?: string) => void;
   commitIndustrySupport: (challengeId: string, support: Partial<IndustrySupport>) => void;
   submitFieldEvidence: (challengeId: string, evidence: Partial<FieldEvidence>) => void;
-  verifyImpact: (challengeId: string, verificationData: Partial<ImpactVerification>) => CredentialRecord;
+  verifyImpact: (challengeId: string, verificationData: Partial<ImpactVerification>) => Promise<CredentialRecord>;
   resetToDemoDefaults: () => void;
   addToast: (title: string, description: string, type?: 'success' | 'info' | 'warning') => void;
 }
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
 
-const STORAGE_KEY_CHALLENGES = 'samadhansetu_challenges_v2';
-const STORAGE_KEY_REPORTS = 'samadhansetu_reports_v2';
-const STORAGE_KEY_CREDENTIALS = 'samadhansetu_credentials_v2';
-const STORAGE_KEY_LOGS = 'samadhansetu_logs_v2';
-const STORAGE_KEY_ROLE = 'samadhansetu_role_v2';
-const STORAGE_KEY_AUTH = 'samadhansetu_auth_v2';
-const STORAGE_KEY_THEME = 'samadhansetu_theme_v2';
-const STORAGE_KEY_LANG = 'samadhansetu_lang_v2';
+export const STORAGE_KEY_CHALLENGES = 'samadhansetu_challenges_v2';
+export const STORAGE_KEY_REPORTS = 'samadhansetu_reports_v2';
+export const STORAGE_KEY_CREDENTIALS = 'samadhansetu_credentials_v2';
+export const STORAGE_KEY_LOGS = 'samadhansetu_logs_v2';
+export const STORAGE_KEY_ROLE = 'samadhansetu_role_v2';
+export const STORAGE_KEY_AUTH = 'samadhansetu_auth_v2';
+export const STORAGE_KEY_THEME = 'samadhansetu_theme_v2';
+export const STORAGE_KEY_LANG = 'samadhansetu_lang_v2';
+
+/**
+ * Safely parses JSON from storage, falling back to mock defaults if corrupt or missing.
+ */
+export function safeParseJSON<T>(raw: string | null, fallback: T): T {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw) as T;
+  } catch (err) {
+    console.warn('[SamadhanSetu] Corrupt localStorage item detected, falling back to default:', err);
+    return fallback;
+  }
+}
+
+/**
+ * Safely writes to localStorage, catching QuotaExceededError or security exceptions without crashing.
+ */
+export function safeSetStorage(key: string, value: string, onQuotaExceeded?: () => void): boolean {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, value);
+      return true;
+    }
+  } catch (err: any) {
+    console.warn(`[SamadhanSetu] Storage write failed for key "${key}":`, err);
+    if (onQuotaExceeded) {
+      onQuotaExceeded();
+    }
+  }
+  return false;
+}
 
 export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<UserRole>(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEY_ROLE) || localStorage.getItem(STORAGE_KEY_ROLE);
-    return (saved as UserRole) || 'government';
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY_ROLE) || localStorage.getItem(STORAGE_KEY_ROLE);
+      return (saved as UserRole) || 'government';
+    } catch {
+      return 'government';
+    }
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEY_AUTH);
-    // Default is LOGGED OUT (false) on clean visit!
-    return saved === 'true';
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY_AUTH);
+      return saved === 'true';
+    } catch {
+      return false;
+    }
   });
 
   const currentUser = isAuthenticated ? ROLE_PROFILES[role] : null;
 
   const [challenges, setChallenges] = useState<Challenge[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_CHALLENGES);
-    return saved ? JSON.parse(saved) : INITIAL_CHALLENGES;
+    return safeParseJSON(localStorage.getItem(STORAGE_KEY_CHALLENGES), INITIAL_CHALLENGES);
   });
 
   const [reports, setReports] = useState<CitizenReport[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_REPORTS);
-    return saved ? JSON.parse(saved) : MOCK_CITIZEN_REPORTS_JH_1042;
+    return safeParseJSON(localStorage.getItem(STORAGE_KEY_REPORTS), MOCK_CITIZEN_REPORTS_JH_1042);
   });
 
   const [credentials, setCredentials] = useState<CredentialRecord[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_CREDENTIALS);
-    return saved ? JSON.parse(saved) : INITIAL_CREDENTIALS;
+    return safeParseJSON(localStorage.getItem(STORAGE_KEY_CREDENTIALS), INITIAL_CREDENTIALS);
   });
 
   const [auditLogs, setAuditLogs] = useState<AuditEntry[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_LOGS);
-    return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
+    return safeParseJSON(localStorage.getItem(STORAGE_KEY_LOGS), INITIAL_AUDIT_LOGS);
   });
 
   const [notifications, setNotifications] = useState<SystemNotification[]>(INITIAL_NOTIFICATIONS);
@@ -173,19 +208,27 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Appearance theme (light/dark)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_THEME);
-    if (saved === 'dark' || saved === 'light') return saved;
-    return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_THEME);
+      if (saved === 'dark' || saved === 'light') return saved;
+      return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
   });
 
   // Localization (EN / HI)
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_LANG);
-    return (saved === 'HI' || saved === 'EN') ? saved : 'EN';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_LANG);
+      return (saved === 'HI' || saved === 'EN') ? saved : 'EN';
+    } catch {
+      return 'EN';
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_THEME, theme);
+    safeSetStorage(STORAGE_KEY_THEME, theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -194,7 +237,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_LANG, language);
+    safeSetStorage(STORAGE_KEY_LANG, language);
   }, [language]);
 
   const toggleTheme = () => {
@@ -206,33 +249,40 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem(STORAGE_KEY_LANG, lang);
+    safeSetStorage(STORAGE_KEY_LANG, lang);
   };
 
   const t = (key: string, fallback?: string): string => {
     return translate(key, language, fallback);
   };
 
+  // Storage full toast callback
+  const handleStorageFull = () => {
+    addToast('Storage Alert', 'Storage full, some data was not saved', 'warning');
+  };
+
   // Sync to local storage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_CHALLENGES, JSON.stringify(challenges));
+    safeSetStorage(STORAGE_KEY_CHALLENGES, JSON.stringify(challenges), handleStorageFull);
   }, [challenges]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify(reports));
+    safeSetStorage(STORAGE_KEY_REPORTS, JSON.stringify(reports), handleStorageFull);
   }, [reports]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_CREDENTIALS, JSON.stringify(credentials));
+    safeSetStorage(STORAGE_KEY_CREDENTIALS, JSON.stringify(credentials), handleStorageFull);
   }, [credentials]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(auditLogs));
+    safeSetStorage(STORAGE_KEY_LOGS, JSON.stringify(auditLogs), handleStorageFull);
   }, [auditLogs]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_ROLE, role);
-    sessionStorage.setItem(STORAGE_KEY_ROLE, role);
+    safeSetStorage(STORAGE_KEY_ROLE, role);
+    try {
+      sessionStorage.setItem(STORAGE_KEY_ROLE, role);
+    } catch {}
   }, [role]);
 
   useEffect(() => {
@@ -282,6 +332,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       ...reportData,
       id,
       trackingId,
+      evidencePhotos: (reportData.evidencePhotos || []).slice(0, 3),
       status: similarity.similarityScore >= 80 ? 'Clustered' : 'Submitted',
       challengeId: similarity.recommendedClusterId,
       createdAt: now,
@@ -293,7 +344,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // If matches an existing challenge, bump report count
     if (similarity.recommendedClusterId) {
       setChallenges(prev => prev.map(c => {
-        if (c.id === similarity.recommendedClusterId) {
+        if (c.id === similarity.recommendedClusterId || c.code === similarity.recommendedClusterId) {
           return {
             ...c,
             reportCount: c.reportCount + 1,
@@ -305,6 +356,10 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }));
     }
 
+    const matchedChallenge = similarity.recommendedClusterId 
+      ? challenges.find(c => c.id === similarity.recommendedClusterId || c.code === similarity.recommendedClusterId)
+      : undefined;
+
     // Add audit entry
     const audit: AuditEntry = {
       id: `AUD-${Date.now().toString().slice(-4)}`,
@@ -313,7 +368,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       actorName: reportData.submittedBy || 'Citizen Reporter',
       action: `Citizen Report Submitted (${trackingId})`,
       details: `Report for "${reportData.title}" filed in ${reportData.district}. Duplicate analysis score: ${similarity.similarityScore}%.`,
-      challengeCode: similarity.recommendedClusterId ? 'JH-WTR-1042' : undefined,
+      challengeCode: matchedChallenge?.code,
     };
     setAuditLogs(prev => [audit, ...prev]);
 
@@ -335,12 +390,13 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const verifyChallenge = (challengeId: string, officerName = 'Sanjay K. Verma, IAS') => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        challengeCode = c.code;
         return {
           ...c,
           status: 'verified',
@@ -373,12 +429,13 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     reason: string, 
     officerName = 'Sanjay K. Verma, IAS'
   ) => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        challengeCode = c.code;
         return {
           ...c,
           priorityScore: newScore,
@@ -412,19 +469,21 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const adoptChallenge = (challengeId: string, proposal: Partial<UniversityTeam>) => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     const newTeam: UniversityTeam = {
       teamId: `TEAM-${Date.now().toString().slice(-4)}`,
-      teamName: proposal.teamName || 'Innovators Guild',
-      university: proposal.university || 'Birla Institute of Technology (BIT) Mesra',
-      department: proposal.department || 'Civil & Environmental Engineering',
+      teamName: proposal.teamName || (targetChallenge.code === 'JH-WTR-1042' ? 'AquaShield Innovators' : `${targetChallenge.category.split(' ')[0]} Engineering Team`),
+      university: proposal.university || (targetChallenge.code === 'JH-WTR-1042' ? 'Birla Institute of Technology (BIT) Mesra' : 'National Institute of Technology (NIT) Jamshedpur'),
+      department: proposal.department || targetChallenge.department || 'Civil & Environmental Engineering',
       leadStudent: proposal.leadStudent || 'Student Lead',
       teamMembers: proposal.teamMembers || ['Student Lead', 'Co-Researcher 1', 'Co-Researcher 2'],
-      facultyMentor: proposal.facultyMentor || 'Dr. Rameshwar Mahato',
+      facultyMentor: proposal.facultyMentor || (targetChallenge.code === 'JH-WTR-1042' ? 'Dr. Rameshwar Mahato' : 'Faculty Advisor'),
       proposedTech: proposal.proposedTech || ['Solar Membrane Filtration', 'IoT Sensor Telemetry'],
-      proposalSummary: proposal.proposalSummary || 'Community scale deployment proposal.',
+      proposalSummary: proposal.proposalSummary || `Community scale deployment proposal for ${targetChallenge.title}.`,
       adoptionDate: now,
       mentorStatus: 'pending',
       milestones: [
@@ -436,7 +495,6 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        challengeCode = c.code;
         return {
           ...c,
           status: 'adopted',
@@ -461,12 +519,13 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const approveMentorProposal = (challengeId: string, mentorNotes = 'Academic rigor and field methodology approved for capstone credit.') => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId && c.adoption) {
-        challengeCode = c.code;
         return {
           ...c,
           status: 'in_progress',
@@ -495,8 +554,10 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const commitIndustrySupport = (challengeId: string, support: Partial<IndustrySupport>) => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     const newSupport: IndustrySupport = {
       supportId: `IND-${Date.now().toString().slice(-4)}`,
@@ -511,7 +572,6 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        challengeCode = c.code;
         return {
           ...c,
           industrySupport: newSupport,
@@ -536,20 +596,22 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const submitFieldEvidence = (challengeId: string, evidence: Partial<FieldEvidence>) => {
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) return;
+    const challengeCode = targetChallenge.code;
     const now = new Date().toISOString();
-    let challengeCode = '';
 
     const newEvidence: FieldEvidence = {
       partnerName: evidence.partnerName || 'Pratham Gramin Vikas Trust',
       ngoName: evidence.ngoName || 'Pratham Gramin Vikas Trust',
       photos: evidence.photos || [
-        'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'
+        '/images/water-turbid.svg',
+        '/images/field-evidence.svg'
       ],
       installationReport: evidence.installationReport || 'On-site installation and operational handover completed successfully.',
       measuredTdsBefore: evidence.measuredTdsBefore ?? 890,
       measuredTdsAfter: evidence.measuredTdsAfter ?? 142,
-      beneficiariesCount: evidence.beneficiariesCount || 2615,
+      beneficiariesCount: evidence.beneficiariesCount || targetChallenge.affectedPopulation || 2615,
       officerNotes: evidence.officerNotes || 'Village Gram Sabha signoff acquired.',
       submissionDate: now,
       status: 'Submitted',
@@ -557,7 +619,6 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        challengeCode = c.code;
         return {
           ...c,
           fieldEvidence: newEvidence,
@@ -581,56 +642,44 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     addToast('Field Evidence Logged', `Submitted implementation evidence for ${challengeCode}. Awaiting DC/DM signoff.`, 'success');
   };
 
-  const verifyImpact = (challengeId: string, verificationData: Partial<ImpactVerification>): CredentialRecord => {
+  const verifyImpact = async (challengeId: string, verificationData: Partial<ImpactVerification>): Promise<CredentialRecord> => {
     const now = new Date().toISOString();
-    let updatedChallenge: Challenge | undefined;
+    const targetChallenge = challenges.find(c => c.id === challengeId);
+    if (!targetChallenge) {
+      throw new Error(`Challenge ${challengeId} not found`);
+    }
 
     const credentialId = `SS-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-    const randomHash = `0x${Array.from({ length: 48 }, () => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+    const baseCredential = buildCredentialRecordData(targetChallenge, verificationData, now, credentialId);
+    const realHash = await computeHash(baseCredential);
+
+    const newCredential: CredentialRecord = {
+      ...baseCredential,
+      verificationHash: realHash,
+    };
+
+    const impact: ImpactVerification = {
+      originalAffectedPop: targetChallenge.affectedPopulation,
+      actualReachedCount: newCredential.impactPopulation,
+      verificationDate: now,
+      verifiedByOfficer: newCredential.verifiedByOfficer,
+      department: newCredential.governmentDepartment,
+      credentialId,
+      status: 'Verified',
+      remarks: verificationData.remarks || 'Impact verified on-site through joint field inspection.',
+    };
 
     setChallenges(prev => prev.map(c => {
       if (c.id === challengeId) {
-        const impact: ImpactVerification = {
-          originalAffectedPop: c.affectedPopulation,
-          actualReachedCount: verificationData.actualReachedCount || c.fieldEvidence?.beneficiariesCount || 2615,
-          verificationDate: now,
-          verifiedByOfficer: verificationData.verifiedByOfficer || 'Sanjay K. Verma, IAS (DM Dumka)',
-          department: verificationData.department || c.department,
-          credentialId,
-          status: 'Verified',
-          remarks: verificationData.remarks || 'Impact verified on-site through joint field inspection.',
-        };
-        const resolvedChallenge = {
+        return {
           ...c,
           status: 'resolved' as const,
           impactVerification: impact,
           updatedAt: now,
         };
-        updatedChallenge = resolvedChallenge;
-        return resolvedChallenge;
       }
       return c;
     }));
-
-    const newCredential: CredentialRecord = {
-      id: credentialId,
-      challengeCode: updatedChallenge?.code || 'JH-WTR-1042',
-      title: updatedChallenge?.title || 'Contaminated Drinking Water Remediation',
-      district: updatedChallenge?.district || 'Dumka',
-      state: 'Jharkhand',
-      university: updatedChallenge?.adoption?.university || 'Birla Institute of Technology (BIT) Mesra',
-      teamName: updatedChallenge?.adoption?.teamName || 'AquaShield Innovators',
-      teamMembers: updatedChallenge?.adoption?.teamMembers || ['Aarav Sengupta', 'Ananya Sharma', 'Rohan Dutta', 'Vikramaditya Roy'],
-      facultyMentor: updatedChallenge?.adoption?.facultyMentor || 'Dr. Rameshwar Mahato',
-      industryPartner: updatedChallenge?.industrySupport?.partnerName || 'Tata Steel Foundation',
-      fieldPartner: updatedChallenge?.fieldEvidence?.ngoName || 'Pratham Gramin Vikas Trust',
-      impactPopulation: verificationData.actualReachedCount || 2615,
-      verificationHash: randomHash,
-      issuedAt: now,
-      governmentDepartment: updatedChallenge?.department || 'Drinking Water & Sanitation Dept, Govt of Jharkhand',
-      verifiedByOfficer: verificationData.verifiedByOfficer || 'Sanjay K. Verma, IAS (DM Dumka)',
-      status: 'VERIFIED',
-    };
 
     setCredentials(prev => [newCredential, ...prev]);
 
@@ -641,7 +690,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       actorName: newCredential.verifiedByOfficer,
       action: `Government Impact Verified & Credential ${credentialId} Issued`,
       details: `Verified ${newCredential.impactPopulation} citizens reached. Verifiable cryptographic credential minted.`,
-      challengeCode: updatedChallenge?.code,
+      challengeCode: targetChallenge.code,
     };
     setAuditLogs(prev => [audit, ...prev]);
 
@@ -650,11 +699,29 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const resetToDemoDefaults = () => {
-    localStorage.removeItem(STORAGE_KEY_CHALLENGES);
-    localStorage.removeItem(STORAGE_KEY_REPORTS);
-    localStorage.removeItem(STORAGE_KEY_CREDENTIALS);
-    localStorage.removeItem(STORAGE_KEY_LOGS);
-    localStorage.removeItem(STORAGE_KEY_ROLE);
+    try {
+      if (typeof window !== 'undefined') {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('samadhansetu_')) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+
+        const sessionKeys: string[] = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          if (key && key.startsWith('samadhansetu_')) {
+            sessionKeys.push(key);
+          }
+        }
+        sessionKeys.forEach(k => sessionStorage.removeItem(k));
+      }
+    } catch (e) {
+      console.warn('[SamadhanSetu] Failed clearing storage during reset', e);
+    }
     setChallenges(INITIAL_CHALLENGES);
     setReports(MOCK_CITIZEN_REPORTS_JH_1042);
     setCredentials(INITIAL_CREDENTIALS);

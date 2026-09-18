@@ -108,6 +108,19 @@ describe('duplicateService', () => {
       expect(result.matchingReports).toHaveLength(0);
       expect(result.similarityScore).toBeLessThan(65);
     });
+
+    it('matches Hindi transliterated keywords (paani, handpump, nal, sadak)', () => {
+      const newReportHindi: Partial<CitizenReport> = {
+        title: 'Gaon ka handpump kharab hai aur ganda paani nikal raha hai',
+        description: 'Borewell nal se peela paani aa raha hai, handpump pipe me leakage hai.',
+        category: 'Water & Sanitation',
+        coordinates: { lat: 24.270, lng: 87.249 },
+      };
+
+      const result = analyzeReportSimilarity(newReportHindi, existingReports);
+      expect(result.similarityScore).toBeGreaterThanOrEqual(70);
+      expect(result.matchingReports.length).toBeGreaterThanOrEqual(1);
+    });
   });
 });
 

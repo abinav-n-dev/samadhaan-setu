@@ -15,6 +15,17 @@
   border-radius: 0.5rem;
   z-index: 10;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background-color: #0b1916 !important;
+  background-image: 
+    radial-gradient(rgba(77, 170, 120, 0.25) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px) !important;
+  background-size: 28px 28px, 56px 56px, 56px 56px !important;
+}
+
+/* Hide broken image icons if offline tiles fail to load */
+.leaflet-tile {
+  text-indent: -9999px;
 }
 
 .leaflet-popup-content-wrapper {

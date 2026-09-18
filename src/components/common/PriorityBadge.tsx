@@ -1,5 +1,6 @@
 import React from 'react';
 import { PriorityLevel } from '../../types';
+import { useAppState } from '../../context/StateContext';
 
 interface PriorityBadgeProps {
   level: PriorityLevel;
@@ -14,6 +15,8 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({
   size = 'md',
   showScore = false,
 }) => {
+  const { t } = useAppState();
+
   const getColors = () => {
     switch (level) {
       case 'CRITICAL':
@@ -48,7 +51,7 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({
       className={`inline-flex items-center rounded-full border ring-1 ring-inset ${getColors()} ${sizeClasses[size]}`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${getDotColor()} animate-pulse`} />
-      <span>{level}</span>
+      <span>{t(`priority.${level.toLowerCase()}`, level)}</span>
       {showScore && score !== undefined && (
         <span className="opacity-75 font-mono text-[11px] border-l border-current pl-1.5">
           {score}/100

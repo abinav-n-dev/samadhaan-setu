@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const CitizenDashboard: React.FC = () => {
-  const { reports } = useAppState();
+  const { reports, t } = useAppState();
 
   const userReports = reports.slice(0, 5); // Show latest reports
   const submittedCount = 8;
@@ -23,19 +23,30 @@ export const CitizenDashboard: React.FC = () => {
   const verifiedCount = 4;
   const resolvedCount = 2;
 
+  const getCategoryLabel = (cat: string) => {
+    if (cat.includes('Water')) return t('category.water', cat);
+    if (cat.includes('Road')) return t('category.roads', cat);
+    if (cat.includes('Electricity') || cat.includes('Solar')) return t('category.power', cat);
+    if (cat.includes('Health')) return t('category.health', cat);
+    if (cat.includes('Education')) return t('category.education', cat);
+    if (cat.includes('Waste') || cat.includes('Drainage')) return t('category.waste', cat);
+    if (cat.includes('Agri')) return t('category.agriculture', cat);
+    return cat;
+  };
+
   return (
     <div className="space-y-6">
       {/* Top Welcome Banner */}
       <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-brand-textMuted">
-            Citizen Voice & Community Action
+            {t('citizen.dashboard_tag', 'Citizen Voice & Community Action')}
           </span>
           <h1 className="text-2xl font-extrabold text-brand-text mt-0.5">
-            Citizen Problem Dashboard
+            {t('citizen.dashboard_title', 'Citizen Problem Dashboard')}
           </h1>
           <p className="text-xs text-brand-textMuted mt-1">
-            Track your reported community issues and observe how government and universities turn them into verified impact.
+            {t('citizen.dashboard_desc', 'Track your reported community issues and observe how government and universities turn them into verified impact.')}
           </p>
         </div>
 
@@ -44,34 +55,34 @@ export const CitizenDashboard: React.FC = () => {
           className="inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-brand-darkSecondary shadow-subtle transition flex-shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>Report a Community Problem</span>
+          <span>{t('citizen.report_problem_btn', 'Report a Community Problem')}</span>
         </Link>
       </div>
 
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          title="Submitted Reports"
+          title={t('citizen.stat_submitted', 'Submitted Reports')}
           value={submittedCount}
-          subtitle="Total logged by community"
+          subtitle={t('citizen.stat_submitted_sub', 'Total logged by community')}
           icon={<FileText className="w-5 h-5" />}
         />
         <MetricCard
-          title="Under Review"
+          title={t('citizen.stat_review', 'Under Review')}
           value={underReviewCount}
-          subtitle="In AI duplicate analysis"
+          subtitle={t('citizen.stat_review_sub', 'In AI duplicate analysis')}
           icon={<Clock className="w-5 h-5 text-amber-600" />}
         />
         <MetricCard
-          title="Verified Challenges"
+          title={t('citizen.stat_verified', 'Verified Challenges')}
           value={verifiedCount}
-          subtitle="Accepted for universities"
+          subtitle={t('citizen.stat_verified_sub', 'Accepted for universities')}
           icon={<CheckCircle2 className="w-5 h-5 text-blue-600" />}
         />
         <MetricCard
-          title="Impact Resolved"
+          title={t('citizen.stat_resolved', 'Impact Resolved')}
           value={resolvedCount}
-          subtitle="Physically resolved & verified"
+          subtitle={t('citizen.stat_resolved_sub', 'Physically resolved & verified')}
           icon={<Award className="w-5 h-5 text-emerald-600" />}
           highlight
         />
@@ -81,14 +92,14 @@ export const CitizenDashboard: React.FC = () => {
       <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-subtle space-y-4">
         <div className="flex items-center justify-between border-b border-brand-border pb-3">
           <div>
-            <h3 className="font-bold text-sm text-brand-text">My Recent Submissions</h3>
-            <p className="text-xs text-brand-textMuted">Live status tracking for filed incidents</p>
+            <h3 className="font-bold text-sm text-brand-text">{t('citizen.recent_submissions', 'My Recent Submissions')}</h3>
+            <p className="text-xs text-brand-textMuted">{t('citizen.recent_submissions_sub', 'Live status tracking for filed incidents')}</p>
           </div>
           <Link
             to="/citizen/reports"
             className="text-xs font-bold text-brand-dark hover:underline flex items-center gap-1"
           >
-            <span>View All Submissions</span>
+            <span>{t('citizen.view_all', 'View All Submissions')}</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -105,21 +116,19 @@ export const CitizenDashboard: React.FC = () => {
                     {report.trackingId}
                   </span>
                   <span className="text-gray-400">•</span>
-                  <span className="text-brand-textMuted">{report.category}</span>
+                  <span className="text-brand-textMuted">{getCategoryLabel(report.category)}</span>
                 </div>
                 <h4 className="font-bold text-brand-text text-sm">{report.title}</h4>
                 <div className="flex items-center gap-2 text-brand-textMuted text-[11px]">
                   <MapPin className="w-3.5 h-3.5 text-gray-400" />
                   <span>{report.locality}, {report.district}</span>
                   <span>•</span>
-                  <span>Est. {report.affectedCountEstimate} citizens affected</span>
+                  <span>Est. {report.affectedCountEstimate} {t('citizen.affected_citizens', 'citizens affected')}</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 self-end sm:self-center">
-                <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md">
-                  {report.status}
-                </span>
+                <StatusBadge status={report.status} size="sm" />
 
                 <Link
                   to="/citizen/reports"

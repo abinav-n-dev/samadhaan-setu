@@ -30,8 +30,8 @@ export const MOCK_CITIZEN_REPORTS_JH_1042: CitizenReport[] = Array.from({ length
     affectedCountEstimate: 70 + (i * 3),
     urgencyLevel: i % 4 === 0 ? 'Emergency' : 'High',
     evidencePhotos: [
-      'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=600&q=80'
+      '/images/water-turbid.svg',
+      '/images/water-remediated.svg'
     ],
     status: 'Clustered',
     submittedBy: citizen,
@@ -84,9 +84,9 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     verifiedAt: '2026-09-12T10:15:00Z',
     verifiedBy: 'Sanjay K. Verma, IAS (DM Dumka)',
     photos: [
-      'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'
+      '/images/water-turbid.svg',
+      '/images/water-remediated.svg',
+      '/images/field-evidence.svg'
     ],
     cluster: {
       clusterId: 'CLUS-DUM-941',
@@ -132,8 +132,8 @@ export const INITIAL_CHALLENGES: Challenge[] = [
       partnerName: 'Pratham Gramin Vikas Trust',
       ngoName: 'Pratham Gramin Vikas Trust (Dumka Chapter)',
       photos: [
-        'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'
+        '/images/water-turbid.svg',
+        '/images/field-evidence.svg'
       ],
       installationReport: 'Solar filtration unit successfully commissioned at Hansdiha main junction. Continuous output of 1,200 liters/hour certified potable water. Water testing confirms TDS dropped from 890 ppm to 142 ppm, and Fluoride lowered from 3.8 mg/L to 0.45 mg/L (well within WHO/BIS 10500 standards).',
       measuredTdsBefore: 890,
@@ -189,7 +189,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     verifiedAt: '2026-09-11T14:20:00Z',
     verifiedBy: 'Anandita Roy, IAS (Deputy Commissioner, Khunti)',
     photos: [
-      'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80'
+      '/images/culvert-damage.svg'
     ],
     adoption: {
       teamId: 'TEAM-NIT-04',
@@ -244,7 +244,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     verifiedAt: '2026-09-14T11:00:00Z',
     verifiedBy: 'Dr. B. K. Singh (Chief Medical Officer, Deoghar)',
     photos: [
-      'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80'
+      '/images/phc-hospital.svg'
     ],
     createdAt: '2026-09-13T12:30:00Z',
     updatedAt: '2026-09-14T11:00:00Z',
@@ -280,7 +280,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     suggestedDepartments: ['Electrical & Electronics Engineering', 'Physics'],
     verificationStatus: 'verified',
     photos: [
-      'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80'
+      '/images/school-solar.svg'
     ],
     createdAt: '2026-09-08T10:00:00Z',
     updatedAt: '2026-09-12T16:00:00Z',
@@ -316,7 +316,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     suggestedDepartments: ['Mining Engineering', 'Environmental Science', 'Chemical Engineering', 'IIT ISM Dhanbad'],
     verificationStatus: 'unverified',
     photos: [
-      'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?auto=format&fit=crop&w=800&q=80'
+      '/images/arsenic-filter.svg'
     ],
     createdAt: '2026-09-15T15:20:00Z',
     updatedAt: '2026-09-15T15:20:00Z',
@@ -352,7 +352,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     suggestedDepartments: ['Agricultural Engineering', 'Mechanical Engineering'],
     verificationStatus: 'unverified',
     photos: [
-      'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80'
+      '/images/cold-storage.svg'
     ],
     createdAt: '2026-09-14T09:40:00Z',
     updatedAt: '2026-09-14T09:40:00Z',
@@ -388,7 +388,7 @@ export const INITIAL_CHALLENGES: Challenge[] = [
     suggestedDepartments: ['Architecture & Planning', 'Civil Engineering'],
     verificationStatus: 'verified',
     photos: [
-      'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80'
+      '/images/skill-center.svg'
     ],
     createdAt: '2026-09-09T11:15:00Z',
     updatedAt: '2026-09-11T12:00:00Z',
@@ -409,7 +409,7 @@ export const INITIAL_CREDENTIALS: CredentialRecord[] = [
     industryPartner: 'Tata Steel Foundation & CleanTech CSR',
     fieldPartner: 'Pratham Gramin Vikas Trust',
     impactPopulation: 2615,
-    verificationHash: '0x8f3c1a9e7d2b45f6a1e8c9b03417e298db54cf60a749321e',
+    verificationHash: '0x87a784822ab1ef8b374f9357ef1372e90604902131826fed9c9a1c6fcacc6f00',
     issuedAt: '2026-09-18T09:30:00Z',
     governmentDepartment: 'Drinking Water & Sanitation Dept, Govt of Jharkhand',
     verifiedByOfficer: 'Sanjay K. Verma, IAS (District Magistrate, Dumka)',
@@ -428,7 +428,7 @@ export const INITIAL_CREDENTIALS: CredentialRecord[] = [
     industryPartner: 'Jindal Steel & Power CSR',
     fieldPartner: 'Jharkhand State Livelihood Promotion Society (JSLPS)',
     impactPopulation: 1420,
-    verificationHash: '0x7e1d52a4b9c810f394e76a218d09bc142f883e01a95423bc',
+    verificationHash: '0x78f53e7bdd49d89bf43de14ddaef3dac87974b26bfb40c77add073efe6e33545',
     issuedAt: '2025-11-20T14:15:00Z',
     governmentDepartment: 'Agriculture & Farmers Welfare Dept',
     verifiedByOfficer: 'Rahul Sharma, IAS',

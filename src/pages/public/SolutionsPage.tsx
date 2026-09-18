@@ -30,7 +30,7 @@ export const SolutionsPage: React.FC = () => {
       afterMetric: 'TDS: 142 ppm | Fluoride: 0.45 mg/L',
       beforeImpact: 'Frequent pediatric acute fluorosis & gastrointestinal cramps',
       afterImpact: 'Clean WHO-grade drinking water for 3 entire tribal villages',
-      image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80',
+      image: '/images/water-remediated.svg',
     },
     {
       credentialId: 'SS-2025-0814',
@@ -45,7 +45,7 @@ export const SolutionsPage: React.FC = () => {
       afterMetric: 'Spoilage reduced to < 4% with 14-day shelf life',
       beforeImpact: 'Distress sales forcing farmers to sell at ₹4/kg during glut',
       afterImpact: 'Collective cold holding enables orderly auction at ₹18/kg',
-      image: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80',
+      image: '/images/cold-storage.svg',
     },
   ];
 
@@ -76,7 +76,7 @@ export const SolutionsPage: React.FC = () => {
                 onError={(e) => {
                   const target = e.currentTarget;
                   target.onerror = null;
-                  target.src = "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=800&q=80";
+                  target.src = "/images/field-evidence.svg";
                 }}
                 className="w-full h-full object-cover"
               />

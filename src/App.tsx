@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { StateProvider } from './context/StateContext';
 import { AppShell } from './components/layout/AppShell';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Public pages
 import { LandingPage } from './pages/public/LandingPage';
@@ -45,7 +46,11 @@ export const App: React.FC = () => {
     <StateProvider>
       <HashRouter>
         <Routes>
-          <Route element={<AppShell />}>
+          <Route element={
+            <ErrorBoundary>
+              <AppShell />
+            </ErrorBoundary>
+          }>
             {/* Public Ecosystem routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/explore" element={<ExploreChallengesPage />} />
@@ -56,6 +61,7 @@ export const App: React.FC = () => {
             <Route path="/login" element={<LoginPage />} />
 
             {/* Citizen routes */}
+            <Route path="/report" element={<ReportProblemWizard />} />
             <Route path="/citizen" element={<CitizenDashboard />} />
             <Route path="/citizen/report" element={<ReportProblemWizard />} />
             <Route path="/citizen/reports" element={<CitizenReportsPage />} />

@@ -78,6 +78,7 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
   const [priorityFilter, setPriorityFilter] = useState<string>('All');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [activeLayer, setActiveLayer] = useState<'All' | 'Critical' | 'Adopted' | 'Resolved'>('All');
+  const [tileError, setTileError] = useState(false);
 
   // Jharkhand centroid coordinates
   const defaultCenter: [number, number] = [23.8, 85.8];
@@ -189,6 +190,9 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            eventHandlers={{
+              tileerror: () => setTileError(true)
+            }}
           />
           <MapController targetLocation={selectedTarget} />
 
@@ -206,13 +210,24 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
         </MapContainer>
 
         {/* Live sync badge on map */}
-        <div className="absolute top-3 right-3 z-[1000] bg-white/95 backdrop-blur border border-brand-border rounded-lg px-3 py-1.5 shadow-subtle flex items-center gap-2 text-xs">
+        <div className="absolute top-3 right-3 z-[1000] bg-white/95 dark:bg-slate-900/95 backdrop-blur border border-brand-border dark:border-slate-700 rounded-lg px-3 py-1.5 shadow-subtle flex items-center gap-2 text-xs">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-semibold text-brand-dark">GIS Live Feed</span>
-          <span className="text-[11px] text-brand-textMuted font-mono border-l pl-2">
+          <span className="font-semibold text-brand-dark dark:text-white">GIS Live Feed</span>
+          <span className="text-[11px] text-brand-textMuted dark:text-slate-400 font-mono border-l dark:border-slate-700 pl-2">
             {filteredChallenges.length} pins plotted
           </span>
         </div>
+
+        {/* Offline GIS Map Fallback Banner */}
+        {tileError && (
+          <div className="absolute top-3 left-3 z-[1000] bg-slate-950/90 text-white backdrop-blur border border-slate-700 rounded-lg px-3 py-1.5 shadow-subtle flex items-center gap-2 text-xs">
+            <span className="h-2 w-2 rounded-full bg-amber-400" />
+            <span className="font-bold text-emerald-400">Offline GIS Grid</span>
+            <span className="text-[11px] text-slate-300 font-mono border-l border-slate-700 pl-2">
+              Topology grid fallback active
+            </span>
+          </div>
+        )}
 
         {/* Floating Map Legend */}
         <div className="absolute bottom-4 left-4 z-[1000] bg-white/95 backdrop-blur border border-brand-border rounded-xl p-3 shadow-subtle text-[11px] space-y-1.5 max-w-[210px]">

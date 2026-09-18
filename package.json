@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "package": "rm -f samadhansetu-submission.zip && zip -r samadhansetu-submission.zip src public test index.html package.json package-lock.json README.md DEMO.md vite.config.ts tsconfig.json tsconfig.node.json tailwind.config.js postcss.config.js vercel.json"
   },
   "dependencies": {
     "clsx": "^2.1.1",

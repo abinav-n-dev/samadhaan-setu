@@ -21,28 +21,56 @@ describe('i18n translation service', () => {
     expect(result).toBe('Fallback Text');
   });
 
-  it('contains matching keys between EN and HI dictionaries', () => {
+  it('contains matching keys between EN and HI dictionaries with zero missing keys', () => {
     const enKeys = Object.keys(TRANSLATIONS.EN);
     const hiKeys = Object.keys(TRANSLATIONS.HI);
-    expect(enKeys.length).toBeGreaterThanOrEqual(50);
-    expect(hiKeys.length).toBeGreaterThanOrEqual(50);
+    expect(enKeys.length).toBeGreaterThanOrEqual(100);
+    expect(hiKeys.length).toBeGreaterThanOrEqual(100);
 
-    // Verify critical navigation keys exist in both
-    const criticalKeys = [
-      'brand.name',
-      'nav.dark_mode',
-      'nav.light_mode',
-      'side.overview',
-      'side.explore_challenges',
-      'side.command_center',
-      'side.citizen_dashboard',
-      'role.government',
-      'role.citizen',
+    const missingInHi = enKeys.filter((key) => !(key in TRANSLATIONS.HI));
+    const missingInEn = hiKeys.filter((key) => !(key in TRANSLATIONS.EN));
+
+    expect(missingInHi).toEqual([]);
+    expect(missingInEn).toEqual([]);
+
+    // Verify all citizen flow categories exist
+    const categories = [
+      'category.water',
+      'category.roads',
+      'category.power',
+      'category.health',
+      'category.education',
+      'category.waste',
     ];
+    for (const cat of categories) {
+      expect(TRANSLATIONS.EN[cat]).toBeDefined();
+      expect(TRANSLATIONS.HI[cat]).toBeDefined();
+    }
 
-    for (const key of criticalKeys) {
-      expect(TRANSLATIONS.EN[key]).toBeDefined();
-      expect(TRANSLATIONS.HI[key]).toBeDefined();
+    // Verify status badges exist
+    const statuses = [
+      'status.unverified',
+      'status.verified',
+      'status.published',
+      'status.adopted',
+      'status.in_progress',
+      'status.resolved',
+    ];
+    for (const st of statuses) {
+      expect(TRANSLATIONS.EN[st]).toBeDefined();
+      expect(TRANSLATIONS.HI[st]).toBeDefined();
+    }
+
+    // Verify priorities exist
+    const priorities = [
+      'priority.critical',
+      'priority.high',
+      'priority.medium',
+      'priority.low',
+    ];
+    for (const pr of priorities) {
+      expect(TRANSLATIONS.EN[pr]).toBeDefined();
+      expect(TRANSLATIONS.HI[pr]).toBeDefined();
     }
   });
 });

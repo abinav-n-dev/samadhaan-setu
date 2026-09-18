@@ -160,7 +160,7 @@ const renderCategoryIcon = (category: string, isSelected: boolean) => {
 };
 
 export const ReportProblemWizard: React.FC = () => {
-  const { submitCitizenReport, reports } = useAppState();
+  const { submitCitizenReport, reports, t, language } = useAppState();
   const navigate = useNavigate();
 
   // Mode: 'quick' (simple 1-page mobile flow) vs 'detailed' (5-step wizard)
@@ -187,11 +187,11 @@ export const ReportProblemWizard: React.FC = () => {
   // Evidence photos (with compression info)
   const [compressedPhotos, setCompressedPhotos] = useState<CompressedPhoto[]>([
     {
-      dataUrl: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80',
+      dataUrl: '/images/water-turbid.svg',
       originalSize: 3420000,
       compressedSize: 138000,
       ratio: 96,
-      name: 'Turbid_water_well_sample.jpg'
+      name: 'Turbid_water_well_sample.svg'
     }
   ]);
   const [isCompressing, setIsCompressing] = useState(false);
@@ -221,7 +221,6 @@ export const ReportProblemWizard: React.FC = () => {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-
           if (width > height) {
             if (width > maxWidth) {
               height = Math.round((height * maxWidth) / width);
@@ -233,7 +232,6 @@ export const ReportProblemWizard: React.FC = () => {
               height = maxWidth;
             }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext('2d');
@@ -247,13 +245,11 @@ export const ReportProblemWizard: React.FC = () => {
             });
             return;
           }
-
           ctx.drawImage(img, 0, 0, width, height);
           const dataUrl = canvas.toDataURL('image/jpeg', quality);
           const base64Str = dataUrl.split(',')[1] || '';
           const compressedSize = Math.round((base64Str.length * 3) / 4);
           const ratio = Math.max(0, Math.round(((file.size - compressedSize) / file.size) * 100));
-
           resolve({
             dataUrl,
             originalSize: file.size,
@@ -280,7 +276,7 @@ export const ReportProblemWizard: React.FC = () => {
         const compressed = await compressImageFile(files[i]);
         newItems.push(compressed);
       }
-      setCompressedPhotos((prev) => [...prev, ...newItems]);
+      setCompressedPhotos((prev) => [...prev, ...newItems].slice(0, 3));
     } catch (err) {
       console.error('Failed to compress image:', err);
     } finally {
@@ -359,11 +355,11 @@ export const ReportProblemWizard: React.FC = () => {
   };
 
   const steps = [
-    { num: 1, label: 'Problem' },
-    { num: 2, label: 'Location' },
-    { num: 3, label: 'Photo' },
-    { num: 4, label: 'Impact' },
-    { num: 5, label: 'Review' },
+    { num: 1, label: t('wizard.step_problem', 'Problem') },
+    { num: 2, label: t('wizard.step_location', 'Location') },
+    { num: 3, label: t('wizard.step_photo', 'Photo') },
+    { num: 4, label: t('wizard.step_impact', 'Impact') },
+    { num: 5, label: t('wizard.step_review', 'Review') },
   ];
 
   return (
@@ -372,13 +368,13 @@ export const ReportProblemWizard: React.FC = () => {
       <div className="bg-white rounded-3xl border border-brand-border p-5 sm:p-6 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[11px] font-bold border border-amber-200">
-            <span>नागरिक सेवा • Citizen Action</span>
+            <span>{t('report.badge', 'नागरिक सेवा • Citizen Action')}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold text-brand-text mt-1.5">
-            Report a Ground Problem
+            {t('report.title', 'Report a Ground Problem')}
           </h1>
           <p className="text-xs text-brand-textMuted mt-0.5">
-            Take a photo, select the issue, and submit to District Administration in 1 minute.
+            {t('report.subtitle', 'Take a photo, select the issue, and submit to District Administration in 1 minute.')}
           </p>
         </div>
 
@@ -394,7 +390,7 @@ export const ReportProblemWizard: React.FC = () => {
             }`}
           >
             <Zap className="w-3.5 h-3.5 text-brand-mint" />
-            <span>Quick Mode (1-Min)</span>
+            <span>{t('report.mode_quick', 'Quick Mode (1-Min)')}</span>
           </button>
           <button
             type="button"
@@ -406,7 +402,7 @@ export const ReportProblemWizard: React.FC = () => {
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
-            <span>5-Step Wizard</span>
+            <span>{t('report.mode_detailed', '5-Step Wizard')}</span>
           </button>
         </div>
       </div>
@@ -439,40 +435,40 @@ export const ReportProblemWizard: React.FC = () => {
           <div className="space-y-2">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              Report Registered & Geotagged
+              {t('report.success_badge', 'Report Registered & Geotagged')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
-              Reference #{submittedReportId}
+              {t('report.success_ref', 'Reference')} #{submittedReportId}
             </h2>
             <p className="text-xs sm:text-sm text-brand-textMuted max-w-md mx-auto leading-relaxed">
-              Your community report has been securely saved and submitted to the <strong>Dumka District Administration</strong>. AI duplicate clustering and university adoption matching have been triggered.
+              {t('report.success_desc', 'Your community report has been securely saved and submitted to the District Administration. AI duplicate clustering and university adoption matching have been triggered.')}
             </p>
           </div>
 
           {/* Report Summary Card */}
           <div className="p-4 sm:p-5 rounded-2xl bg-brand-bg border border-brand-border text-xs max-w-md mx-auto text-left space-y-2.5 font-sans">
             <div className="flex justify-between items-center border-b border-gray-200/60 pb-2">
-              <span className="text-gray-400 font-semibold">Tracking Number:</span>
+              <span className="text-gray-400 font-semibold">{t('report.tracking_number', 'Tracking Number:')}</span>
               <span className="font-mono font-bold text-brand-dark bg-white px-2 py-0.5 rounded border border-brand-border">
                 {submittedReportId}
               </span>
             </div>
             <div className="flex justify-between items-center border-b border-gray-200/60 pb-2">
-              <span className="text-gray-400 font-semibold">Current Phase:</span>
+              <span className="text-gray-400 font-semibold">{t('report.current_phase', 'Current Phase:')}</span>
               <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                Phase 02: AI Deduplication & Review
+                {t('report.phase2_name', 'Phase 02: AI Deduplication & Review')}
               </span>
             </div>
             <div className="flex justify-between items-center border-b border-gray-200/60 pb-2">
-              <span className="text-gray-400 font-semibold">Location:</span>
+              <span className="text-gray-400 font-semibold">{t('report.location_label', 'Location:')}</span>
               <span className="font-medium text-brand-text truncate max-w-[200px]">
                 {locality}, {block}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-400 font-semibold">Evidence Uploaded:</span>
+              <span className="text-gray-400 font-semibold">{t('report.evidence_uploaded', 'Evidence Uploaded:')}</span>
               <span className="font-bold text-emerald-700">
-                {compressedPhotos.length} photo(s) compressed & attached
+                {compressedPhotos.length} {t('report.photos_attached', 'photo(s) compressed & attached')}
               </span>
             </div>
           </div>
@@ -483,7 +479,7 @@ export const ReportProblemWizard: React.FC = () => {
               to="/citizen/reports"
               className="px-6 py-3 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition shadow-xs flex items-center justify-center gap-2"
             >
-              <span>Track Resolution Live</span>
+              <span>{t('report.track_live', 'Track Resolution Live')}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
@@ -496,7 +492,7 @@ export const ReportProblemWizard: React.FC = () => {
               className="px-5 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs hover:bg-emerald-700 transition flex items-center justify-center gap-2"
             >
               <Share2 className="w-4 h-4" />
-              <span>Share on WhatsApp</span>
+              <span>{t('report.share_whatsapp', 'Share on WhatsApp')}</span>
             </a>
 
             <button
@@ -509,7 +505,7 @@ export const ReportProblemWizard: React.FC = () => {
               }}
               className="px-5 py-3 bg-white border border-brand-border text-brand-text rounded-xl font-semibold text-xs hover:bg-gray-50 transition"
             >
-              File Another Report
+              {t('report.file_another', 'File Another Report')}
             </button>
           </div>
         </div>
@@ -524,10 +520,10 @@ export const ReportProblemWizard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">1</span>
-                  <span>Take or Upload Photo (फ़ोटो लें)</span>
+                  <span>{t('report.step1_photo', 'Take or Upload Photo')}</span>
                 </label>
                 <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">
-                  <Check className="w-3 h-3" /> Auto-Optimized
+                  <Check className="w-3 h-3" /> {t('report.auto_optimized', 'Auto-Optimized')}
                 </span>
               </div>
 
@@ -542,8 +538,8 @@ export const ReportProblemWizard: React.FC = () => {
                     <Camera className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <span className="font-extrabold text-xs block text-brand-dark">Take Photo</span>
-                    <span className="text-[10px] text-brand-textMuted block">फ़ोन कैमरा खोलें</span>
+                    <span className="font-extrabold text-xs block text-brand-dark">{t('report.take_photo', 'Take Photo')}</span>
+                    <span className="text-[10px] text-brand-textMuted block">{t('report.take_photo_sub', 'Open phone camera')}</span>
                   </div>
                 </button>
 
@@ -556,8 +552,8 @@ export const ReportProblemWizard: React.FC = () => {
                     <Upload className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <span className="font-extrabold text-xs block text-brand-text">Choose from Gallery</span>
-                    <span className="text-[10px] text-brand-textMuted block">गैलरी से चुनें</span>
+                    <span className="font-extrabold text-xs block text-brand-text">{t('report.choose_gallery', 'Choose from Gallery')}</span>
+                    <span className="text-[10px] text-brand-textMuted block">{t('report.choose_gallery_sub', 'Select from gallery')}</span>
                   </div>
                 </button>
               </div>
@@ -566,7 +562,7 @@ export const ReportProblemWizard: React.FC = () => {
               {isCompressing && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-2 text-blue-800 text-xs font-semibold animate-pulse">
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Compressing photo to save your mobile data...</span>
+                  <span>{t('report.compressing', 'Compressing photo to save your mobile data...')}</span>
                 </div>
               )}
 
@@ -574,7 +570,7 @@ export const ReportProblemWizard: React.FC = () => {
               {compressedPhotos.length > 0 && (
                 <div className="space-y-2 pt-1">
                   <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Attached Photos ({compressedPhotos.length})
+                    {t('report.attached_photos', 'Attached Photos')} ({compressedPhotos.length})
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {compressedPhotos.map((photo, idx) => (
@@ -614,9 +610,9 @@ export const ReportProblemWizard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">2</span>
-                  <span>Pick Category & Details (समस्या चुनें)</span>
+                  <span>{t('report.step2_category', 'Pick Category & Details')}</span>
                 </label>
-                <span className="text-[11px] text-brand-textMuted">Tap to auto-fill</span>
+                <span className="text-[11px] text-brand-textMuted">{t('report.tap_to_autofill', 'Tap to auto-fill')}</span>
               </div>
 
               {/* Category Pills */}
@@ -641,9 +637,9 @@ export const ReportProblemWizard: React.FC = () => {
                     >
                       {renderCategoryIcon(item.category, isSelected)}
                       <div className="min-w-0">
-                        <span className="font-bold text-xs truncate block">{item.labelEn}</span>
+                        <span className="font-bold text-xs truncate block">{language === 'HI' ? item.labelHi : item.labelEn}</span>
                         <span className={`text-[10px] truncate block ${isSelected ? 'text-brand-mint' : 'text-brand-textMuted'}`}>
-                          {item.labelHi}
+                          {language === 'HI' ? item.labelEn : item.labelHi}
                         </span>
                       </div>
                     </button>
@@ -656,7 +652,7 @@ export const ReportProblemWizard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Popular Issues (Click to auto-generate):</span>
+                    <span>{t('report.popular_issues', 'Popular Issues (Click to auto-generate):')}</span>
                   </span>
                 </div>
 
@@ -688,27 +684,27 @@ export const ReportProblemWizard: React.FC = () => {
               <div className="space-y-3 pt-1">
                 <div>
                   <label className="block font-bold text-brand-text mb-1">
-                    Problem Title / समस्या का शीर्षक:
+                    {t('report.problem_title', 'Problem Title:')}
                   </label>
                   <input
                     type="text"
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Severe drinking water contamination in village..."
+                    placeholder={t('report.problem_title_placeholder', 'e.g. Severe drinking water contamination in village...')}
                     className="w-full p-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-mint"
                   />
                 </div>
 
                 <div>
                   <label className="block font-bold text-brand-text mb-1">
-                    Detailed Description / विवरण:
+                    {t('report.detailed_desc', 'Detailed Description:')}
                   </label>
                   <textarea
                     rows={3}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe what happened, who is affected..."
+                    placeholder={t('report.detailed_desc_placeholder', 'Describe what happened, who is affected...')}
                     className="w-full p-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-mint"
                   />
                 </div>
@@ -720,7 +716,7 @@ export const ReportProblemWizard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">3</span>
-                  <span>Location / स्थान</span>
+                  <span>{t('report.step3_location', 'Location')}</span>
                 </label>
                 <button
                   type="button"
@@ -728,13 +724,13 @@ export const ReportProblemWizard: React.FC = () => {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition shadow-xs"
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  <span>Detect GPS Location</span>
+                  <span>{t('report.detect_gps', 'Detect GPS Location')}</span>
                 </button>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-gray-500 text-[11px] mb-1">District / ज़िला:</label>
+                  <label className="block font-semibold text-gray-500 text-[11px] mb-1">{t('report.district', 'District:')}</label>
                   <select
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
@@ -751,7 +747,7 @@ export const ReportProblemWizard: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-gray-500 text-[11px] mb-1">Village / गाँव:</label>
+                  <label className="block font-semibold text-gray-500 text-[11px] mb-1">{t('report.village', 'Village / Locality:')}</label>
                   <input
                     type="text"
                     required
@@ -770,12 +766,12 @@ export const ReportProblemWizard: React.FC = () => {
                 </div>
                 {geoStatus === 'success' && (
                   <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded text-[10px]">
-                    <CheckCircle2 className="w-3 h-3" /> Live GPS Fixed
+                    <CheckCircle2 className="w-3 h-3" /> {t('report.gps_fixed', 'Live GPS Fixed')}
                   </span>
                 )}
                 {geoStatus === 'locating' && (
                   <span className="text-blue-700 font-bold animate-pulse text-[10px]">
-                    Acquiring GPS satellite...
+                    {t('report.acquiring_gps', 'Acquiring GPS satellite...')}
                   </span>
                 )}
               </div>
@@ -786,7 +782,7 @@ export const ReportProblemWizard: React.FC = () => {
               <div className="p-4 bg-amber-50 border border-amber-300 rounded-2xl space-y-2 text-xs">
                 <div className="flex items-center gap-2 font-bold text-amber-900">
                   <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
-                  <span>Similar Problem Already Reported Nearby ({liveSimilarity.similarityScore}% match)</span>
+                  <span>{t('report.similar_nearby', 'Similar Problem Already Reported Nearby')} ({liveSimilarity.similarityScore}% match)</span>
                 </div>
                 <p className="text-amber-800 text-[11px] leading-relaxed">
                   {liveSimilarity.reasons.length > 0
@@ -795,7 +791,7 @@ export const ReportProblemWizard: React.FC = () => {
                 </p>
                 <div className="inline-flex items-center gap-1.5 text-[11px] text-amber-900 font-semibold bg-white/70 p-2 rounded-lg w-full">
                   <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                  <span>Your submission will corroborate and reinforce the priority score for this cluster.</span>
+                  <span>{t('report.reinforce_notice', 'Your submission will corroborate and reinforce the priority score for this cluster.')}</span>
                 </div>
               </div>
             )}
@@ -803,7 +799,7 @@ export const ReportProblemWizard: React.FC = () => {
             {/* Reporter Details (Pre-filled, editable) */}
             <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
               <div>
-                <label className="block font-semibold text-gray-500 text-[11px] mb-1">Your Name / आपका नाम:</label>
+                <label className="block font-semibold text-gray-500 text-[11px] mb-1">{t('report.your_name', 'Your Name:')}</label>
                 <input
                   type="text"
                   required
@@ -814,7 +810,7 @@ export const ReportProblemWizard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-gray-500 text-[11px] mb-1">Mobile / फ़ोन नंबर:</label>
+                <label className="block font-semibold text-gray-500 text-[11px] mb-1">{t('report.mobile_number', 'Mobile Number:')}</label>
                 <input
                   type="tel"
                   required
@@ -832,7 +828,7 @@ export const ReportProblemWizard: React.FC = () => {
             className="w-full py-4 bg-brand-dark text-brand-mint rounded-2xl font-extrabold text-sm hover:bg-brand-darkSecondary transition shadow-elevated flex items-center justify-center gap-2 active:scale-98"
           >
             <Zap className="w-4 h-4 text-brand-mint" />
-            <span>Submit Community Report (शिकायत दर्ज करें)</span>
+            <span>{t('report.submit_btn', 'Submit Community Report')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -884,43 +880,43 @@ export const ReportProblemWizard: React.FC = () => {
           {/* Detailed Step 1 */}
           {currentStep === 1 && (
             <div className="space-y-4 text-xs">
-              <h3 className="text-base font-bold text-brand-text">Step 1: Problem Description</h3>
+              <h3 className="text-base font-bold text-brand-text">{t('wizard.step1_heading', 'Step 1: Problem Description')}</h3>
               <div>
-                <label className="block font-semibold text-brand-text mb-1">Issue Headline *</label>
+                <label className="block font-semibold text-brand-text mb-1">{t('wizard.issue_headline', 'Issue Headline *')}</label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Severe fluoride contamination and yellow water..."
+                  placeholder={t('report.problem_title_placeholder', 'e.g. Severe fluoride contamination and yellow water...')}
                   className="w-full p-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-brand-text mb-1">Category *</label>
+                <label className="block font-semibold text-brand-text mb-1">{t('wizard.category_label', 'Category *')}</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text font-medium"
                 >
-                  <option value="Water & Sanitation">Water & Sanitation</option>
-                  <option value="Roads & Infrastructure">Roads & Infrastructure</option>
-                  <option value="Healthcare">Healthcare</option>
-                  <option value="Electricity & Solar">Electricity & Solar</option>
-                  <option value="Waste Management">Waste Management</option>
-                  <option value="Agriculture">Agriculture</option>
+                  <option value="Water & Sanitation">{t('category.water', 'Water & Sanitation')}</option>
+                  <option value="Roads & Infrastructure">{t('category.roads', 'Roads & Infrastructure')}</option>
+                  <option value="Healthcare">{t('category.health', 'Healthcare')}</option>
+                  <option value="Electricity & Solar">{t('category.power', 'Electricity & Solar')}</option>
+                  <option value="Waste Management">{t('category.waste', 'Waste Management')}</option>
+                  <option value="Agriculture">{t('category.agriculture', 'Agriculture')}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold text-brand-text mb-1">Detailed Description *</label>
+                <label className="block font-semibold text-brand-text mb-1">{t('wizard.detailed_desc_label', 'Detailed Description *')}</label>
                 <textarea
                   rows={4}
                   required
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Explain the background, severity, duration, and community impact..."
+                  placeholder={t('report.detailed_desc_placeholder', 'Explain the background, severity, duration, and community impact...')}
                   className="w-full p-2.5 bg-brand-bg border border-brand-border rounded-xl text-brand-text"
                 />
               </div>
@@ -931,7 +927,7 @@ export const ReportProblemWizard: React.FC = () => {
                   onClick={() => setCurrentStep(2)}
                   className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition"
                 >
-                  Next: Location & GPS →
+                  {t('wizard.next_location', 'Next: Location & GPS →')}
                 </button>
               </div>
             </div>
@@ -941,20 +937,20 @@ export const ReportProblemWizard: React.FC = () => {
           {currentStep === 2 && (
             <div className="space-y-4 text-xs">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-brand-text">Step 2: Location & GPS Coordinates</h3>
+                <h3 className="text-base font-bold text-brand-text">{t('wizard.step2_heading', 'Step 2: Location & GPS Coordinates')}</h3>
                 <button
                   type="button"
                   onClick={handleUseMyLocation}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold"
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  <span>Detect GPS</span>
+                  <span>{t('report.detect_gps', 'Detect GPS Location')}</span>
                 </button>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-brand-text mb-1">District *</label>
+                  <label className="block font-semibold text-brand-text mb-1">{t('report.district', 'District *')}</label>
                   <input
                     type="text"
                     value={district}
@@ -963,7 +959,7 @@ export const ReportProblemWizard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-brand-text mb-1">Block *</label>
+                  <label className="block font-semibold text-brand-text mb-1">{t('report.block', 'Block *')}</label>
                   <input
                     type="text"
                     value={block}
@@ -975,7 +971,7 @@ export const ReportProblemWizard: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-brand-text mb-1">Village / Locality *</label>
+                  <label className="block font-semibold text-brand-text mb-1">{t('report.village', 'Village / Locality *')}</label>
                   <input
                     type="text"
                     value={locality}
@@ -984,7 +980,7 @@ export const ReportProblemWizard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-brand-text mb-1">Landmark</label>
+                  <label className="block font-semibold text-brand-text mb-1">{t('report.landmark', 'Landmark')}</label>
                   <input
                     type="text"
                     value={landmark}
@@ -1000,14 +996,14 @@ export const ReportProblemWizard: React.FC = () => {
                   onClick={() => setCurrentStep(1)}
                   className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
                 >
-                  Back
+                  {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(3)}
                   className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
                 >
-                  Next: Photo Evidence →
+                  {t('wizard.next_photo', 'Next: Photo Evidence →')}
                 </button>
               </div>
             </div>
@@ -1016,9 +1012,9 @@ export const ReportProblemWizard: React.FC = () => {
           {/* Detailed Step 3 */}
           {currentStep === 3 && (
             <div className="space-y-4 text-xs">
-              <h3 className="text-base font-bold text-brand-text">Step 3: Photo Capture & Compression</h3>
+              <h3 className="text-base font-bold text-brand-text">{t('wizard.step3_heading', 'Step 3: Photo Capture & Compression')}</h3>
               <p className="text-brand-textMuted">
-                Photos are automatically compressed client-side to save mobile bandwidth.
+                {t('wizard.step3_desc', 'Photos are automatically compressed client-side to save mobile bandwidth.')}
               </p>
 
               <div className="grid grid-cols-2 gap-3">
@@ -1028,7 +1024,7 @@ export const ReportProblemWizard: React.FC = () => {
                   className="p-4 border-2 border-dashed border-brand-mint rounded-2xl bg-emerald-50/40 text-center font-bold text-brand-dark flex flex-col items-center gap-1.5"
                 >
                   <Camera className="w-5 h-5" />
-                  <span>Snap with Camera</span>
+                  <span>{t('wizard.snap_camera', 'Snap with Camera')}</span>
                 </button>
 
                 <button
@@ -1037,7 +1033,7 @@ export const ReportProblemWizard: React.FC = () => {
                   className="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center font-bold text-brand-text flex flex-col items-center gap-1.5"
                 >
                   <Upload className="w-5 h-5" />
-                  <span>Upload from Files</span>
+                  <span>{t('wizard.upload_files', 'Upload from Files')}</span>
                 </button>
               </div>
 
@@ -1064,14 +1060,14 @@ export const ReportProblemWizard: React.FC = () => {
                   onClick={() => setCurrentStep(2)}
                   className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
                 >
-                  Back
+                  {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(4)}
                   className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
                 >
-                  Next: Community Impact →
+                  {t('wizard.next_impact', 'Next: Community Impact →')}
                 </button>
               </div>
             </div>
@@ -1080,11 +1076,11 @@ export const ReportProblemWizard: React.FC = () => {
           {/* Detailed Step 4 */}
           {currentStep === 4 && (
             <div className="space-y-4 text-xs">
-              <h3 className="text-base font-bold text-brand-text">Step 4: Community Impact & Urgency</h3>
+              <h3 className="text-base font-bold text-brand-text">{t('wizard.step4_heading', 'Step 4: Community Impact & Urgency')}</h3>
 
               <div>
                 <label className="block font-semibold text-brand-text mb-1">
-                  Estimated People Affected: {affectedEstimate} citizens
+                  {t('wizard.estimated_affected', 'Estimated People Affected:')} {affectedEstimate} citizens
                 </label>
                 <input
                   type="range"
@@ -1098,7 +1094,7 @@ export const ReportProblemWizard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-brand-text mb-1">Urgency Level</label>
+                <label className="block font-semibold text-brand-text mb-1">{t('wizard.urgency_level', 'Urgency Level')}</label>
                 <div className="grid grid-cols-4 gap-2">
                   {(['Low', 'Medium', 'High', 'Emergency'] as const).map((lvl) => (
                     <button
@@ -1125,14 +1121,14 @@ export const ReportProblemWizard: React.FC = () => {
                   onClick={() => setCurrentStep(3)}
                   className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
                 >
-                  Back
+                  {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(5)}
                   className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
                 >
-                  Next: Final Review →
+                  {t('wizard.next_review', 'Next: Final Review →')}
                 </button>
               </div>
             </div>
@@ -1141,7 +1137,7 @@ export const ReportProblemWizard: React.FC = () => {
           {/* Detailed Step 5 */}
           {currentStep === 5 && (
             <div className="space-y-4 text-xs">
-              <h3 className="text-base font-bold text-brand-text">Step 5: Review & Submit</h3>
+              <h3 className="text-base font-bold text-brand-text">{t('wizard.step5_heading', 'Step 5: Review & Submit')}</h3>
 
               <div className="p-4 bg-brand-bg rounded-2xl border border-brand-border space-y-2">
                 <div><strong>Headline:</strong> {title || 'Untitled Report'}</div>
@@ -1157,7 +1153,7 @@ export const ReportProblemWizard: React.FC = () => {
                   onClick={() => setCurrentStep(4)}
                   className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
                 >
-                  Back
+                  {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
@@ -1165,7 +1161,7 @@ export const ReportProblemWizard: React.FC = () => {
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-extrabold hover:bg-brand-darkSecondary transition shadow-xs"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Submit Official Citizen Report</span>
+                  <span>{t('wizard.submit_official', 'Submit Official Citizen Report')}</span>
                 </button>
               </div>
             </div>

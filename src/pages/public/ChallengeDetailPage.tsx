@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { PriorityBadge } from '../../components/common/PriorityBadge';
@@ -77,6 +77,33 @@ export const ChallengeDetailPage: React.FC = () => {
     'Deployment of a modular, solar-assisted community micro-filtration kiosk with activated alumina cartridges, gravity settling tank, and real-time GSM telemetry for continuous water quality monitoring.'
   );
 
+  // Synchronize adopt defaults with current challenge so non-1042 challenges don't show BIT Mesra
+  useEffect(() => {
+    if (challenge) {
+      if (challenge.code === 'JH-WTR-1042') {
+        setTeamName('AquaShield Innovators');
+        setUniversityName('Birla Institute of Technology (BIT) Mesra');
+        setDepartmentName('Civil & Environmental Engineering');
+        setMentorName('Dr. Rameshwar Mahato');
+        setApproachSummary(
+          'Deployment of a modular, solar-assisted community micro-filtration kiosk with activated alumina cartridges, gravity settling tank, and real-time GSM telemetry for continuous water quality monitoring.'
+        );
+      } else {
+        setTeamName(`${challenge.category.split(' ')[0]} Engineering Team`);
+        setUniversityName(
+          challenge.district === 'Dumka'
+            ? 'Sido Kanhu Murmu University, Dumka'
+            : 'National Institute of Technology (NIT) Jamshedpur'
+        );
+        setDepartmentName(challenge.suggestedDepartments[0] || challenge.department || 'Engineering');
+        setMentorName('Dr. S. K. Verma');
+        setApproachSummary(
+          `Engineered capstone solution and field implementation proposal for ${challenge.title} in ${challenge.district}.`
+        );
+      }
+    }
+  }, [challenge?.id]);
+
   // Industry support state
   const [supportType, setSupportType] = useState<'Funding & Equipment' | 'CSR Grant' | 'Technical Mentorship'>('CSR Grant');
   const [commitmentDetails, setCommitmentDetails] = useState('₹3,80,000 grant and continuous cartridge sponsorship.');
@@ -142,9 +169,9 @@ export const ChallengeDetailPage: React.FC = () => {
     setShowEvidenceModal(false);
   };
 
-  const handleImpactSignoff = () => {
+  const handleImpactSignoff = async () => {
     if (!challenge) return;
-    const cred = verifyImpact(challenge.id, {
+    const cred = await verifyImpact(challenge.id, {
       actualReachedCount: Number(beneficiariesReached) || 2615,
       remarks: 'Certified 92.1% population reach. Field test telemetry verified by PHC Dumka.',
     });
