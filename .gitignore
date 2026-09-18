@@ -26,3 +26,5 @@ dist-ssr
 samadhansetu-source.zip
 samadhansetu-source.tar.gz
 
+.vercel
+.env*
