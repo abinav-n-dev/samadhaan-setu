@@ -15,7 +15,9 @@ import {
   ShieldCheck,
   GraduationCap,
   Building,
-  HeartHandshake
+  HeartHandshake,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -23,12 +25,22 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
-  const { notifications, role, isAuthenticated, currentUser, logout } = useAppState();
+  const { 
+    notifications, 
+    role, 
+    isAuthenticated, 
+    currentUser, 
+    logout, 
+    theme, 
+    toggleTheme, 
+    language, 
+    setLanguage, 
+    t 
+  } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [language, setLanguage] = useState<'EN' | 'HI'>('EN');
   const navigate = useNavigate();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -75,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
             <input
               type="text"
-              placeholder="Search challenges, districts, categories..."
+              placeholder={t('nav.search_placeholder', 'Search challenges, districts, categories...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-brand-bg border border-brand-border rounded-xl pl-9 pr-3 py-1.5 text-xs text-brand-text placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-mint focus:bg-white"
@@ -83,16 +95,53 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           </form>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          {/* Language Switcher */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Light / Dark Mode Toggle */}
           <button
             type="button"
-            onClick={() => setLanguage(l => l === 'EN' ? 'HI' : 'EN')}
-            className="hidden sm:flex items-center gap-1 text-xs text-brand-text font-medium px-2.5 py-1.5 rounded-xl border border-brand-border hover:bg-brand-bg transition"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? t('nav.light_mode', 'Light Mode') : t('nav.dark_mode', 'Dark Mode')}
+            title={theme === 'dark' ? t('nav.light_mode', 'Light Mode') : t('nav.dark_mode', 'Dark Mode')}
+            className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-brand-border hover:bg-brand-bg transition text-xs font-semibold text-brand-text shadow-xs"
           >
-            <Languages className="w-3.5 h-3.5 text-brand-dark" />
-            <span>{language === 'EN' ? 'EN' : 'हिंदी'}</span>
+            {theme === 'dark' ? (
+              <>
+                <Sun className="w-4 h-4 text-amber-400" />
+                <span className="hidden md:inline">{t('nav.light_mode', 'Light')}</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-4 h-4 text-slate-700" />
+                <span className="hidden md:inline">{t('nav.dark_mode', 'Dark')}</span>
+              </>
+            )}
           </button>
+
+          {/* Bilingual Language Selector: EN | हिंदी */}
+          <div className="flex items-center rounded-xl border border-brand-border overflow-hidden text-xs font-semibold bg-brand-bg p-0.5">
+            <button
+              type="button"
+              onClick={() => setLanguage('EN')}
+              className={`px-2 py-1 rounded-lg transition ${
+                language === 'EN'
+                  ? 'bg-brand-dark text-brand-mint font-bold shadow-xs'
+                  : 'text-brand-textMuted hover:text-brand-text'
+              }`}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('HI')}
+              className={`px-2 py-1 rounded-lg transition ${
+                language === 'HI'
+                  ? 'bg-brand-dark text-brand-mint font-bold shadow-xs'
+                  : 'text-brand-textMuted hover:text-brand-text'
+              }`}
+            >
+              हिंदी
+            </button>
+          </div>
 
           {/* Notifications */}
           <div className="relative">

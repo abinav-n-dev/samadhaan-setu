@@ -31,50 +31,50 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseMobile }) => {
-  const { role, currentUser, isAuthenticated, logout } = useAppState();
+  const { role, currentUser, isAuthenticated, logout, t } = useAppState();
 
   const getRoleLinks = () => {
     switch (role) {
       case 'government':
         return [
-          { to: '/government', label: 'Command Center', icon: <ShieldCheck className="w-4 h-4" /> },
-          { to: '/government/verification', label: 'Incoming & Duplicate Queue', icon: <Layers className="w-4 h-4" /> },
-          { to: '/government/map', label: 'Live GIS Problem Map', icon: <Map className="w-4 h-4" /> },
-          { to: '/government/challenges', label: 'Challenges Registry', icon: <FileText className="w-4 h-4" /> },
-          { to: '/government/impact', label: 'Impact Verification Desk', icon: <CheckSquare className="w-4 h-4" /> },
-          { to: '/government/analytics', label: 'Geographic Analytics', icon: <BarChart3 className="w-4 h-4" /> },
-          { to: '/government/audit', label: 'Transparent Audit Log', icon: <Clock className="w-4 h-4" /> },
+          { to: '/government', label: t('side.command_center', 'Command Center'), icon: <ShieldCheck className="w-4 h-4" /> },
+          { to: '/government/verification', label: t('side.verification_queue', 'Incoming & Duplicate Queue'), icon: <Layers className="w-4 h-4" /> },
+          { to: '/government/map', label: t('side.live_gis_map', 'Live GIS Problem Map'), icon: <Map className="w-4 h-4" /> },
+          { to: '/government/challenges', label: t('side.challenges_registry', 'Challenges Registry'), icon: <FileText className="w-4 h-4" /> },
+          { to: '/government/impact', label: t('side.impact_desk', 'Impact Verification Desk'), icon: <CheckSquare className="w-4 h-4" /> },
+          { to: '/government/analytics', label: t('side.analytics', 'Geographic Analytics'), icon: <BarChart3 className="w-4 h-4" /> },
+          { to: '/government/audit', label: t('side.audit_log', 'Transparent Audit Log'), icon: <Clock className="w-4 h-4" /> },
         ];
       case 'citizen':
         return [
-          { to: '/citizen', label: 'Citizen Dashboard', icon: <Home className="w-4 h-4" /> },
-          { to: '/citizen/report', label: 'Report a Problem', icon: <PlusCircle className="w-4 h-4" /> },
-          { to: '/citizen/reports', label: 'My Submissions & Tracking', icon: <ListOrdered className="w-4 h-4" /> },
+          { to: '/citizen', label: t('side.citizen_dashboard', 'Citizen Dashboard'), icon: <Home className="w-4 h-4" /> },
+          { to: '/citizen/report', label: t('side.report_problem', 'Report a Problem'), icon: <PlusCircle className="w-4 h-4" /> },
+          { to: '/citizen/reports', label: t('side.my_reports', 'My Submissions & Tracking'), icon: <ListOrdered className="w-4 h-4" /> },
         ];
       case 'student':
         return [
-          { to: '/university', label: 'Innovation Dashboard', icon: <GraduationCap className="w-4 h-4" /> },
-          { to: '/university/challenges', label: 'Recommended Challenges', icon: <Compass className="w-4 h-4" /> },
-          { to: '/university/projects', label: 'Active Projects & Milestones', icon: <CheckCircle className="w-4 h-4" /> },
-          { to: '/university/achievements', label: 'Student Impact Profile', icon: <Award className="w-4 h-4" /> },
+          { to: '/university', label: t('side.university_dashboard', 'Innovation Dashboard'), icon: <GraduationCap className="w-4 h-4" /> },
+          { to: '/university/challenges', label: t('side.recommended_challenges', 'Recommended Challenges'), icon: <Compass className="w-4 h-4" /> },
+          { to: '/university/projects', label: t('side.active_projects', 'Active Projects & Milestones'), icon: <CheckCircle className="w-4 h-4" /> },
+          { to: '/university/achievements', label: t('side.student_profile', 'Student Impact Profile'), icon: <Award className="w-4 h-4" /> },
         ];
       case 'mentor':
         return [
-          { to: '/university/mentors', label: 'Proposal Review Desk', icon: <CheckSquare className="w-4 h-4" /> },
-          { to: '/university/projects', label: 'Supervised Student Teams', icon: <GraduationCap className="w-4 h-4" /> },
-          { to: '/explore', label: 'Browse Challenges', icon: <Compass className="w-4 h-4" /> },
+          { to: '/university/mentors', label: t('side.mentor_review', 'Proposal Review Desk'), icon: <CheckSquare className="w-4 h-4" /> },
+          { to: '/university/projects', label: t('side.supervised_teams', 'Supervised Student Teams'), icon: <GraduationCap className="w-4 h-4" /> },
+          { to: '/explore', label: t('side.explore_challenges', 'Browse Challenges'), icon: <Compass className="w-4 h-4" /> },
         ];
       case 'industry':
         return [
-          { to: '/industry', label: 'CSR Portfolio & Impact', icon: <Briefcase className="w-4 h-4" /> },
-          { to: '/industry/projects', label: 'Discover University Projects', icon: <Compass className="w-4 h-4" /> },
-          { to: '/solutions', label: 'Proven Implementations', icon: <Award className="w-4 h-4" /> },
+          { to: '/industry', label: t('side.csr_portfolio', 'CSR Portfolio & Impact'), icon: <Briefcase className="w-4 h-4" /> },
+          { to: '/industry/projects', label: t('side.discover_projects', 'Discover University Projects'), icon: <Compass className="w-4 h-4" /> },
+          { to: '/solutions', label: t('side.solutions', 'Proven Implementations'), icon: <Award className="w-4 h-4" /> },
         ];
       case 'ngo':
         return [
-          { to: '/ngo', label: 'Field Operations Desk', icon: <HeartHandshake className="w-4 h-4" /> },
-          { to: '/ngo/evidence', label: 'Submit Field Evidence', icon: <UploadCloud className="w-4 h-4" /> },
-          { to: '/government/map', label: 'Ground Incident Map', icon: <Map className="w-4 h-4" /> },
+          { to: '/ngo', label: t('side.field_ops', 'Field Operations Desk'), icon: <HeartHandshake className="w-4 h-4" /> },
+          { to: '/ngo/evidence', label: t('side.submit_evidence', 'Submit Field Evidence'), icon: <UploadCloud className="w-4 h-4" /> },
+          { to: '/government/map', label: t('side.incident_map', 'Ground Incident Map'), icon: <Map className="w-4 h-4" /> },
         ];
       default:
         return [];
@@ -82,11 +82,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
   };
 
   const publicLinks = [
-    { to: '/', label: 'Overview', icon: <Home className="w-4 h-4" /> },
-    { to: '/explore', label: 'Explore Challenges', icon: <Compass className="w-4 h-4" /> },
-    { to: '/solutions', label: 'Impact Showcase', icon: <Award className="w-4 h-4" /> },
-    { to: '/how-it-works', label: 'How Ecosystem Works', icon: <HelpCircle className="w-4 h-4" /> },
-    { to: '/verify/SS-2026-1042', label: 'Verify Credential', icon: <ExternalLink className="w-4 h-4" /> },
+    { to: '/', label: t('side.overview', 'Overview'), icon: <Home className="w-4 h-4" /> },
+    { to: '/explore', label: t('side.explore_challenges', 'Explore Challenges'), icon: <Compass className="w-4 h-4" /> },
+    { to: '/solutions', label: t('side.solutions', 'Impact Showcase'), icon: <Award className="w-4 h-4" /> },
+    { to: '/how-it-works', label: t('side.how_it_works', 'How Ecosystem Works'), icon: <HelpCircle className="w-4 h-4" /> },
+    { to: '/verify/SS-2026-1042', label: t('side.verify_credential', 'Verify Credential'), icon: <ExternalLink className="w-4 h-4" /> },
   ];
 
   return (

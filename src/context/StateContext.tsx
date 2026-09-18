@@ -21,6 +21,7 @@ import {
   INITIAL_NOTIFICATIONS 
 } from '../data/mockData';
 import { analyzeReportSimilarity } from '../services/duplicateService';
+import { translate, Language } from '../services/i18n';
 
 export const ROLE_PROFILES: Record<UserRole, UserProfile> = {
   government: {
@@ -102,6 +103,12 @@ interface StateContextType {
   dismissToast: (id: string) => void;
   goldenStep: number;
   setGoldenStep: (step: number) => void;
+  // Appearance & Localization
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string, fallback?: string) => string;
   // Actions
   submitCitizenReport: (report: Omit<CitizenReport, 'id' | 'trackingId' | 'status' | 'createdAt' | 'updatedAt'>) => CitizenReport;
   verifyChallenge: (challengeId: string, officerName?: string) => void;
@@ -123,6 +130,8 @@ const STORAGE_KEY_CREDENTIALS = 'samadhansetu_credentials_v2';
 const STORAGE_KEY_LOGS = 'samadhansetu_logs_v2';
 const STORAGE_KEY_ROLE = 'samadhansetu_role_v2';
 const STORAGE_KEY_AUTH = 'samadhansetu_auth_v2';
+const STORAGE_KEY_THEME = 'samadhansetu_theme_v2';
+const STORAGE_KEY_LANG = 'samadhansetu_lang_v2';
 
 export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<UserRole>(() => {
@@ -161,6 +170,48 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [notifications, setNotifications] = useState<SystemNotification[]>(INITIAL_NOTIFICATIONS);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [goldenStep, setGoldenStep] = useState<number>(1);
+
+  // Appearance theme (light/dark)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_THEME);
+    if (saved === 'dark' || saved === 'light') return saved;
+    return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  // Localization (EN / HI)
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_LANG);
+    return (saved === 'HI' || saved === 'EN') ? saved : 'EN';
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_THEME, theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_LANG, language);
+  }, [language]);
+
+  const toggleTheme = () => {
+    setTheme(prev => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      return next;
+    });
+  };
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem(STORAGE_KEY_LANG, lang);
+  };
+
+  const t = (key: string, fallback?: string): string => {
+    return translate(key, language, fallback);
+  };
 
   // Sync to local storage
   useEffect(() => {
@@ -631,6 +682,11 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         dismissToast,
         goldenStep,
         setGoldenStep,
+        theme,
+        toggleTheme,
+        language,
+        setLanguage,
+        t,
         submitCitizenReport,
         verifyChallenge,
         overridePriority,

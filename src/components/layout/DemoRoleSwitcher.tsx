@@ -18,17 +18,17 @@ import {
 } from 'lucide-react';
 
 export const DemoRoleSwitcher: React.FC = () => {
-  const { role, switchRole, resetToDemoDefaults, goldenStep, setGoldenStep } = useAppState();
+  const { role, switchRole, resetToDemoDefaults, goldenStep, setGoldenStep, t } = useAppState();
   const [showTourModal, setShowTourModal] = useState(false);
   const navigate = useNavigate();
 
   const roles: { key: UserRole; label: string; icon: React.ReactNode; path: string }[] = [
-    { key: 'government', label: 'Government Officer', icon: <Shield className="w-3.5 h-3.5" />, path: '/government' },
-    { key: 'student', label: 'Student / Innovator', icon: <GraduationCap className="w-3.5 h-3.5" />, path: '/university' },
-    { key: 'mentor', label: 'Faculty Mentor', icon: <UserCheck className="w-3.5 h-3.5" />, path: '/university/mentors' },
-    { key: 'industry', label: 'Industry / CSR', icon: <Briefcase className="w-3.5 h-3.5" />, path: '/industry' },
-    { key: 'ngo', label: 'NGO / Field Partner', icon: <HeartHandshake className="w-3.5 h-3.5" />, path: '/ngo' },
-    { key: 'citizen', label: 'Citizen Reporter', icon: <Users className="w-3.5 h-3.5" />, path: '/citizen' },
+    { key: 'government', label: t('role.government', 'Government Officer'), icon: <Shield className="w-3.5 h-3.5" />, path: '/government' },
+    { key: 'student', label: t('role.student', 'Student / Innovator'), icon: <GraduationCap className="w-3.5 h-3.5" />, path: '/university' },
+    { key: 'mentor', label: t('role.mentor', 'Faculty Mentor'), icon: <UserCheck className="w-3.5 h-3.5" />, path: '/university/mentors' },
+    { key: 'industry', label: t('role.industry', 'Industry / CSR'), icon: <Briefcase className="w-3.5 h-3.5" />, path: '/industry' },
+    { key: 'ngo', label: t('role.ngo', 'NGO / Field Partner'), icon: <HeartHandshake className="w-3.5 h-3.5" />, path: '/ngo' },
+    { key: 'citizen', label: t('role.citizen', 'Citizen Reporter'), icon: <Users className="w-3.5 h-3.5" />, path: '/citizen' },
   ];
 
   const tourSteps = [
@@ -67,11 +67,11 @@ export const DemoRoleSwitcher: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 bg-brand-sidebarActive px-2.5 py-1 rounded-md border border-brand-border/20">
             <span className="h-2 w-2 rounded-full bg-brand-mintBright animate-pulse" />
-            <span className="font-bold text-brand-mint text-[11px] tracking-wider uppercase">SIH 2026 Demo Mode</span>
+            <span className="font-bold text-brand-mint text-[11px] tracking-wider uppercase">{t('demo.badge', 'SIH 2026 DEMO MODE')}</span>
           </div>
 
           <span className="hidden md:inline text-gray-400 text-[11px]">
-            Active Role: <strong className="text-white capitalize">{role}</strong>
+            {t('demo.active_role', 'Active Role')}: <strong className="text-white capitalize">{role}</strong>
           </span>
         </div>
 
@@ -100,12 +100,12 @@ export const DemoRoleSwitcher: React.FC = () => {
             className="flex items-center gap-1.5 px-3 py-1 bg-brand-mint text-brand-dark rounded-lg font-bold text-xs hover:bg-brand-mintBright transition shadow-xs"
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>Golden Tour (Step {goldenStep}/12)</span>
+            <span>{t('demo.golden_tour', 'Golden Tour')} ({t('demo.step', 'Step')} {goldenStep}/12)</span>
           </button>
 
           <button
             onClick={resetToDemoDefaults}
-            title="Reset to initial prototype dataset"
+            title={t('demo.reset', 'Reset to initial prototype dataset')}
             className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-brand-sidebarActive transition"
           >
             <RotateCcw className="w-3.5 h-3.5" />

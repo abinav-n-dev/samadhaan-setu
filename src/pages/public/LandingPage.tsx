@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  const { login, challenges } = useAppState();
+  const { login, challenges, t } = useAppState();
   const navigate = useNavigate();
 
   const totalReports = 1284;
@@ -234,15 +234,15 @@ export const LandingPage: React.FC = () => {
           <div className="lg:col-span-8 space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-sidebarActive border border-brand-mint/30 text-xs font-semibold text-brand-mint">
               <span className="w-2 h-2 rounded-full bg-brand-mintBright animate-ping" />
-              <span>Smart India Hackathon 2026 Innovation Platform</span>
+              <span>{t('hero.tag', 'Smart India Hackathon 2026 Innovation Platform')}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Bridging Civic Problems with <span className="text-brand-mint">Engineered, Funded & Verified Solutions.</span>
+              {t('hero.title_prefix', 'Bridging Civic Problems with')} <span className="text-brand-mint">{t('hero.title_highlight', 'Engineered, Funded & Verified Solutions.')}</span>
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal max-w-2xl">
-              <strong>SamadhanSetu (समाधान सेतु)</strong> turns verified community problems into accredited University Capstone projects, funded by Corporate CSR grants, deployed with grassroots NGOs, and audited by District Administration.
+              {t('hero.desc', 'SamadhanSetu (समाधान सेतु) turns verified community problems into accredited University Capstone projects, funded by Corporate CSR grants, deployed with grassroots NGOs, and audited by District Administration.')}
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -251,14 +251,14 @@ export const LandingPage: React.FC = () => {
                 className="inline-flex items-center gap-2 bg-brand-mint text-brand-dark px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm hover:bg-brand-mintBright transition shadow-elevated"
               >
                 <Lock className="w-4 h-4" />
-                <span>Select Portal & Log In</span>
+                <span>{t('nav.portal_login', 'Select Portal & Log In')}</span>
               </a>
 
               <Link
                 to="/citizen/report"
                 className="inline-flex items-center gap-2 bg-brand-sidebarActive text-white border border-brand-border/30 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm hover:bg-brand-sidebarActive/80 transition"
               >
-                <span>Report a Problem</span>
+                <span>{t('hero.btn_report', 'Report a Problem')}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
@@ -266,7 +266,7 @@ export const LandingPage: React.FC = () => {
                 to="/explore"
                 className="inline-flex items-center gap-2 text-gray-300 hover:text-white text-xs sm:text-sm font-semibold px-3 py-2"
               >
-                <span>Explore 316+ Challenges</span>
+                <span>{t('hero.btn_explore', 'Explore Challenges')}</span>
               </Link>
             </div>
           </div>
