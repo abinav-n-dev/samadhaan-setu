@@ -475,7 +475,7 @@ export const ReportProblemWizard: React.FC = () => {
 
             <a
               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                `I just reported a civic problem on SamadhanSetu: "${title}". Reference ID: ${submittedReportId}. Track it here: https://samadhansetu-xi.vercel.app`
+                `I just reported a civic problem on SamadhanSetu: "${title}". Reference ID: ${submittedReportId}. Track it here: https://samadhansetu-abinav5.vercel.app`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
