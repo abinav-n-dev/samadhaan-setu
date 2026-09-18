@@ -69,10 +69,11 @@ export const MentorReviewPage: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-brand-dark">#{c.code}</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded ${
                       isApproved ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                     }`}>
-                      {isApproved ? 'Approved ✓' : 'Pending Review'}
+                      {isApproved && <Check className="w-3 h-3" />}
+                      <span>{isApproved ? 'Approved' : 'Pending Review'}</span>
                     </span>
                   </div>
 

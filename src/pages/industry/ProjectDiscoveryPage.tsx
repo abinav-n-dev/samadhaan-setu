@@ -139,7 +139,7 @@ export const ProjectDiscoveryPage: React.FC = () => {
               <div className="pt-3 border-t border-brand-border flex items-center justify-between">
                 {isSupported ? (
                   <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                    Sponsorship Committed ✓
+                    Sponsorship Committed
                   </span>
                 ) : (
                   <button

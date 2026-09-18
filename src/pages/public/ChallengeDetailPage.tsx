@@ -505,7 +505,7 @@ export const ChallengeDetailPage: React.FC = () => {
                         <div className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
                           m.completed ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600'
                         }`}>
-                          {m.completed ? '✓' : '○'}
+                          {m.completed ? <Check className="w-2.5 h-2.5" /> : <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between font-semibold text-brand-text">

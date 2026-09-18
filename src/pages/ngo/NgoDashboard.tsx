@@ -110,7 +110,7 @@ export const NgoDashboard: React.FC = () => {
                     #{c.code}
                   </span>
                   <span className="font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded text-[10px]">
-                    Status: {c.status === 'resolved' ? 'Impact Verified ✓' : 'Ready for Field Pilot'}
+                    Status: {c.status === 'resolved' ? 'Impact Verified' : 'Ready for Field Pilot'}
                   </span>
                 </div>
                 <h3 className="font-bold text-base text-brand-text">{c.title}</h3>

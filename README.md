@@ -1,6 +1,6 @@
 # SamadhanSetu — From Community Problems to Verified Impact
 > **Smart India Hackathon 2026 Civic-Tech Innovation Platform**  
-> 🌐 **Live Vercel Link**: [https://samadhansetu-abinav5.vercel.app](https://samadhansetu-abinav5.vercel.app)
+> **Official Team Deployment**: [https://samadhansetu-xi.vercel.app](https://samadhansetu-xi.vercel.app)
 
 SamadhanSetu connects citizens, district administration, universities, industry CSR, and NGOs to transform genuine community problems into verified, credit-bearing engineering projects and measurable public impact.
 
@@ -10,7 +10,7 @@ REPORT → AI INTELLIGENCE → VERIFY → PRIORITIZE → ADOPT → BUILD → SUP
 
 ---
 
-## 🚀 Quick Deployment Guide
+## Deployment Guide
 
 ### Option 1: Deploy on Vercel (Recommended)
 1. Push this repository to GitHub or install Vercel CLI (`npm i -g vercel`).
@@ -77,7 +77,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ---
 
-## 🏛️ Ecosystem Features
+## Ecosystem Architecture & Modules
 
 - **6 Functional Stakeholder Experiences**:
   1. **Citizen Portal** (`/citizen`): 5-step problem wizard with GPS geotagging, photo upload, and live AI cluster detection.
@@ -96,7 +96,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ---
 
-## 🛠️ Tech Stack
+## Technical Stack
 
 - **Framework**: React 18, TypeScript, Vite
 - **Styling**: Tailwind CSS, Plus Jakarta Sans typography

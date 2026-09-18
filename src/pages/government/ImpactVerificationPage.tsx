@@ -80,12 +80,13 @@ export const ImpactVerificationPage: React.FC = () => {
             <h2 className="text-xl font-extrabold text-brand-text mt-1">{selectedChallenge.title}</h2>
           </div>
 
-          <span className={`text-xs font-bold px-3 py-1 rounded-full border self-start sm:self-center ${
+          <span className={`text-xs font-bold px-3 py-1 rounded-full border self-start sm:self-center flex items-center gap-1.5 ${
             selectedChallenge.status === 'resolved' 
               ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
               : 'bg-amber-50 text-amber-800 border-amber-200'
           }`}>
-            {selectedChallenge.status === 'resolved' ? 'Impact Certified ✓' : 'Awaiting Executive Sign-Off'}
+            {selectedChallenge.status === 'resolved' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+            <span>{selectedChallenge.status === 'resolved' ? 'Impact Certified' : 'Awaiting Executive Sign-Off'}</span>
           </span>
         </div>
 
@@ -126,7 +127,7 @@ export const ImpactVerificationPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>On-Site Solar Filtration Kiosk Installation Telemetry</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-700 font-bold">VERIFIED ✓</span>
+              <span className="text-[11px] font-mono text-emerald-700 font-bold">ATTESTED</span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
@@ -134,7 +135,7 @@ export const ImpactVerificationPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Birla Institute of Technology (BIT) Mesra Engineering Capstone Report</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-700 font-bold">VERIFIED ✓</span>
+              <span className="text-[11px] font-mono text-emerald-700 font-bold">ATTESTED</span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
@@ -142,7 +143,7 @@ export const ImpactVerificationPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Tata Steel Foundation CSR Grant & Hardware Certification</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-700 font-bold">VERIFIED ✓</span>
+              <span className="text-[11px] font-mono text-emerald-700 font-bold">ATTESTED</span>
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
@@ -150,7 +151,7 @@ export const ImpactVerificationPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Pratham Gramin Vikas Trust Field Beneficiary Audit & Gram Sabha Sign-Off</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-700 font-bold">VERIFIED ✓</span>
+              <span className="text-[11px] font-mono text-emerald-700 font-bold">ATTESTED</span>
             </div>
           </div>
         </div>

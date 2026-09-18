@@ -21,7 +21,7 @@ const createCustomMarkerIcon = (challenge: Challenge, activeLayer: string) => {
   if (challenge.status === 'resolved') {
     color = '#0D9488'; // Teal
     ringColor = 'rgba(13, 148, 136, 0.4)';
-    label = '✓';
+    label = '<svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
   } else if (challenge.status === 'adopted' || challenge.status === 'in_progress') {
     color = '#4F46E5'; // Indigo
     ringColor = 'rgba(79, 70, 229, 0.4)';
@@ -238,7 +238,7 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-teal-600 flex-shrink-0" />
-            <span className="text-gray-700">Impact Verified (✓)</span>
+            <span className="text-gray-700">Impact Verified & Resolved</span>
           </div>
         </div>
       </div>

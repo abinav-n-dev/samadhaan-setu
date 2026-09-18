@@ -103,6 +103,22 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'stats.resolved': 'Verified Impact',
     'stats.resolved_sub': 'Tamper-proof credentials',
 
+    // Vision & Core Architecture
+    'vision.tag': 'The Vision & Core Architecture',
+    'vision.title': 'Why Traditional Grievance Systems Fail & How SamadhanSetu Solves It',
+    'vision.desc': 'India does not lack citizen complaints — it lacks an engineering and execution bridge to turn those complaints into verified, sustainable public infrastructure.',
+    'vision.pillar1_title': '1. Ground Reality & Spatial De-Duplication',
+    'vision.pillar1_desc': 'Instead of fragmented duplicate text tickets, citizens submit geo-tagged, photo-verified reports. The spatial engine aggregates reports within a 500m radius and scores severity objectively across 6 vital civic factors.',
+    'vision.pillar2_title': '2. Academic Capstones with Real-World Purpose',
+    'vision.pillar2_desc': 'Channels talent from accredited engineering colleges into verified public infrastructure problems as credit-bearing capstone projects under experienced faculty mentorship.',
+    'vision.pillar3_title': '3. CSR Co-Financing & Verified Public Impact',
+    'vision.pillar3_desc': 'Corporate CSR grants provide milestone-locked disbursements. Grassroots NGOs coordinate field adoption, while District Administration conducts public social audits and issues tamper-proof impact credentials.',
+
+    // Portals section
+    'portals.tag': 'Multi-Stakeholder Architecture',
+    'portals.title': 'Select Your Institutional Portal to Log In',
+    'portals.desc': 'Select your role to access your custom administrative dashboard with role-specific operational permissions.',
+
     // Common Actions
     'action.submit': 'Submit',
     'action.cancel': 'Cancel',
@@ -223,6 +239,22 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'stats.teams_sub': 'सक्रिय कैपस्टोन प्रोजेक्ट्स',
     'stats.resolved': 'सत्यापित प्रभाव',
     'stats.resolved_sub': 'अपरिवर्तनीय डिजिटल प्रमाण',
+
+    // Vision & Core Architecture
+    'vision.tag': 'दूरदर्शिता एवं आधारभूत संरचना',
+    'vision.title': 'पारंपरिक शिकायत पोर्टल क्यों विफल होते हैं एवं समाधान सेतु इसे कैसे हल करता है',
+    'vision.desc': 'नागरिक समस्याओं को सीधे मान्यता प्राप्त इंजीनियरिंग प्रोजेक्ट्स, सीएसआर अनुदान और प्रमाणित प्रशासनिक सत्यापन से जोड़ना।',
+    'vision.pillar1_title': '१. ज़मीनी वास्तविकता एवं स्थानिक एकत्रीकरण',
+    'vision.pillar1_desc': 'बार-बार दोहराई जाने वाली शिकायतों के बजाय नागरिक जियो-टैग्ड व फ़ोटो-सत्यापित समस्या दर्ज करते हैं। स्थानिक प्रणाली 500 मीटर के दायरे में शिकायतों का स्वतः एकत्रीकरण करती है।',
+    'vision.pillar2_title': '२. वास्तविक उद्देश्य के साथ अकादमिक कैपस्टोन',
+    'vision.pillar2_desc': 'इंजीनियरिंग संस्थानों के लाखों छात्रों की तकनीकी प्रतिभा को सत्यापित नागरिक समस्याओं के समाधान के लिए अंतिम-वर्षीय कैपस्टोन प्रोजेक्ट्स के रूप में निर्देशित किया जाता है।',
+    'vision.pillar3_title': '३. सीएसआर वित्तपोषण व प्रमाणित ज़मीनी प्रभाव',
+    'vision.pillar3_desc': 'उद्योग सीएसआर अनुदान माइलस्टोन आधारित किश्तों में जारी होते हैं। क्षेत्रीय एनजीओ ज़मीनी क्रियान्वयन करते हैं और जिला प्रशासन ग्राम सभा के साथ सार्वजनिक ऑडिट करता है।',
+
+    // Portals section
+    'portals.tag': 'हितधारक आधारित व्यवस्था',
+    'portals.title': 'लॉगिन हेतु अपना अधिकृत पोर्टल चुनें',
+    'portals.desc': 'अपनी संबंधित भूमिका का चयन करें और समर्पित प्रशासनिक अनुमतियों वाले विशिष्ट डैशबोर्ड में प्रवेश करें।',
 
     // Common Actions
     'action.submit': 'जमा करें',

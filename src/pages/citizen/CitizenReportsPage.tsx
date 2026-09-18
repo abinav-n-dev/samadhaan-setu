@@ -5,6 +5,7 @@ import {
   FileText, 
   MapPin, 
   CheckCircle2, 
+  Check,
   Clock, 
   ChevronRight, 
   AlertTriangle, 
@@ -127,7 +128,7 @@ export const CitizenReportsPage: React.FC = () => {
                       <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
                         stg.done ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-500'
                       }`}>
-                        {stg.done ? '✓' : i + 1}
+                        {stg.done ? <Check className="w-3 h-3" /> : i + 1}
                       </div>
                       <div>
                         <div className="font-bold text-brand-text">{stg.label}</div>

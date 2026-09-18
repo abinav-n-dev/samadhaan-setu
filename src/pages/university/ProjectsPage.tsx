@@ -4,6 +4,7 @@ import { useAppState } from '../../context/StateContext';
 import { 
   GraduationCap, 
   CheckCircle2, 
+  Check,
   Clock, 
   ChevronRight, 
   MapPin, 
@@ -70,12 +71,13 @@ export const ProjectsPage: React.FC = () => {
                   <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                     Mentor Approval:
                   </span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${
                     adoption.mentorStatus === 'approved'
                       ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                       : 'bg-amber-50 text-amber-800 border border-amber-200'
                   }`}>
-                    {adoption.mentorStatus === 'approved' ? 'Approved by Mentor ✓' : 'Under Mentor Review'}
+                    {adoption.mentorStatus === 'approved' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                    <span>{adoption.mentorStatus === 'approved' ? 'Approved by Mentor' : 'Under Mentor Review'}</span>
                   </span>
                 </div>
               </div>
@@ -128,7 +130,7 @@ export const ProjectsPage: React.FC = () => {
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 ${
                           m.completed ? 'bg-emerald-600 text-white' : 'bg-gray-300 text-gray-600'
                         }`}>
-                          {m.completed ? '✓' : '○'}
+                          {m.completed ? <Check className="w-2.5 h-2.5" /> : <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />}
                         </div>
                         <div>
                           <div className="font-bold text-brand-text">{m.title}</div>

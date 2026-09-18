@@ -141,8 +141,8 @@ export const StudentProfilePage: React.FC = () => {
                   <span className="font-mono font-bold text-brand-dark bg-white px-2 py-0.5 rounded border border-gray-200">
                     #{cred.id}
                   </span>
-                  <span className="font-semibold text-emerald-800 bg-brand-mintSoft px-2 py-0.5 rounded-full text-[10px]">
-                    ✓ Impact Verified
+                  <span className="inline-flex items-center gap-1 font-semibold text-emerald-800 bg-brand-mintSoft px-2 py-0.5 rounded-full text-[10px]">
+                    <CheckCircle2 className="w-3 h-3" /> Impact Verified
                   </span>
                 </div>
                 <h4 className="font-bold text-sm text-brand-text">{cred.title}</h4>

@@ -102,45 +102,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? t('nav.light_mode', 'Light Mode') : t('nav.dark_mode', 'Dark Mode')}
             title={theme === 'dark' ? t('nav.light_mode', 'Light Mode') : t('nav.dark_mode', 'Dark Mode')}
-            className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-brand-border hover:bg-brand-bg transition text-xs font-semibold text-brand-text shadow-xs"
+            className="flex items-center justify-center p-2 rounded-xl border border-brand-border hover:bg-brand-bg transition text-brand-text shadow-xs"
           >
             {theme === 'dark' ? (
-              <>
-                <Sun className="w-4 h-4 text-amber-400" />
-                <span className="hidden md:inline">{t('nav.light_mode', 'Light')}</span>
-              </>
+              <Sun className="w-4 h-4 text-amber-400" />
             ) : (
-              <>
-                <Moon className="w-4 h-4 text-slate-700" />
-                <span className="hidden md:inline">{t('nav.dark_mode', 'Dark')}</span>
-              </>
+              <Moon className="w-4 h-4 text-slate-700 dark:text-slate-200" />
             )}
           </button>
 
-          {/* Bilingual Language Selector: EN | हिंदी */}
-          <div className="flex items-center rounded-xl border border-brand-border overflow-hidden text-xs font-semibold bg-brand-bg p-0.5">
-            <button
-              type="button"
-              onClick={() => setLanguage('EN')}
-              className={`px-2 py-1 rounded-lg transition ${
-                language === 'EN'
-                  ? 'bg-brand-dark text-brand-mint font-bold shadow-xs'
-                  : 'text-brand-textMuted hover:text-brand-text'
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('HI')}
-              className={`px-2 py-1 rounded-lg transition ${
-                language === 'HI'
-                  ? 'bg-brand-dark text-brand-mint font-bold shadow-xs'
-                  : 'text-brand-textMuted hover:text-brand-text'
-              }`}
-            >
-              हिंदी
-            </button>
+          {/* Refined Bilingual Language Selector: English | हिन्दी */}
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl border border-brand-border bg-brand-bg text-xs font-semibold shadow-xs">
+            <Languages className="w-3.5 h-3.5 text-brand-dark dark:text-brand-mint shrink-0" />
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setLanguage('EN')}
+                aria-label="Switch to English"
+                className={`px-2 py-0.5 rounded-lg text-xs transition-all ${
+                  language === 'EN'
+                    ? 'bg-brand-dark text-brand-mint dark:bg-brand-mint dark:text-brand-dark font-bold shadow-xs'
+                    : 'text-brand-textMuted hover:text-brand-text'
+                }`}
+              >
+                English
+              </button>
+              <span className="text-gray-300 dark:text-gray-600 select-none text-[11px]">|</span>
+              <button
+                type="button"
+                onClick={() => setLanguage('HI')}
+                aria-label="हिन्दी में बदलें"
+                className={`px-2 py-0.5 rounded-lg text-xs transition-all ${
+                  language === 'HI'
+                    ? 'bg-brand-dark text-brand-mint dark:bg-brand-mint dark:text-brand-dark font-bold shadow-xs'
+                    : 'text-brand-textMuted hover:text-brand-text'
+                }`}
+              >
+                हिन्दी
+              </button>
+            </div>
           </div>
 
           {/* Notifications */}

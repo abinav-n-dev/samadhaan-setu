@@ -22,7 +22,13 @@ import {
   Sliders, 
   PhoneCall, 
   RefreshCw,
-  ImageIcon
+  ImageIcon,
+  Droplets,
+  Construction,
+  HeartPulse,
+  Sprout,
+  Info,
+  Send
 } from 'lucide-react';
 import { analyzeReportSimilarity } from '../../services/duplicateService';
 
@@ -38,7 +44,6 @@ interface CompressedPhoto {
 const QUICK_TEMPLATES = [
   {
     category: 'Water & Sanitation',
-    icon: '🚰',
     labelEn: 'Drinking Water',
     labelHi: 'पेय जल समस्या',
     templates: [
@@ -64,7 +69,6 @@ const QUICK_TEMPLATES = [
   },
   {
     category: 'Roads & Infrastructure',
-    icon: '🛣️',
     labelEn: 'Roads & Potholes',
     labelHi: 'सड़क व पुलिया',
     templates: [
@@ -84,7 +88,6 @@ const QUICK_TEMPLATES = [
   },
   {
     category: 'Electricity & Solar',
-    icon: '💡',
     labelEn: 'Solar & Power',
     labelHi: 'सौर ऊर्जा व बत्ती',
     templates: [
@@ -104,7 +107,6 @@ const QUICK_TEMPLATES = [
   },
   {
     category: 'Drainage & Waste',
-    icon: '🧹',
     labelEn: 'Drainage & Sanitation',
     labelHi: 'नाली व स्वच्छता',
     templates: [
@@ -118,7 +120,6 @@ const QUICK_TEMPLATES = [
   },
   {
     category: 'Healthcare',
-    icon: '🏥',
     labelEn: 'Health Sub-Center',
     labelHi: 'स्वास्थ्य उपकेंद्र',
     templates: [
@@ -132,7 +133,6 @@ const QUICK_TEMPLATES = [
   },
   {
     category: 'Agriculture',
-    icon: '🌾',
     labelEn: 'Farming & Canal',
     labelHi: 'सिंचाई व नहर',
     templates: [
@@ -145,6 +145,19 @@ const QUICK_TEMPLATES = [
     ]
   }
 ];
+
+const renderCategoryIcon = (category: string, isSelected: boolean) => {
+  const cls = `w-4 h-4 shrink-0 ${isSelected ? 'text-brand-mint' : 'text-brand-dark'}`;
+  switch (category) {
+    case 'Water & Sanitation': return <Droplets className={cls} />;
+    case 'Roads & Infrastructure': return <Construction className={cls} />;
+    case 'Electricity & Solar': return <Zap className={cls} />;
+    case 'Drainage & Waste': return <Trash2 className={cls} />;
+    case 'Healthcare': return <HeartPulse className={cls} />;
+    case 'Agriculture': return <Sprout className={cls} />;
+    default: return <FileText className={cls} />;
+  }
+};
 
 export const ReportProblemWizard: React.FC = () => {
   const { submitCitizenReport, reports } = useAppState();
@@ -424,8 +437,9 @@ export const ReportProblemWizard: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-              ✓ Report Registered & Geotagged
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Report Registered & Geotagged
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
               Reference #{submittedReportId}
@@ -475,7 +489,7 @@ export const ReportProblemWizard: React.FC = () => {
 
             <a
               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                `I just reported a civic problem on SamadhanSetu: "${title}". Reference ID: ${submittedReportId}. Track it here: https://samadhansetu-abinav5.vercel.app`
+                `I just reported a civic problem on SamadhanSetu: "${title}". Reference ID: ${submittedReportId}. Track it here: https://samadhansetu-xi.vercel.app`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -512,8 +526,8 @@ export const ReportProblemWizard: React.FC = () => {
                   <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">1</span>
                   <span>Take or Upload Photo (फ़ोटो लें)</span>
                 </label>
-                <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">
-                  ⚡ Auto-Compressed
+                <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">
+                  <Check className="w-3 h-3" /> Auto-Optimized
                 </span>
               </div>
 
@@ -625,7 +639,7 @@ export const ReportProblemWizard: React.FC = () => {
                           : 'border-brand-border bg-brand-bg hover:bg-gray-100 text-brand-text'
                       }`}
                     >
-                      <span className="text-lg">{item.icon}</span>
+                      {renderCategoryIcon(item.category, isSelected)}
                       <div className="min-w-0">
                         <span className="font-bold text-xs truncate block">{item.labelEn}</span>
                         <span className={`text-[10px] truncate block ${isSelected ? 'text-brand-mint' : 'text-brand-textMuted'}`}>
@@ -755,8 +769,8 @@ export const ReportProblemWizard: React.FC = () => {
                   <span>GPS: {lat.toFixed(4)}° N, {lng.toFixed(4)}° E</span>
                 </div>
                 {geoStatus === 'success' && (
-                  <span className="text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded text-[10px]">
-                    ✓ Live GPS Fixed
+                  <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded text-[10px]">
+                    <CheckCircle2 className="w-3 h-3" /> Live GPS Fixed
                   </span>
                 )}
                 {geoStatus === 'locating' && (
@@ -779,8 +793,9 @@ export const ReportProblemWizard: React.FC = () => {
                     ? liveSimilarity.reasons.join('. ')
                     : 'A matching challenge cluster has been detected within the same administrative ward.'}
                 </p>
-                <div className="text-[11px] text-amber-900 font-semibold bg-white/70 p-2 rounded-lg">
-                  💡 Your submission will reinforce the priority score for this cluster!
+                <div className="inline-flex items-center gap-1.5 text-[11px] text-amber-900 font-semibold bg-white/70 p-2 rounded-lg w-full">
+                  <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <span>Your submission will corroborate and reinforce the priority score for this cluster.</span>
                 </div>
               </div>
             )}
@@ -1147,9 +1162,10 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleFinalSubmit}
-                  className="px-6 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-extrabold"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-extrabold hover:bg-brand-darkSecondary transition shadow-xs"
                 >
-                  Submit Official Report ✓
+                  <Send className="w-4 h-4" />
+                  <span>Submit Official Citizen Report</span>
                 </button>
               </div>
             </div>

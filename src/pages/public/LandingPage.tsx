@@ -319,13 +319,13 @@ export const LandingPage: React.FC = () => {
       <section className="space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-brand-dark bg-brand-mintSoft px-3.5 py-1 rounded-full border border-brand-mint/40">
-            The Vision & Core Idea
+            {t('vision.tag', 'The Vision & Core Architecture')}
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-brand-text tracking-tight">
-            Why Traditional Grievance Portals Fail & How SamadhanSetu Solves It
+            {t('vision.title', 'Why Traditional Grievance Systems Fail & How SamadhanSetu Solves It')}
           </h2>
           <p className="text-xs sm:text-sm text-brand-textMuted leading-relaxed">
-            India does not lack citizen complaints — it lacks an <strong>engineering and execution bridge</strong> to turn those complaints into sustainable solutions. Here is the architectural shift.
+            {t('vision.desc', 'India does not lack citizen complaints — it lacks an engineering and execution bridge to turn those complaints into verified, sustainable public infrastructure.')}
           </p>
         </div>
 
@@ -335,9 +335,11 @@ export const LandingPage: React.FC = () => {
             <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
               <Users className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">1. Ground Reality & AI Intelligence</h3>
+            <h3 className="font-extrabold text-base text-brand-text">
+              {t('vision.pillar1_title', '1. Ground Reality & Spatial De-Duplication')}
+            </h3>
             <p className="text-xs text-brand-textMuted leading-relaxed">
-              Instead of endless duplicate text tickets, citizens report issues with geotagged photos. Our AI engine clusters reports within a 500m radius and scores them using a 6-factor algorithm (health risk, population, duration, schools/hospitals nearby).
+              {t('vision.pillar1_desc', 'Instead of fragmented duplicate text tickets, citizens submit geo-tagged, photo-verified reports. The spatial engine aggregates reports within a 500m radius and scores severity objectively across 6 vital civic factors.')}
             </p>
           </div>
 
@@ -345,9 +347,11 @@ export const LandingPage: React.FC = () => {
             <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
               <GraduationCap className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">2. Academic Capstones with Real Purpose</h3>
+            <h3 className="font-extrabold text-base text-brand-text">
+              {t('vision.pillar2_title', '2. Academic Capstones with Real-World Purpose')}
+            </h3>
             <p className="text-xs text-brand-textMuted leading-relaxed">
-              Every year, over 1.5 million engineering students build theoretical toy projects. SamadhanSetu channels this vast engineering talent to solve government-verified civic problems as accredited final-year Capstone projects under faculty mentorship.
+              {t('vision.pillar2_desc', 'Channels talent from accredited engineering colleges into verified public infrastructure problems as credit-bearing capstone projects under experienced faculty mentorship.')}
             </p>
           </div>
 
@@ -355,9 +359,11 @@ export const LandingPage: React.FC = () => {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
               <Building className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">3. CSR Funding & Verified Field Impact</h3>
+            <h3 className="font-extrabold text-base text-brand-text">
+              {t('vision.pillar3_title', '3. CSR Co-Financing & Verified Public Impact')}
+            </h3>
             <p className="text-xs text-brand-textMuted leading-relaxed">
-              Corporate CSR funds (Section 135) provide micro-grants directly linked to milestone releases. Local NGOs execute ground adoption, and District Administration verifies water/health outcomes before minting tamper-proof credentials.
+              {t('vision.pillar3_desc', 'Corporate CSR grants provide milestone-locked disbursements. Grassroots NGOs coordinate field adoption, while District Administration conducts public social audits and issues tamper-proof impact credentials.')}
             </p>
           </div>
         </div>
@@ -368,14 +374,14 @@ export const LandingPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brand-border pb-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-brand-dark bg-brand-mintSoft px-2.5 py-0.5 rounded">
-              Role-Based Access
+              {t('portals.tag', 'Multi-Stakeholder Architecture')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text mt-1">
-              Select Your Stakeholder Portal to Log In
+              {t('portals.title', 'Select Your Institutional Portal to Log In')}
             </h2>
           </div>
           <p className="text-xs text-brand-textMuted max-w-md">
-            Click any stakeholder below to authenticate instantly and access your specialized dashboard with tailored operational permissions.
+            {t('portals.desc', 'Select your role to access your custom administrative dashboard with role-specific operational permissions.')}
           </p>
         </div>
 
