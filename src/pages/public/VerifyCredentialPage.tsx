@@ -21,7 +21,37 @@ export const VerifyCredentialPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { credentials } = useAppState();
 
-  const credential = credentials.find(c => c.id === id || c.challengeCode === id) || credentials[0];
+  const credential = credentials.find(c => c.id === id || c.challengeCode === id) || (id ? undefined : credentials[0]);
+
+  if (!credential) {
+    return (
+      <div className="max-w-2xl mx-auto py-16 text-center space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto">
+          <ShieldCheck className="w-8 h-8" />
+        </div>
+        <h2 className="text-xl font-extrabold text-brand-text">Credential Not Found</h2>
+        <p className="text-xs text-brand-textMuted max-w-md mx-auto">
+          No verified credential matching identifier <span className="font-mono font-bold text-brand-dark">"{id}"</span> could be found in the public ledger.
+        </p>
+        <div className="pt-3 flex justify-center gap-3">
+          <Link
+            to="/solutions"
+            className="px-4 py-2 bg-brand-dark text-brand-mint text-xs font-bold rounded-xl hover:bg-brand-darkSecondary transition"
+          >
+            Browse Verified Solutions
+          </Link>
+          {credentials[0] && (
+            <Link
+              to={`/verify/${credentials[0].id}`}
+              className="px-4 py-2 bg-white border border-brand-border text-brand-text text-xs font-bold rounded-xl hover:bg-gray-50 transition"
+            >
+              View Sample Credential
+            </Link>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-12">

@@ -20,14 +20,23 @@ export const ImpactVerificationPage: React.FC = () => {
 
   // Find challenges ready for impact verification (such as #JH-WTR-1042)
   const readyChallenges = challenges.filter(c => c.fieldEvidence || c.status === 'impact_verification' || c.status === 'resolved');
-  const [selectedChallenge, setSelectedChallenge] = useState(readyChallenges[0] || challenges[0]);
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string>(readyChallenges[0]?.id || challenges[0]?.id || '');
+  const selectedChallenge = challenges.find(c => c.id === selectedChallengeId) || readyChallenges[0] || challenges[0];
 
-  const [actualReached, setActualReached] = useState(
-    selectedChallenge.fieldEvidence?.beneficiariesCount || 2615
+  const [actualReached, setActualReached] = useState<number>(() =>
+    selectedChallenge?.fieldEvidence?.beneficiariesCount || selectedChallenge?.affectedPopulation || 2615
   );
   const [remarks, setRemarks] = useState(
     'Certified 92.1% population coverage reached. Significant drop in pediatric acute clinic visits documented by PHC Hansdiha within 72 hours of commissioning.'
   );
+
+  const handleSelectChallenge = (id: string) => {
+    setSelectedChallengeId(id);
+    const target = challenges.find(c => c.id === id);
+    if (target) {
+      setActualReached(target.fieldEvidence?.beneficiariesCount || target.affectedPopulation || 2615);
+    }
+  };
 
   const handleVerifyImpact = () => {
     const cred = verifyImpact(selectedChallenge.id, {
@@ -53,20 +62,30 @@ export const ImpactVerificationPage: React.FC = () => {
 
       <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 max-w-4xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-border pb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-extrabold text-brand-dark bg-brand-bg px-2.5 py-1 rounded border">
-                #{selectedChallenge.code}
-              </span>
-              <span className="text-xs font-semibold text-brand-textMuted bg-gray-100 px-2 py-0.5 rounded">
-                {selectedChallenge.category}
-              </span>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] uppercase font-bold text-gray-400">Select Target Challenge:</span>
+              <select
+                value={selectedChallenge.id}
+                onChange={(e) => handleSelectChallenge(e.target.value)}
+                className="bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1 text-xs font-bold text-brand-text focus:outline-none focus:ring-1 focus:ring-brand-mint"
+              >
+                {readyChallenges.map(c => (
+                  <option key={c.id} value={c.id}>
+                    #{c.code} — {c.title} ({c.status.replace('_', ' ')})
+                  </option>
+                ))}
+              </select>
             </div>
             <h2 className="text-xl font-extrabold text-brand-text mt-1">{selectedChallenge.title}</h2>
           </div>
 
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-            Awaiting Final Executive Sign-Off
+          <span className={`text-xs font-bold px-3 py-1 rounded-full border self-start sm:self-center ${
+            selectedChallenge.status === 'resolved' 
+              ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+              : 'bg-amber-50 text-amber-800 border-amber-200'
+          }`}>
+            {selectedChallenge.status === 'resolved' ? 'Impact Certified ✓' : 'Awaiting Executive Sign-Off'}
           </span>
         </div>
 

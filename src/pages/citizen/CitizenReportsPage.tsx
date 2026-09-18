@@ -17,16 +17,18 @@ import { Link } from 'react-router-dom';
 
 export const CitizenReportsPage: React.FC = () => {
   const { reports, challenges } = useAppState();
-  const [selectedReport, setSelectedReport] = useState<CitizenReport | null>(reports[0] || null);
+  const [selectedReportId, setSelectedReportId] = useState<string>(reports[0]?.id || '');
+  const selectedReport = reports.find(r => r.id === selectedReportId) || reports[0] || null;
+  const linkedChallenge = challenges.find(c => c.id === selectedReport?.challengeId);
 
   const trackingStages = [
     { label: 'Report Submitted', done: true, desc: 'Logged with photo and GPS location' },
-    { label: 'Duplicate Analysis', done: true, desc: 'Clustered with nearby community reports' },
-    { label: 'Government Review', done: true, desc: 'District Officer reviewed veracity' },
-    { label: 'Administrative Verification', done: selectedReport?.status !== 'Under Review', desc: 'Published to academic innovation catalog' },
-    { label: 'University Adoption', done: selectedReport?.challengeId === 'c-wtr-1042', desc: 'Student engineering team assigned' },
-    { label: 'Field Implementation', done: selectedReport?.challengeId === 'c-wtr-1042', desc: 'NGO prototype installation completed' },
-    { label: 'Government Impact Sign-off', done: selectedReport?.challengeId === 'c-wtr-1042', desc: 'Certified population benefit audited' },
+    { label: 'Duplicate Analysis', done: selectedReport?.status !== 'Submitted', desc: 'Clustered with nearby community reports' },
+    { label: 'Government Review', done: selectedReport?.status !== 'Submitted' && selectedReport?.status !== 'Under Review', desc: 'District Officer reviewed veracity' },
+    { label: 'Administrative Verification', done: linkedChallenge?.verificationStatus === 'verified' || selectedReport?.status === 'Verified' || selectedReport?.status === 'Clustered' || selectedReport?.status === 'Resolved', desc: 'Published to academic innovation catalog' },
+    { label: 'University Adoption', done: !!linkedChallenge?.adoption, desc: 'Student engineering team assigned' },
+    { label: 'Field Implementation', done: !!linkedChallenge?.fieldEvidence || linkedChallenge?.status === 'implementation' || linkedChallenge?.status === 'impact_verification' || linkedChallenge?.status === 'resolved', desc: 'NGO prototype installation completed' },
+    { label: 'Government Impact Sign-off', done: !!linkedChallenge?.impactVerification || linkedChallenge?.status === 'resolved', desc: 'Certified population benefit audited' },
   ];
 
   return (
@@ -51,7 +53,7 @@ export const CitizenReportsPage: React.FC = () => {
             return (
               <div
                 key={rep.id}
-                onClick={() => setSelectedReport(rep)}
+                onClick={() => setSelectedReportId(rep.id)}
                 className={`p-4 rounded-2xl border cursor-pointer transition text-xs space-y-2 ${
                   isSelected
                     ? 'bg-white border-brand-mint ring-1 ring-brand-mint shadow-subtle'

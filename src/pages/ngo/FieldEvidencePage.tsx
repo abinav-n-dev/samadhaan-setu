@@ -17,7 +17,8 @@ export const FieldEvidencePage: React.FC = () => {
   const { challenges, submitFieldEvidence, addToast } = useAppState();
   const navigate = useNavigate();
 
-  const targetChallenge = challenges.find(c => c.id === 'c-wtr-1042') || challenges[0];
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string>('c-wtr-1042');
+  const targetChallenge = challenges.find(c => c.id === selectedChallengeId) || challenges[0];
 
   const [partnerName, setPartnerName] = useState('Pratham Gramin Vikas Trust');
   const [beneficiaries, setBeneficiaries] = useState(2615);
@@ -63,14 +64,24 @@ export const FieldEvidencePage: React.FC = () => {
         className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 text-xs"
       >
         {/* Challenge reference */}
-        <div className="p-4 rounded-2xl bg-brand-bg border border-brand-border flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-gray-400 font-bold uppercase block">Target Challenge:</span>
-            <div className="font-bold text-sm text-brand-text">#{targetChallenge.code} — {targetChallenge.title}</div>
-            <div className="text-[11px] text-brand-textMuted">{targetChallenge.locality}, {targetChallenge.district}</div>
+        <div className="p-4 rounded-2xl bg-brand-bg border border-brand-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex-1">
+            <label className="text-[10px] text-gray-500 font-bold uppercase block mb-1">Target Civic Challenge:</label>
+            <select
+              value={selectedChallengeId}
+              onChange={(e) => setSelectedChallengeId(e.target.value)}
+              className="w-full bg-white border border-brand-border rounded-xl p-2 font-bold text-xs text-brand-text focus:outline-none focus:ring-1 focus:ring-brand-mint"
+            >
+              {challenges.map((c) => (
+                <option key={c.id} value={c.id}>
+                  #{c.code} — {c.title} ({c.district})
+                </option>
+              ))}
+            </select>
+            <div className="text-[11px] text-brand-textMuted mt-1">{targetChallenge.locality}, {targetChallenge.district}</div>
           </div>
-          <span className="font-mono font-bold text-xs bg-white px-2.5 py-1 rounded border">
-            Est. Baseline: ~{targetChallenge.affectedPopulation}
+          <span className="font-mono font-bold text-xs bg-white px-2.5 py-1 rounded border self-start sm:self-center">
+            Est. Baseline: ~{targetChallenge.affectedPopulation.toLocaleString()}
           </span>
         </div>
 

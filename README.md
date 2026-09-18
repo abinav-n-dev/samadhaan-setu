@@ -1,5 +1,6 @@
 # SamadhanSetu — From Community Problems to Verified Impact
-> **Smart India Hackathon 2026 Civic-Tech Innovation Platform**
+> **Smart India Hackathon 2026 Civic-Tech Innovation Platform**  
+> 🌐 **Live Vercel Link**: [https://samadhansetu-xi.vercel.app](https://samadhansetu-xi.vercel.app)
 
 SamadhanSetu connects citizens, district administration, universities, industry CSR, and NGOs to transform genuine community problems into verified, credit-bearing engineering projects and measurable public impact.
 

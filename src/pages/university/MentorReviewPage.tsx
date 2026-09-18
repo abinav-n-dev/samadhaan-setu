@@ -17,7 +17,8 @@ export const MentorReviewPage: React.FC = () => {
 
   // Find adopted projects awaiting mentor signoff or approved
   const reviewProjects = challenges.filter(c => c.adoption);
-  const [selectedChallenge, setSelectedChallenge] = useState(reviewProjects[0] || challenges[0]);
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string>(reviewProjects[0]?.id || challenges[0]?.id || '');
+  const selectedChallenge = challenges.find(c => c.id === selectedChallengeId) || reviewProjects[0] || challenges[0];
   const [mentorFeedback, setMentorFeedback] = useState(
     'Sound scientific approach. The modular ultrafiltration column and activated alumina cartridges fulfill the requirements for capstone academic credits.'
   );
@@ -59,7 +60,7 @@ export const MentorReviewPage: React.FC = () => {
               return (
                 <div
                   key={c.id}
-                  onClick={() => setSelectedChallenge(c)}
+                  onClick={() => setSelectedChallengeId(c.id)}
                   className={`p-4 rounded-2xl border cursor-pointer transition text-xs space-y-2 ${
                     isSelected
                       ? 'bg-white border-brand-mint ring-1 ring-brand-mint shadow-subtle'
