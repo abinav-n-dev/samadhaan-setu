@@ -107,7 +107,35 @@ npm run package
 
 ---
 
-## 5. Known Limitations & Future Scope
+## 5. Supabase Cloud Database Setup (Optional / Resilient)
+
+SamadhanSetu features a **Dual-Mode Persistence Layer**:
+- **Offline / Local Mode**: Operates seamlessly out of the box using browser `localStorage` and mock data (no configuration required, zero network dependencies).
+- **Cloud Database Mode**: When connected to Supabase, it syncs challenges, citizen reports, cryptographic credentials, and audit logs to PostgreSQL in real time.
+
+### How to Connect Supabase:
+1. **Create Project**: Sign in to [Supabase](https://supabase.com) and create a new project.
+2. **Execute Schema Migration**:
+   - Open your project dashboard and navigate to the **SQL Editor**.
+   - Copy the contents of `supabase/schema.sql` and run it. This creates the `challenges`, `citizen_reports`, `credentials`, and `audit_logs` tables, sets Row Level Security (RLS) policies, and seeds initial demo records.
+3. **Configure Environment Variables**:
+   - In Supabase, go to **Project Settings → API**.
+   - Copy your **Project URL** and **Anon / Public Key**.
+   - Create a `.env.local` file in your project root:
+     ```env
+     VITE_SUPABASE_URL=https://your-project-id.supabase.co
+     VITE_SUPABASE_ANON_KEY=your-anon-key-here
+     ```
+   - For Vercel, add these same two environment variables in **Project Settings → Environment Variables**.
+4. **Restart Vite**:
+   ```bash
+   npm run dev
+   ```
+   The UI will display a green **"Supabase Cloud"** status badge in the navbar indicating real-time PostgreSQL synchronization.
+
+---
+
+## 6. Known Limitations & Future Scope
 
 As a hackathon prototype, SamadhanSetu demonstrates end-to-end functionality within browser memory. Production deployment requires:
 

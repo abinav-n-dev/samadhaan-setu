@@ -23,6 +23,18 @@ import {
 import { analyzeReportSimilarity } from '../services/duplicateService';
 import { buildCredentialRecordData, computeHash } from '../services/credentialService';
 import { translate, Language } from '../services/i18n';
+import { isSupabaseConfigured } from '../services/supabase';
+import {
+  fetchChallengesFromDb,
+  fetchReportsFromDb,
+  fetchCredentialsFromDb,
+  fetchAuditLogsFromDb,
+  upsertChallengeToDb,
+  insertReportToDb,
+  insertCredentialToDb,
+  insertAuditLogToDb,
+  seedSupabaseIfEmpty,
+} from '../services/supabaseDb';
 
 export const ROLE_PROFILES: Record<UserRole, UserProfile> = {
   government: {
@@ -110,6 +122,10 @@ interface StateContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string, fallback?: string) => string;
+  // Database & Cloud Sync
+  dbMode: 'cloud' | 'local';
+  dbSyncStatus: 'idle' | 'syncing' | 'synced' | 'error';
+  refreshFromCloud: () => Promise<void>;
   // Actions
   submitCitizenReport: (report: Omit<CitizenReport, 'id' | 'trackingId' | 'status' | 'createdAt' | 'updatedAt'>) => CitizenReport;
   verifyChallenge: (challengeId: string, officerName?: string) => void;
@@ -256,6 +272,45 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return translate(key, language, fallback);
   };
 
+  // Cloud Database State & Synchronization
+  const [dbMode, setDbMode] = useState<'cloud' | 'local'>(() => {
+    return isSupabaseConfigured() ? 'cloud' : 'local';
+  });
+  const [dbSyncStatus, setDbSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
+
+  const refreshFromCloud = async () => {
+    if (!isSupabaseConfigured()) {
+      setDbMode('local');
+      setDbSyncStatus('idle');
+      return;
+    }
+    setDbMode('cloud');
+    setDbSyncStatus('syncing');
+    try {
+      await seedSupabaseIfEmpty(INITIAL_CHALLENGES, MOCK_CITIZEN_REPORTS_JH_1042, INITIAL_CREDENTIALS, INITIAL_AUDIT_LOGS);
+      const [remoteChallenges, remoteReports, remoteCredentials, remoteLogs] = await Promise.all([
+        fetchChallengesFromDb(),
+        fetchReportsFromDb(),
+        fetchCredentialsFromDb(),
+        fetchAuditLogsFromDb(),
+      ]);
+      if (remoteChallenges && remoteChallenges.length > 0) setChallenges(remoteChallenges);
+      if (remoteReports && remoteReports.length > 0) setReports(remoteReports);
+      if (remoteCredentials && remoteCredentials.length > 0) setCredentials(remoteCredentials);
+      if (remoteLogs && remoteLogs.length > 0) setAuditLogs(remoteLogs);
+      setDbSyncStatus('synced');
+    } catch (err) {
+      console.warn('[SamadhanSetu] Cloud refresh error:', err);
+      setDbSyncStatus('error');
+    }
+  };
+
+  useEffect(() => {
+    if (isSupabaseConfigured()) {
+      refreshFromCloud();
+    }
+  }, []);
+
   // Storage full toast callback
   const handleStorageFull = () => {
     addToast('Storage Alert', 'Storage full, some data was not saved', 'warning');
@@ -386,6 +441,20 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setNotifications(prev => [notif, ...prev]);
 
     addToast('Report Submitted Successfully', `Tracking ID: ${trackingId}. AI cluster analysis complete.`, 'success');
+
+    if (isSupabaseConfigured()) {
+      insertReportToDb(newReport).catch(e => console.warn('[Supabase] report insert error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit insert error', e));
+      if (matchedChallenge) {
+        upsertChallengeToDb({
+          ...matchedChallenge,
+          reportCount: matchedChallenge.reportCount + 1,
+          affectedPopulation: matchedChallenge.affectedPopulation + (reportData.affectedCountEstimate || 50),
+          updatedAt: now,
+        }).catch(e => console.warn('[Supabase] challenge reportCount sync error', e));
+      }
+    }
+
     return newReport;
   };
 
@@ -420,6 +489,18 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Challenge Verified', `${challengeCode} verified & published for university discovery.`, 'success');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        status: 'verified',
+        verificationStatus: 'verified',
+        verifiedAt: now,
+        verifiedBy: officerName,
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] challenge verify error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const overridePriority = (
@@ -466,6 +547,25 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Priority Override Applied', `Challenge priority updated to ${newLevel} (${newScore}/100).`, 'warning');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        priorityScore: newScore,
+        priorityLevel: newLevel,
+        governmentOverride: {
+          originalScore: targetChallenge.priorityScore,
+          originalLevel: targetChallenge.priorityLevel,
+          overrideScore: newScore,
+          overrideLevel: newLevel,
+          reason,
+          officerName,
+          timestamp: now,
+        },
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] override priority error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const adoptChallenge = (challengeId: string, proposal: Partial<UniversityTeam>) => {
@@ -516,6 +616,16 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Challenge Adopted', `Proposal registered for ${challengeCode}. Sent to faculty mentor for approval.`, 'success');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        status: 'adopted',
+        adoption: newTeam,
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] adopt challenge error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const approveMentorProposal = (challengeId: string, mentorNotes = 'Academic rigor and field methodology approved for capstone credit.') => {
@@ -551,6 +661,20 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Mentor Approval Confirmed', `Project plan approved for ${challengeCode}. Ready for industry CSR matching.`, 'success');
+
+    if (isSupabaseConfigured() && targetChallenge.adoption) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        status: 'in_progress',
+        adoption: {
+          ...targetChallenge.adoption,
+          mentorStatus: 'approved',
+          mentorNotes,
+        },
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] mentor approval error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const commitIndustrySupport = (challengeId: string, support: Partial<IndustrySupport>) => {
@@ -593,6 +717,16 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Industry Support Confirmed', `${newSupport.partnerName} assigned resource commitment.`, 'success');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        industrySupport: newSupport,
+        status: 'implementation',
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] commit industry support error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const submitFieldEvidence = (challengeId: string, evidence: Partial<FieldEvidence>) => {
@@ -640,6 +774,16 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     setAuditLogs(prev => [audit, ...prev]);
     addToast('Field Evidence Logged', `Submitted implementation evidence for ${challengeCode}. Awaiting DC/DM signoff.`, 'success');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        fieldEvidence: newEvidence,
+        status: 'impact_verification',
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] field evidence error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
   };
 
   const verifyImpact = async (challengeId: string, verificationData: Partial<ImpactVerification>): Promise<CredentialRecord> => {
@@ -695,6 +839,18 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setAuditLogs(prev => [audit, ...prev]);
 
     addToast('Impact Verified & Credential Issued', `Verifiable Credential ${credentialId} issued!`, 'success');
+
+    if (isSupabaseConfigured()) {
+      upsertChallengeToDb({
+        ...targetChallenge,
+        status: 'resolved' as const,
+        impactVerification: impact,
+        updatedAt: now,
+      }).catch(e => console.warn('[Supabase] verify impact challenge update error', e));
+      insertCredentialToDb(newCredential).catch(e => console.warn('[Supabase] insert credential error', e));
+      insertAuditLogToDb(audit).catch(e => console.warn('[Supabase] audit error', e));
+    }
+
     return newCredential;
   };
 
@@ -754,6 +910,9 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         language,
         setLanguage,
         t,
+        dbMode,
+        dbSyncStatus,
+        refreshFromCloud,
         submitCitizenReport,
         verifyChallenge,
         overridePriority,

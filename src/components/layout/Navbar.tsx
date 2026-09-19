@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { LoginModal } from './LoginModal';
+import { DbStatusIndicator } from '../common/DbStatusIndicator';
 import { 
   Menu, 
   Search, 
@@ -96,6 +97,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Cloud Database Status & Config */}
+          <DbStatusIndicator />
+
           {/* Light / Dark Mode Toggle */}
           <button
             type="button"
