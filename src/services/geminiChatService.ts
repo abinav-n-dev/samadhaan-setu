@@ -153,7 +153,7 @@ You can view the full telemetry and field updates in the **Live GIS Map** or **C
 How can I assist your review today? You can ask about priority score breakdowns, challenge assignments, or audit logs.`;
   }
 
-  return `**Hello! I am Setu AI Sahayak (powered by Gemini 3.1 Flash).**
+  return `**Hello! I am Setu AI Sahayak, your civic intelligence co-pilot.**
 
 I am connected to the SamadhanSetu civic innovation network. You can ask me about:
 - **Tracking ground reports** (e.g., Dumka water issue #JH-1042)
@@ -231,28 +231,29 @@ export async function sendChatMessage(
           cachedWorkingModel = model;
           return {
             text: generatedText.trim(),
-            modelUsed: model,
+            modelUsed: 'Setu AI Core',
           };
         }
       }
 
       // If response status is 404 (model not found), proceed to next candidate model
       if (response.status === 404) {
-        console.warn(`[Gemini API] Model ${model} not available on endpoint, trying next fallback...`);
+        console.warn(`[Setu AI] Model candidate ${model} unavailable, switching to next fallback...`);
         continue;
       }
 
       // If other error (e.g. rate limit, auth), log and try next or fallback
       const errText = await response.text();
-      console.warn(`[Gemini API ${model} Error]:`, errText);
+      console.warn(`[Setu AI Error]:`, errText);
     } catch (err) {
-      console.warn(`[Gemini Network/CORS Notice with ${model}]:`, err);
+      console.warn(`[Setu AI Network Notice]:`, err);
     }
   }
 
   // If all live API attempts fail (network policy, offline, or rate limit), use intelligent domain fallback
   return {
     text: getIntelligentFallback(currentQuery, role),
-    modelUsed: 'Gemini 3.1 Flash (Grounded Engine)',
+    modelUsed: 'Setu AI Core',
   };
 }
+

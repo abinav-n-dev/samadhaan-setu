@@ -67,7 +67,7 @@ describe('Gemini Chat Service (Setu AI Sahayak)', () => {
         candidates: [
           {
             content: {
-              parts: [{ text: 'Hello from Gemini 3.1 Flash! How may I assist your civic journey?' }],
+              parts: [{ text: 'Hello from Setu AI Sahayak! How may I assist your civic journey?' }],
             },
           },
         ],
@@ -84,6 +84,7 @@ describe('Gemini Chat Service (Setu AI Sahayak)', () => {
     ];
 
     const response = await sendChatMessage(messages, { userRole: 'student' });
-    expect(response.text).toContain('Hello from Gemini 3.1 Flash');
+    expect(response.text).toContain('Hello from Setu AI Sahayak');
   });
 });
+

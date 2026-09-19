@@ -23,7 +23,7 @@ export const SetuAiChatbot: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeModel, setActiveModel] = useState('Gemini 3.1 Flash');
+  const [activeModel, setActiveModel] = useState('GovTech AI v2.6');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,9 +33,9 @@ export const SetuAiChatbot: React.FC = () => {
       const initialGreeting: ChatMessage = {
         id: 'init-1',
         sender: 'assistant',
-        text: `**Namaste! I am Setu AI Sahayak (powered by Gemini 3.1 Flash).**\n\nI can help you track ground grievances, explore university Capstone challenges, explain AI priority scores, or navigate CSR funding. How can I assist you today?`,
+        text: `**Namaste! I am Setu AI Sahayak, your civic intelligence co-pilot.**\n\nI can help you track ground grievances, explore university Capstone challenges, explain AI priority scores, or navigate CSR funding. How can I assist you today?`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        modelUsed: 'Gemini 3.1 Flash',
+        modelUsed: 'Setu AI Core',
       };
       setMessages([initialGreeting]);
     }
@@ -236,7 +236,7 @@ export const SetuAiChatbot: React.FC = () => {
               <Sparkles className="w-3 h-3 text-amber-300" />
             </div>
             <div className="text-[10px] text-slate-300 dark:text-emerald-100 leading-tight">
-              Gemini 3.1 Flash
+              GovTech AI Engine
             </div>
           </div>
         </button>
@@ -255,7 +255,7 @@ export const SetuAiChatbot: React.FC = () => {
                 <div className="flex items-center gap-1.5">
                   <h3 className="text-xs font-bold tracking-tight">Setu AI Sahayak</h3>
                   <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/30">
-                    Gemini 3.1 Flash
+                    GovTech AI v2.6
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] text-slate-300">
@@ -336,7 +336,7 @@ export const SetuAiChatbot: React.FC = () => {
                     >
                       <span>{msg.timestamp}</span>
                       {msg.modelUsed && isAssistant && (
-                        <span>• {msg.modelUsed}</span>
+                        <span>• Setu AI</span>
                       )}
                     </div>
                   </div>
@@ -358,7 +358,7 @@ export const SetuAiChatbot: React.FC = () => {
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 flex items-center gap-1.5 shadow-2xs">
                   <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                    Gemini 3.1 Flash is thinking
+                    Setu AI is analyzing...
                   </span>
                   <span className="flex gap-1 items-center ml-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-bounce [animation-delay:-0.3s]" />
@@ -423,7 +423,7 @@ export const SetuAiChatbot: React.FC = () => {
             </form>
             <div className="text-center mt-1.5">
               <span className="text-[9px] text-slate-400 dark:text-slate-500">
-                Ground-verified GovTech AI • Powered by Google Gemini
+                SamadhanSetu Civic Intelligence Engine • Smart India Hackathon 2026
               </span>
             </div>
           </div>
@@ -432,3 +432,4 @@ export const SetuAiChatbot: React.FC = () => {
     </>
   );
 };
+
