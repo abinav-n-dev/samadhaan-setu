@@ -61,12 +61,14 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile> = {
   },
   student: {
     id: 'usr-stu-01',
-    name: 'Aarav Sengupta',
-    email: 'aarav.sengupta@bitmesra.ac.in',
+    name: 'Harshit Gadre',
+    email: 'harshitgadre786@gmail.com',
     role: 'student',
-    title: 'Student Team Lead (AquaShield)',
-    organization: 'BIT Mesra, Ranchi',
+    title: 'STUDENT • BIT Sindri',
+    organization: 'BIT Sindri',
     location: 'Ranchi, Jharkhand',
+    phone: '+91 98765 43210',
+    skills: ['Python', 'IoT', 'C++', 'React', 'GIS', 'Water Chemistry', 'Solar Filtration'],
   },
   mentor: {
     id: 'usr-men-01',
@@ -141,6 +143,7 @@ interface StateContextType {
   verifyImpact: (challengeId: string, verificationData: Partial<ImpactVerification>) => Promise<CredentialRecord>;
   resetToDemoDefaults: () => void;
   addToast: (title: string, description: string, type?: 'success' | 'info' | 'warning') => void;
+  updateProfile: (updates: Partial<UserProfile>) => void;
 }
 
 const StateContext = createContext<StateContextType | undefined>(undefined);
@@ -915,6 +918,19 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     addToast('Demo State Reset', 'Restored pristine prototype demonstration records.', 'info');
   };
 
+  const updateProfile = (updates: Partial<UserProfile>) => {
+    setCustomUserOverrides(prev => {
+      const next = { ...(prev || {}), ...updates };
+      try {
+        sessionStorage.setItem('samadhansetu_custom_user', JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save custom user:', e);
+      }
+      return next;
+    });
+    addToast('Profile Updated', 'Your profile information and skills have been updated.', 'success');
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -951,6 +967,7 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         verifyImpact,
         resetToDemoDefaults,
         addToast,
+        updateProfile,
       }}
     >
       {children}

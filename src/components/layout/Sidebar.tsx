@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
           { to: '/map', label: t('side.live_gis_map', 'Live GIS Problem Map'), icon: <Map className="w-4 h-4" /> },
           { to: '/university/challenges', label: t('side.recommended_challenges', 'Recommended Challenges'), icon: <Compass className="w-4 h-4" /> },
           { to: '/university/projects', label: t('side.active_projects', 'Active Projects & Milestones'), icon: <CheckCircle className="w-4 h-4" /> },
-          { to: '/university/achievements', label: t('side.student_profile', 'Student Impact Profile'), icon: <Award className="w-4 h-4" /> },
+          { to: '/profile', label: t('side.student_profile', 'Student Profile & Skills'), icon: <Award className="w-4 h-4" /> },
         ];
       case 'mentor':
         return [

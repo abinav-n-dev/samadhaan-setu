@@ -282,11 +282,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                     </div>
 
                     <Link
+                      to="/profile"
+                      onClick={() => setShowUserDropdown(false)}
+                      className="flex items-center gap-2 p-2 rounded-xl text-brand-text hover:bg-gray-50 dark:hover:bg-slate-800 font-medium"
+                    >
+                      <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span>My Profile & Skills</span>
+                    </Link>
+
+                    <Link
                       to={getRoleDashboardPath(currentUser.role)}
                       onClick={() => setShowUserDropdown(false)}
                       className="flex items-center gap-2 p-2 rounded-xl text-brand-text hover:bg-gray-50 dark:hover:bg-slate-800 font-medium"
                     >
-                      <User className="w-4 h-4 text-brand-dark dark:text-emerald-400" />
+                      <ShieldCheck className="w-4 h-4 text-brand-dark dark:text-emerald-400" />
                       <span>My Role Dashboard</span>
                     </Link>
 

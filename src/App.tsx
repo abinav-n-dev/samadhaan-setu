@@ -61,6 +61,7 @@ export const App: React.FC = () => {
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/verify/:id" element={<VerifyCredentialPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<StudentProfilePage />} />
 
             {/* Citizen routes */}
             <Route path="/report" element={<ReportProblemWizard />} />

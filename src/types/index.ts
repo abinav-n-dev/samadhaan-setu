@@ -14,6 +14,8 @@ export interface UserProfile {
   title: string;
   organization: string;
   location: string;
+  phone?: string;
+  skills?: string[];
   governmentId?: string;
   isGovtVerified?: boolean;
   departmentCode?: string;

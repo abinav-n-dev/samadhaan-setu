@@ -15,22 +15,46 @@ import {
   SlidersHorizontal,
   X,
   LayoutGrid,
-  Map
+  Map,
+  Sparkles,
+  Check
 } from 'lucide-react';
 
 export const ExploreChallengesPage: React.FC = () => {
-  const { challenges } = useAppState();
+  const { challenges, currentUser } = useAppState();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParam = searchParams.get('q') || '';
+  const initialSortBy = (searchParams.get('sortBy') as any) || 'priority';
   const [searchQuery, setSearchQuery] = useState(queryParam);
   const [selectedDistrict, setSelectedDistrict] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPriority, setSelectedPriority] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedDept, setSelectedDept] = useState('All');
-  const [sortBy, setSortBy] = useState<'priority' | 'reports' | 'affected' | 'newest'>('priority');
+  const [sortBy, setSortBy] = useState<'priority' | 'skillMatch' | 'reports' | 'affected' | 'newest'>(
+    ['priority', 'skillMatch', 'reports', 'affected', 'newest'].includes(initialSortBy) ? initialSortBy : 'priority'
+  );
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
+
+  const userSkills = useMemo(() => {
+    return (currentUser?.skills || []).map(s => s.toLowerCase().trim());
+  }, [currentUser?.skills]);
+
+  const isSkillMatched = (reqSkill: string, skillsList: string[]) => {
+    if (!skillsList || skillsList.length === 0) return false;
+    const r = reqSkill.toLowerCase().trim();
+    return skillsList.some(u => u.includes(r) || r.includes(u));
+  };
+
+  const getChallengeSkillMatch = (reqSkills: string[], skillsList: string[]) => {
+    if (!skillsList || skillsList.length === 0 || !reqSkills || reqSkills.length === 0) {
+      return { count: 0, percentage: 0 };
+    }
+    const matched = reqSkills.filter(s => isSkillMatched(s, skillsList));
+    const percentage = Math.round((matched.length / reqSkills.length) * 100);
+    return { count: matched.length, percentage };
+  };
 
   const districts = useMemo(() => ['All', ...Array.from(new Set(challenges.map(c => c.district)))], [challenges]);
   const categories = useMemo(() => ['All', ...Array.from(new Set(challenges.map(c => c.category)))], [challenges]);
@@ -72,13 +96,19 @@ export const ExploreChallengesPage: React.FC = () => {
 
       return true;
     }).sort((a, b) => {
+      if (sortBy === 'skillMatch') {
+        const matchB = getChallengeSkillMatch(b.requiredSkills, userSkills).percentage;
+        const matchA = getChallengeSkillMatch(a.requiredSkills, userSkills).percentage;
+        if (matchB !== matchA) return matchB - matchA;
+        return b.priorityScore - a.priorityScore;
+      }
       if (sortBy === 'priority') return b.priorityScore - a.priorityScore;
       if (sortBy === 'reports') return b.reportCount - a.reportCount;
       if (sortBy === 'affected') return b.affectedPopulation - a.affectedPopulation;
       if (sortBy === 'newest') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return 0;
     });
-  }, [challenges, searchQuery, selectedDistrict, selectedCategory, selectedPriority, selectedStatus, selectedDept, sortBy]);
+  }, [challenges, searchQuery, selectedDistrict, selectedCategory, selectedPriority, selectedStatus, selectedDept, sortBy, userSkills]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -138,7 +168,39 @@ export const ExploreChallengesPage: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-between md:justify-end">
+            {/* Solvable with My Skills Toggle Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const nextSort = sortBy === 'skillMatch' ? 'priority' : 'skillMatch';
+                setSortBy(nextSort);
+                if (nextSort === 'skillMatch') {
+                  searchParams.set('sortBy', 'skillMatch');
+                  setSearchParams(searchParams);
+                } else {
+                  searchParams.delete('sortBy');
+                  setSearchParams(searchParams);
+                }
+              }}
+              title="Rank challenges by compatibility with your profile skills"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
+                sortBy === 'skillMatch'
+                  ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+              }`}
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${sortBy === 'skillMatch' ? 'text-amber-300' : 'text-emerald-600'}`} />
+              <span>🎯 Solvable with My Skills</span>
+              {userSkills.length > 0 && (
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  sortBy === 'skillMatch' ? 'bg-emerald-800 text-emerald-100' : 'bg-emerald-200 text-emerald-900'
+                }`}>
+                  {userSkills.length}
+                </span>
+              )}
+            </button>
+
             {/* View Mode Toggle */}
             <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 p-1 rounded-lg">
               <button
@@ -167,17 +229,28 @@ export const ExploreChallengesPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-600 font-semibold pl-2">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-600 font-semibold pl-1">
               <SlidersHorizontal className="w-3.5 h-3.5 text-slate-700" />
               <span>Sort:</span>
             </div>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => {
+                const val = e.target.value as any;
+                setSortBy(val);
+                if (val === 'skillMatch') {
+                  searchParams.set('sortBy', 'skillMatch');
+                  setSearchParams(searchParams);
+                } else {
+                  searchParams.delete('sortBy');
+                  setSearchParams(searchParams);
+                }
+              }}
               aria-label="Sort challenges"
               className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
               <option value="priority">Priority Score</option>
+              <option value="skillMatch">🎯 Solvable with My Skills</option>
               <option value="reports">Most Reports</option>
               <option value="affected">Most Population</option>
               <option value="newest">Recently Added</option>
@@ -264,6 +337,25 @@ export const ExploreChallengesPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Skill match active banner */}
+        {sortBy === 'skillMatch' && (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>
+                Ranked by compatibility with your profile skills: <strong>{currentUser?.skills?.join(', ') || 'No skills set in profile'}</strong>
+              </span>
+            </div>
+            <Link
+              to="/profile"
+              className="text-emerald-700 hover:text-emerald-950 font-bold underline shrink-0 inline-flex items-center gap-1"
+            >
+              <span>Edit Skills in Profile</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+        )}
+
         {hasActiveFilters && (
           <div className="flex items-center justify-between pt-2 text-xs border-t border-slate-100">
             <span className="text-slate-500">
@@ -301,98 +393,136 @@ export const ExploreChallengesPage: React.FC = () => {
       ) : (
         /* Challenge Cards Grid */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((challenge) => (
-            <div
-              key={challenge.id}
-              className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition duration-200 flex flex-col justify-between overflow-hidden"
-            >
-              <div className="p-5 space-y-4">
-                {/* Card Top: Code & Priority */}
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                    #{challenge.code}
-                  </span>
-                  <PriorityBadge
-                    level={challenge.priorityLevel}
-                    score={challenge.priorityScore}
-                    showScore
-                  />
+          {filtered.map((challenge) => {
+            const skillMatch = getChallengeSkillMatch(challenge.requiredSkills, userSkills);
+            return (
+              <div
+                key={challenge.id}
+                className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition duration-200 flex flex-col justify-between overflow-hidden"
+              >
+                <div className="p-5 space-y-4">
+                  {/* Card Top: Code, Priority & Skill Match Badge */}
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        #{challenge.code}
+                      </span>
+                      {skillMatch.percentage > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs">
+                          <Sparkles className="w-3 h-3 text-emerald-600" />
+                          <span>{skillMatch.percentage}% Match</span>
+                        </span>
+                      )}
+                    </div>
+                    <PriorityBadge
+                      level={challenge.priorityLevel}
+                      score={challenge.priorityScore}
+                      showScore
+                    />
+                  </div>
+
+                  {/* Title & Location */}
+                  <div>
+                    <Link
+                      to={`/challenges/${challenge.id}`}
+                      className="font-bold text-base text-slate-900 hover:text-emerald-700 line-clamp-2 leading-snug transition-colors"
+                    >
+                      {challenge.title}
+                    </Link>
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                      <span className="truncate">{challenge.locality}, {challenge.district}</span>
+                    </div>
+                  </div>
+
+                  {/* Description snippet */}
+                  <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                    {challenge.description}
+                  </p>
+
+                  {/* Key Indicators */}
+                  <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-slate-50 border border-slate-100 rounded-lg text-xs">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Citizen Signal</span>
+                      <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
+                        <FileText className="w-3.5 h-3.5 text-slate-500" />
+                        {challenge.reportCount} reports
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Affected Pop.</span>
+                      <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
+                        <Users className="w-3.5 h-3.5 text-slate-500" />
+                        ~{challenge.affectedPopulation.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Required Skills with Matched Highlights */}
+                  {challenge.requiredSkills && challenge.requiredSkills.length > 0 && (
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                        Required Skills:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {challenge.requiredSkills.map((skill) => {
+                          const matched = isSkillMatched(skill, userSkills);
+                          return (
+                            <span
+                              key={skill}
+                              className={`text-[10px] px-2 py-0.5 rounded font-medium border flex items-center gap-1 transition ${
+                                matched
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 font-semibold'
+                                  : 'bg-slate-100 text-slate-600 border-slate-200'
+                              }`}
+                            >
+                              {matched && <Check className="w-2.5 h-2.5 text-emerald-600 stroke-[3]" />}
+                              <span>{skill}</span>
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Suggested Departments */}
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                      Suggested Academic Disciplines:
+                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      {challenge.suggestedDepartments.slice(0, 2).map((dept) => (
+                        <span
+                          key={dept}
+                          className="text-[11px] bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded font-medium truncate max-w-[200px]"
+                        >
+                          {dept}
+                        </span>
+                      ))}
+                      {challenge.suggestedDepartments.length > 2 && (
+                        <span className="text-[10px] text-slate-400 self-center">
+                          +{challenge.suggestedDepartments.length - 2} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Title & Location */}
-                <div>
+                {/* Card Footer */}
+                <div className="p-3.5 bg-slate-50/80 border-t border-slate-200 flex items-center justify-between gap-2">
+                  <StatusBadge status={challenge.status} size="sm" />
+
                   <Link
                     to={`/challenges/${challenge.id}`}
-                    className="font-bold text-base text-slate-900 hover:text-emerald-700 line-clamp-2 leading-snug transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition"
                   >
-                    {challenge.title}
+                    <span>Details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                    <span className="truncate">{challenge.locality}, {challenge.district}</span>
-                  </div>
-                </div>
-
-                {/* Description snippet */}
-                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-                  {challenge.description}
-                </p>
-
-                {/* Key Indicators */}
-                <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-slate-50 border border-slate-100 rounded-lg text-xs">
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Citizen Signal</span>
-                    <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
-                      <FileText className="w-3.5 h-3.5 text-slate-500" />
-                      {challenge.reportCount} reports
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Affected Pop.</span>
-                    <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
-                      <Users className="w-3.5 h-3.5 text-slate-500" />
-                      ~{challenge.affectedPopulation.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Suggested Departments */}
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                    Suggested Academic Disciplines:
-                  </span>
-                  <div className="flex flex-wrap gap-1">
-                    {challenge.suggestedDepartments.slice(0, 2).map((dept) => (
-                      <span
-                        key={dept}
-                        className="text-[11px] bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded font-medium truncate max-w-[200px]"
-                      >
-                        {dept}
-                      </span>
-                    ))}
-                    {challenge.suggestedDepartments.length > 2 && (
-                      <span className="text-[10px] text-slate-400 self-center">
-                        +{challenge.suggestedDepartments.length - 2} more
-                      </span>
-                    )}
-                  </div>
                 </div>
               </div>
-
-              {/* Card Footer */}
-              <div className="p-3.5 bg-slate-50/80 border-t border-slate-200 flex items-center justify-between gap-2">
-                <StatusBadge status={challenge.status} size="sm" />
-
-                <Link
-                  to={`/challenges/${challenge.id}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition"
-                >
-                  <span>Details</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
