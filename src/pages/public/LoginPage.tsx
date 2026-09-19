@@ -3,22 +3,20 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { UserRole, UserProfile } from '../../types';
 import { getSupabaseClient, isSupabaseConfigured } from '../../services/supabase';
+import { SamadhanLogo } from '../../components/common/SamadhanLogo';
 import { 
   ShieldCheck, 
   Users, 
   GraduationCap, 
-  UserCheck, 
   Building, 
-  HeartHandshake, 
   ArrowRight, 
-  Lock,
   ArrowLeft,
-  CheckCircle2,
-  AlertCircle,
   BadgeCheck,
-  Building2,
   Mail,
   KeyRound,
+  Lock,
+  Building2,
+  CheckCircle2,
   Sparkles
 } from 'lucide-react';
 
@@ -36,7 +34,6 @@ export const LoginPage: React.FC = () => {
   // Citizen Form State
   const [citIdentifier, setCitIdentifier] = useState('sunita.soren@hansdiha.org');
   const [citPassword, setCitPassword] = useState('••••••••••••');
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   // University Form State
   const [uniSubRole, setUniSubRole] = useState<'student' | 'mentor'>('student');
@@ -44,11 +41,14 @@ export const LoginPage: React.FC = () => {
   const [uniId, setUniId] = useState('BIT-CE-2023-089');
   const [uniPassword, setUniPassword] = useState('••••••••••••');
 
-  // Partner Form State
-  const [partnerSubRole, setPartnerSubRole] = useState<'industry' | 'ngo'>('industry');
-  const [partnerEmail, setPartnerEmail] = useState('rajesh.sharma@tatasteel.com');
-  const [partnerId, setPartnerId] = useState('CSR-TATA-JH-2026');
+  // Partner (NGO / Industry) Form State
+  const [partnerSubRole, setPartnerSubRole] = useState<'industry' | 'ngo'>('ngo');
+  const [partnerEmail, setPartnerEmail] = useState('anita@prathamvikas.org');
+  const [partnerId, setPartnerId] = useState('NGO-JH-DUM-4421');
   const [partnerPassword, setPartnerPassword] = useState('••••••••••••');
+
+  // Social login loading state
+  const [socialLoading, setSocialLoading] = useState<string | null>(null);
 
   // Fill quick demo credentials
   const fillGovDemo = () => {
@@ -123,49 +123,6 @@ export const LoginPage: React.FC = () => {
     navigate('/citizen');
   };
 
-  const handleGoogleLogin = async () => {
-    setIsGoogleLoading(true);
-    const client = getSupabaseClient();
-    if (client && isSupabaseConfigured()) {
-      try {
-        const { error } = await client.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: window.location.origin + '/citizen',
-          },
-        });
-        if (error) {
-          console.warn('[Supabase Google Auth Notice]:', error.message);
-          // Fallback to simulated verified Google citizen session
-          login('citizen', {
-            name: 'Sunita Soren (Google Verified)',
-            email: 'sunita.soren@gmail.com',
-            authProvider: 'google',
-          });
-          navigate('/citizen');
-        }
-      } catch (err) {
-        login('citizen', {
-          name: 'Sunita Soren (Google Verified)',
-          email: 'sunita.soren@gmail.com',
-          authProvider: 'google',
-        });
-        navigate('/citizen');
-      }
-    } else {
-      // Offline/Local Simulated Google Auth
-      setTimeout(() => {
-        login('citizen', {
-          name: 'Sunita Soren (Google Verified)',
-          email: 'sunita.soren@gmail.com',
-          authProvider: 'google',
-        });
-        navigate('/citizen');
-      }, 500);
-    }
-    setIsGoogleLoading(false);
-  };
-
   const handleUniSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (uniSubRole === 'student') {
@@ -212,577 +169,697 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  // Social Login Handler (Google, GitHub, LinkedIn)
+  const handleSocialLogin = async (provider: 'google' | 'github' | 'linkedin') => {
+    setSocialLoading(provider);
+    const client = getSupabaseClient();
+    const destination = 
+      activeTab === 'university'
+        ? (uniSubRole === 'student' ? '/university' : '/university/mentors')
+        : activeTab === 'partner'
+        ? (partnerSubRole === 'ngo' ? '/ngo' : '/industry')
+        : '/citizen';
+
+    const targetRole: UserRole = 
+      activeTab === 'university'
+        ? (uniSubRole === 'student' ? 'student' : 'mentor')
+        : activeTab === 'partner'
+        ? (partnerSubRole === 'ngo' ? 'ngo' : 'industry')
+        : 'citizen';
+
+    const supabaseProvider = provider === 'linkedin' ? 'linkedin_oidc' : provider;
+
+    if (client && isSupabaseConfigured()) {
+      try {
+        const { error } = await client.auth.signInWithOAuth({
+          provider: supabaseProvider as any,
+          options: {
+            redirectTo: window.location.origin + destination,
+          },
+        });
+        if (error) {
+          console.warn(`[Supabase ${provider} Auth Notice]:`, error.message);
+          loginWithSocialProfile(targetRole, provider, destination);
+        }
+      } catch (err) {
+        loginWithSocialProfile(targetRole, provider, destination);
+      }
+    } else {
+      setTimeout(() => {
+        loginWithSocialProfile(targetRole, provider, destination);
+      }, 350);
+    }
+  };
+
+  const loginWithSocialProfile = (targetRole: UserRole, provider: 'google' | 'github' | 'linkedin', destination: string) => {
+    const providerLabel = provider.charAt(0).toUpperCase() + provider.slice(1);
+    let profile: Partial<UserProfile>;
+
+    if (targetRole === 'student') {
+      profile = {
+        name: `Aarav Sengupta (${providerLabel} Verified)`,
+        email: 'aarav.sengupta@bitmesra.ac.in',
+        title: 'Student Team Lead (AquaShield)',
+        organization: 'BIT Mesra, Ranchi',
+        authProvider: provider,
+      };
+    } else if (targetRole === 'mentor') {
+      profile = {
+        name: `Dr. Rameshwar Mahato (${providerLabel} Verified)`,
+        email: 'r.mahato@bitmesra.ac.in',
+        title: 'Professor & Academic Mentor',
+        organization: 'BIT Mesra Department of Civil Engineering',
+        authProvider: provider,
+      };
+    } else if (targetRole === 'ngo') {
+      profile = {
+        name: `Anita Murmu (${providerLabel} Verified)`,
+        email: 'anita@prathamvikas.org',
+        title: 'Field Operations Coordinator',
+        organization: 'Pratham Gramin Vikas Trust',
+        authProvider: provider,
+      };
+    } else if (targetRole === 'industry') {
+      profile = {
+        name: `Er. Rajesh Sharma (${providerLabel} Verified)`,
+        email: 'rajesh.sharma@tatasteel.com',
+        title: 'Lead CSR Specialist',
+        organization: 'Tata Steel CSR Foundation',
+        authProvider: provider,
+      };
+    } else {
+      profile = {
+        name: `Sunita Soren (${providerLabel} Verified)`,
+        email: 'sunita.soren@gmail.com',
+        title: 'Citizen Reporter & Community Lead',
+        organization: 'Hansdiha Gram Sabha',
+        authProvider: provider,
+      };
+    }
+
+    login(targetRole, profile);
+    addToast(`${providerLabel} Connected`, `Signed in via ${providerLabel} as ${profile.name}`, 'success');
+    navigate(destination);
+    setSocialLoading(null);
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between">
+    <div className="min-h-[calc(100vh-140px)] flex flex-col justify-center items-center py-6 px-4">
+      {/* Top Back Link */}
+      <div className="w-full max-w-[420px] mb-3 flex items-center justify-between">
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-textMuted hover:text-brand-dark"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white transition"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Landing Page</span>
         </Link>
+        <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+          NIC SSO Compliant
+        </span>
+      </div>
 
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-md">
-            <BadgeCheck className="w-3.5 h-3.5" />
-            <span>NIC / State SSO Standard</span>
-          </span>
+      {/* Main Narrow Centered Login Card (LeetCode Style) */}
+      <div className="w-full max-w-[420px] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5">
+        {/* Brand Header */}
+        <div className="text-center space-y-1.5">
+          <div className="flex justify-center mb-2">
+            <SamadhanLogo size={46} />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            SamadhanSetu
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Select your stakeholder desk to continue
+          </p>
         </div>
-      </div>
 
-      {/* Header */}
-      <div className="text-center space-y-2 max-w-xl mx-auto">
-        <div className="w-12 h-12 rounded-xl bg-slate-900 text-emerald-400 border border-slate-700 flex items-center justify-center mx-auto mb-2 shadow-sm">
-          <Lock className="w-6 h-6" />
+        {/* 4-Role Compact Pill Switcher */}
+        <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 dark:bg-slate-800/90 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setActiveTab('government')}
+            className={`py-1.5 px-1 rounded-lg text-[11px] font-bold flex flex-col items-center gap-0.5 transition ${
+              activeTab === 'government'
+                ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Govt</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('citizen')}
+            className={`py-1.5 px-1 rounded-lg text-[11px] font-bold flex flex-col items-center gap-0.5 transition ${
+              activeTab === 'citizen'
+                ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span>Citizen</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('university')}
+            className={`py-1.5 px-1 rounded-lg text-[11px] font-bold flex flex-col items-center gap-0.5 transition ${
+              activeTab === 'university'
+                ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>College</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('partner')}
+            className={`py-1.5 px-1 rounded-lg text-[11px] font-bold flex flex-col items-center gap-0.5 transition ${
+              activeTab === 'partner'
+                ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Building className="w-3.5 h-3.5" />
+            <span>NGO/CSR</span>
+          </button>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
-          SamadhanSetu Authentication Portal
-        </h1>
-        <p className="text-xs sm:text-sm text-brand-textMuted">
-          Secure, authenticated gateway for government administrators, citizens, academic innovators, and CSR partners.
-        </p>
-      </div>
 
-      {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 p-1.5 bg-gray-100 dark:bg-slate-800/80 rounded-xl border border-slate-200">
-        <button
-          type="button"
-          onClick={() => setActiveTab('government')}
-          className={`flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-            activeTab === 'government'
-              ? 'bg-blue-600 text-white shadow-sm'
-              : 'text-brand-textMuted hover:text-brand-text'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4" />
-          <span>Government Authority</span>
-        </button>
+        {/* TAB 1: GOVERNMENT AUTHORITY */}
+        {activeTab === 'government' && (
+          <form onSubmit={handleGovSubmit} className="space-y-3.5 text-xs">
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                Government Officer Login
+              </span>
+              <button
+                type="button"
+                onClick={fillGovDemo}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                Auto-fill Demo
+              </button>
+            </div>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab('citizen')}
-          className={`flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-            activeTab === 'citizen'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'text-brand-textMuted hover:text-brand-text'
-          }`}
-        >
-          <Users className="w-4 h-4" />
-          <span>Citizen Reporter</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('university')}
-          className={`flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-            activeTab === 'university'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-brand-textMuted hover:text-brand-text'
-          }`}
-        >
-          <GraduationCap className="w-4 h-4" />
-          <span>University & Mentors</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('partner')}
-          className={`flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-            activeTab === 'partner'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'text-brand-textMuted hover:text-brand-text'
-          }`}
-        >
-          <Building className="w-4 h-4" />
-          <span>Industry & NGO</span>
-        </button>
-      </div>
-
-      {/* TAB CONTENT 1: GOVERNMENT AUTHORITY */}
-      {activeTab === 'government' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-blue-50 dark:bg-blue-950/60 rounded-2xl border border-blue-200 dark:border-blue-900 text-blue-600 dark:text-blue-400">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-base font-bold text-brand-dark dark:text-white">
-                    Government Officer Single Sign-On
-                  </h2>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300">
-                    ID VERIFICATION REQUIRED
-                  </span>
-                </div>
-                <p className="text-xs text-brand-textMuted">
-                  Authorized access for District Magistrates, Department Secretaries, and Verification Officers.
-                </p>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Official Government Email (.gov.in / .nic.in)
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="email"
+                  required
+                  value={govEmail}
+                  onChange={(e) => setGovEmail(e.target.value)}
+                  placeholder="dm.dumka@jharkhand.gov.in"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={fillGovDemo}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 rounded-xl text-xs font-bold transition"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>Fill DM Dumka (IAS) Demo</span>
-            </button>
-          </div>
-
-          <form onSubmit={handleGovSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Official Government Email (.gov.in / .nic.in)
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="email"
-                    required
-                    value={govEmail}
-                    onChange={(e) => setGovEmail(e.target.value)}
-                    placeholder="officer@jharkhand.gov.in"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-blue-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Civil Service Cadre / Govt Officer ID
+              </label>
+              <div className="relative">
+                <BadgeCheck className="w-4 h-4 text-blue-600 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  value={govId}
+                  onChange={(e) => setGovId(e.target.value)}
+                  placeholder="IAS-JH-1998-042"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Government Officer / Employee ID (Govt ID Verification)
-                </label>
-                <div className="relative">
-                  <BadgeCheck className="w-4 h-4 text-blue-600 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    required
-                    value={govId}
-                    onChange={(e) => setGovId(e.target.value)}
-                    placeholder="e.g. IAS-JH-1998-042 or DWSD-EMP-882"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs font-mono text-brand-text focus:ring-1 focus:ring-blue-500 focus:bg-white"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Designated Department & Jurisdiction
-                </label>
-                <select
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Department / District Jurisdiction
+              </label>
+              <div className="relative">
+                <Building2 className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
                   value={govDept}
                   onChange={(e) => setGovDept(e.target.value)}
-                  className="w-full px-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-blue-500 focus:bg-white"
-                >
-                  <option value="District Administration Dumka">District Administration Dumka (District Magistrate)</option>
-                  <option value="Drinking Water & Sanitation Department">Drinking Water & Sanitation Department (DWSD)</option>
-                  <option value="Rural Development & Panchayati Raj">Rural Development & Panchayati Raj</option>
-                  <option value="Road Construction Department">Road Construction Department (RCD)</option>
-                  <option value="Agriculture & Animal Husbandry">Agriculture & Animal Husbandry Department</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Security Passcode / e-Gov Digital Token
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="password"
-                    required
-                    value={govPassword}
-                    onChange={(e) => setGovPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-blue-500 focus:bg-white"
-                  />
-                </div>
+                  placeholder="District Administration Dumka"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
             </div>
 
-            {/* Verification Guarantee */}
-            <div className="p-3.5 bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 rounded-2xl flex items-start gap-2.5 text-xs text-blue-900 dark:text-blue-200">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <div className="text-[11px] leading-relaxed">
-                <strong>National Informatics Centre (NIC) SSO Enabled:</strong> Verified credentials grant official cryptographic signing privileges, priority override authority, and formal credential minting on SamadhanSetu.
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="password"
+                  required
+                  value={govPassword}
+                  onChange={(e) => setGovPassword(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 mt-2"
             >
-              <span>Authenticate Government Authority & Access Portal</span>
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Sign In as District Authority</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+
+            <p className="text-[10px] text-slate-400 text-center pt-1">
+              Govt IDs verified against State Directory / NIC open standards.
+            </p>
           </form>
-        </div>
-      )}
+        )}
 
-      {/* TAB CONTENT 2: CITIZEN REPORTER */}
-      {activeTab === 'citizen' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-amber-50 dark:bg-amber-950/60 rounded-2xl border border-amber-200 dark:border-amber-900 text-amber-600 dark:text-amber-400">
-                <Users className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-brand-dark dark:text-white">
-                  Citizen & Community Reporter Login
-                </h2>
-                <p className="text-xs text-brand-textMuted">
-                  Report civic infrastructure issues, upvote community problems, and track ground resolution.
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={fillCitizenDemo}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold transition"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Fill Sunita Soren (Gram Sabha)</span>
-            </button>
-          </div>
-
-          {/* Google Sign-in Button */}
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={isGoogleLoading}
-              className="w-full py-3 px-4 bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 hover:border-gray-400 dark:hover:border-slate-500 rounded-2xl text-xs font-bold text-gray-800 dark:text-white transition flex items-center justify-center gap-3 shadow-xs"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                />
-              </svg>
-              <span>{isGoogleLoading ? 'Connecting to Google...' : 'Continue with Google Account'}</span>
-            </button>
-
-            <div className="relative flex items-center justify-center py-2">
-              <div className="border-t border-gray-200 dark:border-slate-700 w-full" />
-              <span className="bg-white dark:bg-slate-900 px-3 text-[10px] font-bold uppercase tracking-wider text-gray-400 absolute">
-                Or Continue with Citizen Credentials
+        {/* TAB 2: CITIZEN REPORTER */}
+        {activeTab === 'citizen' && (
+          <form onSubmit={handleCitizenSubmit} className="space-y-3.5 text-xs">
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                Citizen Ground Reporter
               </span>
+              <button
+                type="button"
+                onClick={fillCitizenDemo}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                Auto-fill Demo
+              </button>
             </div>
-          </div>
 
-          <form onSubmit={handleCitizenSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Mobile Number or Citizen Email
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    required
-                    value={citIdentifier}
-                    onChange={(e) => setCitIdentifier(e.target.value)}
-                    placeholder="+91 94311 28941 or sunita@hansdiha.org"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-amber-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Mobile Number or Email Address
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  value={citIdentifier}
+                  onChange={(e) => setCitIdentifier(e.target.value)}
+                  placeholder="+91 94311 28941 or sunita@hansdiha.org"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Password / Citizen OTP
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="password"
-                    required
-                    value={citPassword}
-                    onChange={(e) => setCitPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-amber-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Password / OTP
+              </label>
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="password"
+                  required
+                  value={citPassword}
+                  onChange={(e) => setCitPassword(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 mt-2"
             >
               <span>Sign In as Citizen Reporter</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+
+            {/* Social Auth Area */}
+            <div className="pt-2 text-center">
+              <div className="relative flex items-center justify-center my-3">
+                <div className="border-t border-slate-200 dark:border-slate-700 w-full" />
+                <span className="bg-white dark:bg-slate-900 px-3 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                  or sign in with
+                </span>
+              </div>
+
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('google')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with Google"
+                  aria-label="Sign in with Google"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.31 24 12 24Z"/>
+                    <path fill="#FBBC05" d="M5.28 14.27a7.18 7.18 0 0 1 0-4.54V6.58H1.26a11.99 11.99 0 0 0 0 10.84l4.02-3.15Z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </form>
-        </div>
-      )}
+        )}
 
-      {/* TAB CONTENT 3: UNIVERSITY & MENTORS */}
-      {activeTab === 'university' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/60 rounded-2xl border border-indigo-200 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400">
-                <GraduationCap className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-brand-dark dark:text-white">
-                  University Student Innovator & Faculty Mentor Login
-                </h2>
-                <p className="text-xs text-brand-textMuted">
-                  Adopt verified civic challenges for engineering capstone credit and academic certification.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
+        {/* TAB 3: UNIVERSITY (STUDENTS & FACULTY) */}
+        {activeTab === 'university' && (
+          <form onSubmit={handleUniSubmit} className="space-y-3.5 text-xs">
+            {/* Sub-role selector: Student vs Mentor */}
+            <div className="flex gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
               <button
                 type="button"
-                onClick={() => fillUniDemo('student')}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 dark:text-indigo-300 rounded-xl text-xs font-bold transition"
+                onClick={() => setUniSubRole('student')}
+                className={`flex-1 py-1.5 rounded-md text-[11px] font-bold transition ${
+                  uniSubRole === 'student'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
               >
-                <span>Student Demo</span>
+                Student Innovator
               </button>
               <button
                 type="button"
-                onClick={() => fillUniDemo('mentor')}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 dark:text-indigo-300 rounded-xl text-xs font-bold transition"
+                onClick={() => setUniSubRole('mentor')}
+                className={`flex-1 py-1.5 rounded-md text-[11px] font-bold transition ${
+                  uniSubRole === 'mentor'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
               >
-                <span>Mentor Demo</span>
+                Faculty Mentor
               </button>
             </div>
-          </div>
 
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setUniSubRole('student')}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold border transition ${
-                uniSubRole === 'student'
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-brand-bg text-brand-textMuted border-brand-border'
-              }`}
-            >
-              Student Innovator Team
-            </button>
-            <button
-              type="button"
-              onClick={() => setUniSubRole('mentor')}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold border transition ${
-                uniSubRole === 'mentor'
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-brand-bg text-brand-textMuted border-brand-border'
-              }`}
-            >
-              Faculty Academic Mentor
-            </button>
-          </div>
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                {uniSubRole === 'student' ? 'Student Team Login' : 'Academic Faculty Login'}
+              </span>
+              <button
+                type="button"
+                onClick={() => fillUniDemo(uniSubRole)}
+                className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Auto-fill Demo
+              </button>
+            </div>
 
-          <form onSubmit={handleUniSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Institutional Email (.ac.in / .edu)
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="email"
-                    required
-                    value={uniEmail}
-                    onChange={(e) => setUniEmail(e.target.value)}
-                    placeholder="student@bitmesra.ac.in"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-indigo-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Institutional Email (.ac.in / .edu)
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="email"
+                  required
+                  value={uniEmail}
+                  onChange={(e) => setUniEmail(e.target.value)}
+                  placeholder="student@bitmesra.ac.in"
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  {uniSubRole === 'student' ? 'Student Enrollment / Roll Number' : 'Faculty Employee ID'}
-                </label>
-                <div className="relative">
-                  <BadgeCheck className="w-4 h-4 text-indigo-600 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    required
-                    value={uniId}
-                    onChange={(e) => setUniId(e.target.value)}
-                    placeholder="BIT-CE-2023-089"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs font-mono text-brand-text focus:ring-1 focus:ring-indigo-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {uniSubRole === 'student' ? 'Enrollment / Roll Number' : 'Faculty Employee ID'}
+              </label>
+              <div className="relative">
+                <BadgeCheck className="w-4 h-4 text-indigo-600 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  value={uniId}
+                  onChange={(e) => setUniId(e.target.value)}
+                  placeholder={uniSubRole === 'student' ? 'BIT-CE-2023-089' : 'FAC-ENV-014'}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
               </div>
+            </div>
 
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="password"
-                    required
-                    value={uniPassword}
-                    onChange={(e) => setUniPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-indigo-500 focus:bg-white"
-                  />
-                </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="password"
+                  required
+                  value={uniPassword}
+                  onChange={(e) => setUniPassword(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 mt-2"
             >
-              <span>Sign In as {uniSubRole === 'student' ? 'Student Team Lead' : 'Faculty Academic Mentor'}</span>
+              <span>Sign In as {uniSubRole === 'student' ? 'Student Lead' : 'Faculty Mentor'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+
+            {/* Social Auth Area (Google, GitHub, LinkedIn) */}
+            <div className="pt-2 text-center">
+              <div className="relative flex items-center justify-center my-3">
+                <div className="border-t border-slate-200 dark:border-slate-700 w-full" />
+                <span className="bg-white dark:bg-slate-900 px-3 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                  or sign in with
+                </span>
+              </div>
+
+              <div className="flex items-center justify-center gap-3">
+                {/* Google */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('google')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with Google"
+                  aria-label="Sign in with Google"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.31 24 12 24Z"/>
+                    <path fill="#FBBC05" d="M5.28 14.27a7.18 7.18 0 0 1 0-4.54V6.58H1.26a11.99 11.99 0 0 0 0 10.84l4.02-3.15Z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+                  </svg>
+                </button>
+
+                {/* GitHub */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('github')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-white flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with GitHub"
+                  aria-label="Sign in with GitHub"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                </button>
+
+                {/* LinkedIn */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('linkedin')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with LinkedIn"
+                  aria-label="Sign in with LinkedIn"
+                >
+                  <svg className="w-4 h-4 fill-[#0A66C2]" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </form>
-        </div>
-      )}
+        )}
 
-      {/* TAB CONTENT 4: INDUSTRY & NGO PARTNERS */}
-      {activeTab === 'partner' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 rounded-2xl border border-emerald-200 dark:border-emerald-900 text-emerald-600 dark:text-emerald-400">
-                <Building className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-brand-dark dark:text-white">
-                  Industry Corporate CSR & Field NGO Partner Login
-                </h2>
-                <p className="text-xs text-brand-textMuted">
-                  Pledge CSR capital sponsorship, lab testing facilities, and submit ground telemetry proof.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
+        {/* TAB 4: PARTNER (NGO & INDUSTRY) */}
+        {activeTab === 'partner' && (
+          <form onSubmit={handlePartnerSubmit} className="space-y-3.5 text-xs">
+            {/* Sub-role selector: Field NGO vs Industry CSR */}
+            <div className="flex gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
               <button
                 type="button"
-                onClick={() => fillPartnerDemo('industry')}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold transition"
+                onClick={() => setPartnerSubRole('ngo')}
+                className={`flex-1 py-1.5 rounded-md text-[11px] font-bold transition ${
+                  partnerSubRole === 'ngo'
+                    ? 'bg-purple-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
               >
-                <span>Industry Demo</span>
+                Field NGO Partner
               </button>
               <button
                 type="button"
-                onClick={() => fillPartnerDemo('ngo')}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold transition"
+                onClick={() => setPartnerSubRole('industry')}
+                className={`flex-1 py-1.5 rounded-md text-[11px] font-bold transition ${
+                  partnerSubRole === 'industry'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
               >
-                <span>NGO Demo</span>
+                Industry CSR Lead
               </button>
             </div>
-          </div>
 
-          <div className="flex gap-2">
+            <div className="flex items-center justify-between pb-1">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                {partnerSubRole === 'ngo' ? 'Grassroots NGO Login' : 'Corporate CSR Foundation'}
+              </span>
+              <button
+                type="button"
+                onClick={() => fillPartnerDemo(partnerSubRole)}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                Auto-fill Demo
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Official Organization Email
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="email"
+                  required
+                  value={partnerEmail}
+                  onChange={(e) => setPartnerEmail(e.target.value)}
+                  placeholder={partnerSubRole === 'ngo' ? 'anita@prathamvikas.org' : 'rajesh.sharma@tatasteel.com'}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {partnerSubRole === 'ngo' ? 'NGO Darpan Registration ID' : 'Corporate CSR CIN Number'}
+              </label>
+              <div className="relative">
+                <BadgeCheck className="w-4 h-4 text-emerald-600 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  required
+                  value={partnerId}
+                  onChange={(e) => setPartnerId(e.target.value)}
+                  placeholder={partnerSubRole === 'ngo' ? 'NGO-JH-DUM-4421' : 'CSR-TATA-JH-2026'}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="password"
+                  required
+                  value={partnerPassword}
+                  onChange={(e) => setPartnerPassword(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
             <button
-              type="button"
-              onClick={() => setPartnerSubRole('industry')}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold border transition ${
-                partnerSubRole === 'industry'
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-brand-bg text-brand-textMuted border-brand-border'
-              }`}
-            >
-              Industry CSR Foundation
-            </button>
-            <button
-              type="button"
-              onClick={() => setPartnerSubRole('ngo')}
-              className={`flex-1 py-2 rounded-xl text-xs font-bold border transition ${
+              type="submit"
+              className={`w-full py-2.5 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 mt-2 ${
                 partnerSubRole === 'ngo'
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-brand-bg text-brand-textMuted border-brand-border'
+                  ? 'bg-purple-600 hover:bg-purple-700'
+                  : 'bg-emerald-600 hover:bg-emerald-700'
               }`}
             >
-              Field NGO Implementation Partner
-            </button>
-          </div>
-
-          <form onSubmit={handlePartnerSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Official Organization Email
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="email"
-                    required
-                    value={partnerEmail}
-                    onChange={(e) => setPartnerEmail(e.target.value)}
-                    placeholder="partner@organization.com"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-emerald-500 focus:bg-white"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  {partnerSubRole === 'industry' ? 'Corporate CSR Registration CIN' : 'NGO Darpan Registration ID'}
-                </label>
-                <div className="relative">
-                  <BadgeCheck className="w-4 h-4 text-emerald-600 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    required
-                    value={partnerId}
-                    onChange={(e) => setPartnerId(e.target.value)}
-                    placeholder="CSR-TATA-JH-2026"
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs font-mono text-brand-text focus:ring-1 focus:ring-emerald-500 focus:bg-white"
-                  />
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-brand-text mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-                  <input
-                    type="password"
-                    required
-                    value={partnerPassword}
-                    onChange={(e) => setPartnerPassword(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text focus:ring-1 focus:ring-emerald-500 focus:bg-white"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-2"
-            >
-              <span>Sign In as {partnerSubRole === 'industry' ? 'CSR Foundation Lead' : 'Field NGO Partner'}</span>
+              <span>Sign In as {partnerSubRole === 'ngo' ? 'NGO Field Partner' : 'CSR Foundation'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+
+            {/* Social Auth Area (Google, GitHub, LinkedIn) */}
+            <div className="pt-2 text-center">
+              <div className="relative flex items-center justify-center my-3">
+                <div className="border-t border-slate-200 dark:border-slate-700 w-full" />
+                <span className="bg-white dark:bg-slate-900 px-3 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                  or sign in with
+                </span>
+              </div>
+
+              <div className="flex items-center justify-center gap-3">
+                {/* Google */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('google')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with Google"
+                  aria-label="Sign in with Google"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.31 24 12 24Z"/>
+                    <path fill="#FBBC05" d="M5.28 14.27a7.18 7.18 0 0 1 0-4.54V6.58H1.26a11.99 11.99 0 0 0 0 10.84l4.02-3.15Z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/>
+                  </svg>
+                </button>
+
+                {/* GitHub */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('github')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-white flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with GitHub"
+                  aria-label="Sign in with GitHub"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                </button>
+
+                {/* LinkedIn */}
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin('linkedin')}
+                  disabled={!!socialLoading}
+                  className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition shadow-xs hover:scale-105 active:scale-95 disabled:opacity-50"
+                  title="Sign in with LinkedIn"
+                  aria-label="Sign in with LinkedIn"
+                >
+                  <svg className="w-4 h-4 fill-[#0A66C2]" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </form>
+        )}
+
+        {/* Card Footer */}
+        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
+          <p className="text-[10px] text-slate-400 dark:text-slate-500">
+            By continuing, you agree to SamadhanSetu Security & NIC Open Standards.
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 };

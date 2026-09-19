@@ -17,7 +17,7 @@ export interface UserProfile {
   governmentId?: string;
   isGovtVerified?: boolean;
   departmentCode?: string;
-  authProvider?: 'credentials' | 'google' | 'govt_sso';
+  authProvider?: 'credentials' | 'google' | 'govt_sso' | 'github' | 'linkedin';
 }
 
 export type PriorityLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
