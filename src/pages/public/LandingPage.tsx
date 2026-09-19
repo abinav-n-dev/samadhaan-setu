@@ -570,11 +570,10 @@ export const LandingPage: React.FC = () => {
 
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
-                to="/verify/SS-2026-1042"
+                to="/solutions"
                 className="inline-flex items-center gap-2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition shadow-xs"
               >
-                <FileCheck2 className="w-4 h-4 text-emerald-400" />
-                <span>Verify Credential SS-2026-1042</span>
+                <span>Explore Solution Case Studies →</span>
               </Link>
             </div>
           </div>

@@ -145,13 +145,10 @@ export const SolutionsPage: React.FC = () => {
                   <span>{sol.beneficiaries.toLocaleString()} Citizens Impacted</span>
                 </div>
 
-                <Link
-                  to={`/verify/${sol.credentialId}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg border border-slate-200 transition"
-                >
-                  <FileCheck2 className="w-4 h-4 text-slate-600" />
-                  <span>Verify Credential #{sol.credentialId}</span>
-                </Link>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1.5 rounded-lg border border-emerald-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Verified Field Outcome</span>
+                </span>
               </div>
             </div>
           </div>

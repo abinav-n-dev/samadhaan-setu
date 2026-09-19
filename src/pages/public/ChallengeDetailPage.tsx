@@ -42,7 +42,8 @@ export const ChallengeDetailPage: React.FC = () => {
     approveMentorProposal, 
     commitIndustrySupport, 
     submitFieldEvidence, 
-    verifyImpact 
+    verifyImpact,
+    addToast
   } = useAppState();
 
   const navigate = useNavigate();
@@ -172,11 +173,11 @@ export const ChallengeDetailPage: React.FC = () => {
 
   const handleImpactSignoff = async () => {
     if (!challenge) return;
-    const cred = await verifyImpact(challenge.id, {
+    await verifyImpact(challenge.id, {
       actualReachedCount: Number(beneficiariesReached) || 2615,
       remarks: 'Certified 92.1% population reach. Field test telemetry verified by PHC Dumka.',
     });
-    navigate(`/verify/${cred.id}`);
+    addToast('Impact Verified', 'Impact has been officially verified and certified.', 'success');
   };
 
   if (!challenge) {
@@ -343,14 +344,11 @@ export const ChallengeDetailPage: React.FC = () => {
               </>
             )}
 
-            {challenge.status === 'resolved' && challenge.impactVerification && (
-              <Link
-                to={`/verify/${challenge.impactVerification.credentialId}`}
-                className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-xs transition"
-              >
-                <FileCheck2 className="w-4 h-4" />
-                <span>View Verifiable Credential</span>
-              </Link>
+            {challenge.status === 'resolved' && (
+              <div className="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 px-4 py-2.5 rounded-lg font-bold text-xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Field Impact Verified & Resolved</span>
+              </div>
             )}
           </div>
         </div>

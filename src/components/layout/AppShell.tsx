@@ -99,8 +99,8 @@ export const AppShell: React.FC = () => {
                     Live GIS Map
                   </Link>
                   <span className="text-slate-300">•</span>
-                  <Link to="/verify/SS-2026-1042" className="text-slate-600 hover:text-emerald-700 hover:underline">
-                    Verifiable Credentials
+                  <Link to="/solutions" className="text-slate-600 hover:text-emerald-700 hover:underline">
+                    Impact Showcase
                   </Link>
                 </div>
               </div>

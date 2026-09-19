@@ -10,7 +10,6 @@ import { ExploreChallengesPage } from './pages/public/ExploreChallengesPage';
 import { ChallengeDetailPage } from './pages/public/ChallengeDetailPage';
 import { SolutionsPage } from './pages/public/SolutionsPage';
 import { HowItWorksPage } from './pages/public/HowItWorksPage';
-import { VerifyCredentialPage } from './pages/public/VerifyCredentialPage';
 import { LoginPage } from './pages/public/LoginPage';
 import { LiveMapPage } from './pages/public/LiveMapPage';
 
@@ -59,7 +58,8 @@ export const App: React.FC = () => {
             <Route path="/challenges/:id" element={<ChallengeDetailPage />} />
             <Route path="/solutions" element={<SolutionsPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
-            <Route path="/verify/:id" element={<VerifyCredentialPage />} />
+            <Route path="/verify/:id" element={<Navigate to="/solutions" replace />} />
+            <Route path="/verify" element={<Navigate to="/solutions" replace />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<StudentProfilePage />} />
 

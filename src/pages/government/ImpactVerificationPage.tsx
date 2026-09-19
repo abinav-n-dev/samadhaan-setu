@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const ImpactVerificationPage: React.FC = () => {
-  const { challenges, verifyImpact } = useAppState();
+  const { challenges, verifyImpact, addToast } = useAppState();
   const navigate = useNavigate();
 
   // Find challenges ready for impact verification (such as #JH-WTR-1042)
@@ -40,11 +40,12 @@ export const ImpactVerificationPage: React.FC = () => {
 
   const handleVerifyImpact = async () => {
     if (!selectedChallenge) return;
-    const cred = await verifyImpact(selectedChallenge.id, {
+    await verifyImpact(selectedChallenge.id, {
       actualReachedCount: Number(actualReached),
       remarks,
     });
-    navigate(`/verify/${cred.id}`);
+    addToast('Impact Verified', 'Impact has been officially verified and certified.', 'success');
+    navigate(`/challenges/${selectedChallenge.id}`);
   };
 
   return (

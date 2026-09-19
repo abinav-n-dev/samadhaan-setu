@@ -157,13 +157,10 @@ export const ProjectsPage: React.FC = () => {
                 </Link>
 
                 {challenge.status === 'resolved' && (
-                  <Link
-                    to="/verify/SS-2026-1042"
-                    className="inline-flex items-center gap-1.5 font-bold text-emerald-800 bg-brand-mintSoft px-3 py-1.5 rounded-lg border border-brand-mint"
-                  >
+                  <span className="inline-flex items-center gap-1.5 font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
                     <Award className="w-4 h-4 text-emerald-700" />
-                    <span>View Minted Impact Credential</span>
-                  </Link>
+                    <span>Impact Verified & Resolved</span>
+                  </span>
                 )}
               </div>
             </div>

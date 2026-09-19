@@ -43,7 +43,7 @@ export const DemoRoleSwitcher: React.FC = () => {
     { step: 9, title: 'Industry CSR Support & Mentorship', role: 'industry' as UserRole, path: '/industry/projects', desc: 'Tata Steel CSR discovers project and pledges ₹3.8L grant and dedicated technical mentor.' },
     { step: 10, title: 'NGO Field Implementation', role: 'ngo' as UserRole, path: '/ngo/evidence', desc: 'Grassroots partner uploads solar kiosk photos, TDS test drop (890 -> 142 ppm), and 2,615 beneficiaries.' },
     { step: 11, title: 'Government Impact Verification', role: 'government' as UserRole, path: '/government/impact', desc: 'District Magistrate verifies ground evidence and certifies population reach.' },
-    { step: 12, title: 'Verifiable Impact Credential', role: 'government' as UserRole, path: '/verify/SS-2026-1042', desc: 'Cryptographic public credential issued and verified for student portfolio.' },
+    { step: 12, title: 'Impact Showcase & Resolution', role: 'government' as UserRole, path: '/solutions', desc: 'Public impact showcase with citizen reach and verified outcomes.' },
   ];
 
   const handleRoleClick = (r: UserRole, path: string) => {

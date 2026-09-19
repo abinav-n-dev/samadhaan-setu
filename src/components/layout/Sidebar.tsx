@@ -90,7 +90,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
     { to: '/explore', label: t('side.explore_challenges', 'Explore Challenges'), icon: <Compass className="w-4 h-4" /> },
     { to: '/solutions', label: t('side.solutions', 'Impact Showcase'), icon: <Award className="w-4 h-4" /> },
     { to: '/how-it-works', label: t('side.how_it_works', 'How Ecosystem Works'), icon: <HelpCircle className="w-4 h-4" /> },
-    { to: '/verify/SS-2026-1042', label: t('side.verify_credential', 'Verify Credential'), icon: <ExternalLink className="w-4 h-4" /> },
   ];
 
   return (
