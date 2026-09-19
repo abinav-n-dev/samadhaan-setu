@@ -61,7 +61,7 @@ export const FieldEvidencePage: React.FC = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 text-xs"
+        className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 text-xs"
       >
         {/* Challenge reference */}
         <div className="p-4 rounded-2xl bg-brand-bg border border-brand-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">

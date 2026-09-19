@@ -166,15 +166,15 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
           </div>
 
           {/* Layer toggles */}
-          <div className="flex items-center gap-1 bg-white border border-brand-border p-1 rounded-lg">
+          <div className="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-lg">
             {(['All', 'Critical', 'Adopted', 'Resolved'] as const).map((layer) => (
               <button
                 key={layer}
                 onClick={() => setActiveLayer(layer)}
-                className={`px-2.5 py-1 rounded text-[11px] font-semibold transition ${
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition ${
                   activeLayer === layer
-                    ? 'bg-brand-dark text-brand-mint shadow-xs'
-                    : 'text-brand-textMuted hover:text-brand-text'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {layer}

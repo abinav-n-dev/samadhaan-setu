@@ -365,7 +365,7 @@ export const ReportProblemWizard: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6 pb-16 px-1 sm:px-0">
       {/* Top Header */}
-      <div className="bg-white rounded-3xl border border-brand-border p-5 sm:p-6 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-xl border border-brand-border p-5 sm:p-6 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[11px] font-bold border border-amber-200">
             <span>{t('report.badge', 'नागरिक सेवा • Citizen Action')}</span>
@@ -427,8 +427,8 @@ export const ReportProblemWizard: React.FC = () => {
 
       {/* Submitted Success Confirmation Screen */}
       {submittedReportId ? (
-        <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-10 shadow-elevated text-center space-y-6 animate-in zoom-in-95 duration-200">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-subtle">
+        <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-10 shadow-elevated text-center space-y-6 animate-in zoom-in-95 duration-200">
+          <div className="w-16 h-16 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-subtle">
             <CheckCircle2 className="w-9 h-9" />
           </div>
 
@@ -514,7 +514,7 @@ export const ReportProblemWizard: React.FC = () => {
         /* QUICK 1-MINUTE CITIZEN REPORT (SUPER SIMPLE FOR PHONE USERS)  */
         /* ============================================================ */
         <form onSubmit={handleFinalSubmit} className="space-y-6">
-          <div className="bg-white rounded-3xl border border-brand-border p-5 sm:p-7 shadow-subtle space-y-6 text-xs">
+          <div className="bg-white rounded-xl border border-brand-border p-5 sm:p-7 shadow-subtle space-y-6 text-xs">
             {/* STEP 1: PHOTO CAPTURE & COMPRESSION */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -836,7 +836,7 @@ export const ReportProblemWizard: React.FC = () => {
         /* ============================================================ */
         /* DETAILED 5-STEP WIZARD (FOR ADVANCED USERS)                  */
         /* ============================================================ */
-        <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
+        <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
           {/* Stepper Navigation */}
           <div className="border-b border-brand-border pb-4">
             <div className="flex items-center justify-between">

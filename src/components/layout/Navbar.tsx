@@ -79,31 +79,37 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {/* Compact Mobile Brand Logo */}
-          <Link to="/" className="lg:hidden flex items-center gap-1.5 font-extrabold text-brand-dark text-xs sm:text-sm tracking-wide">
-            <span>SAMADHAN</span><span className="text-emerald-600">SETU</span>
+          <Link to="/" className="lg:hidden flex items-center gap-1.5 font-bold text-slate-900 dark:text-white text-xs sm:text-sm tracking-tight">
+            <div className="w-5 h-5 rounded bg-emerald-700 text-white flex items-center justify-center font-black text-[10px]">
+              स
+            </div>
+            <span>SAMADHAN</span><span className="text-emerald-700 font-extrabold">SETU</span>
           </Link>
 
           {/* Global Search */}
           <form onSubmit={handleSearchSubmit} className="relative hidden sm:block w-56 md:w-72 lg:w-80">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder={t('nav.search_placeholder', 'Search challenges, districts, categories...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-xl pl-9 pr-3 py-1.5 text-xs text-brand-text placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-mint focus:bg-white"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-8 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             />
+            <kbd className="hidden lg:inline-flex items-center absolute right-2.5 top-2 px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-200/60 rounded border border-slate-200">
+              /
+            </kbd>
           </form>
 
           {/* Live GIS Map Link */}
           <Link
             to="/map"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100/80 transition shadow-xs"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50/80 text-emerald-800 text-xs font-semibold hover:bg-emerald-100 transition shadow-xs"
             title="Open Live GIS Problem Map"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span className="hidden sm:inline">Live Map</span>
+            <MapPin className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <span className="hidden sm:inline">Live GIS Map</span>
           </Link>
         </div>
 
@@ -308,7 +314,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           {/* Primary CTA */}
           <Link
             to="/citizen/report"
-            className="inline-flex items-center gap-1.5 bg-brand-dark text-brand-mint text-xs font-bold px-3.5 py-1.5 rounded-xl hover:bg-brand-darkSecondary shadow-subtle transition"
+            className="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg hover:bg-emerald-800 shadow-xs transition active:scale-[0.98]"
           >
             <Plus className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Report a Problem</span>

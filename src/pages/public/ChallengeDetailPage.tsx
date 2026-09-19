@@ -191,7 +191,7 @@ export const ChallengeDetailPage: React.FC = () => {
         <div className="pt-3">
           <Link
             to="/explore"
-            className="px-4 py-2 bg-brand-dark text-brand-mint text-xs font-bold rounded-xl hover:bg-brand-darkSecondary transition"
+            className="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition shadow-xs"
           >
             Explore All Challenges
           </Link>
@@ -206,7 +206,7 @@ export const ChallengeDetailPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link
           to="/explore"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-textMuted hover:text-brand-dark"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Explore Challenges</span>
@@ -224,33 +224,33 @@ export const ChallengeDetailPage: React.FC = () => {
       </div>
 
       {/* Main Header Banner */}
-      <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-subtle space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-extrabold text-brand-dark bg-brand-bg px-2.5 py-1 rounded border border-brand-border">
+              <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">
                 #{challenge.code}
               </span>
-              <span className="text-xs font-semibold text-brand-textMuted bg-gray-100 px-2 py-0.5 rounded">
+              <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                 {challenge.category}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               {challenge.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-brand-textMuted">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
               <span className="flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-gray-400" />
+                <MapPin className="w-4 h-4 text-slate-400" />
                 <strong>{challenge.locality}, {challenge.district}, Jharkhand</strong>
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Users className="w-4 h-4 text-gray-400" />
+                <Users className="w-4 h-4 text-slate-400" />
                 ~{challenge.affectedPopulation.toLocaleString()} affected residents
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4 text-gray-400" />
+                <Calendar className="w-4 h-4 text-slate-400" />
                 Logged: {new Date(challenge.createdAt).toLocaleDateString()}
               </span>
             </div>
@@ -263,7 +263,7 @@ export const ChallengeDetailPage: React.FC = () => {
                 {challenge.verificationStatus !== 'verified' ? (
                   <button
                     onClick={handleVerify}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-brand-darkSecondary shadow-subtle transition"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-xs transition"
                   >
                     <ShieldCheck className="w-4 h-4" />
                     <span>Verify Challenge</span>
@@ -333,7 +333,7 @@ export const ChallengeDetailPage: React.FC = () => {
             {challenge.status === 'resolved' && challenge.impactVerification && (
               <Link
                 to={`/verify/${challenge.impactVerification.credentialId}`}
-                className="w-full inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-brand-darkSecondary shadow-subtle transition"
+                className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-xs transition"
               >
                 <FileCheck2 className="w-4 h-4" />
                 <span>View Verifiable Credential</span>
@@ -343,25 +343,25 @@ export const ChallengeDetailPage: React.FC = () => {
         </div>
 
         {/* 10-Step Progress Pipeline Tracker */}
-        <div className="pt-4 border-t border-brand-border">
-          <div className="flex items-center justify-between text-[11px] font-bold text-brand-textMuted uppercase tracking-wider mb-2">
+        <div className="pt-4 border-t border-slate-200">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
             <span>Problem-to-Impact Progress</span>
-            <span className="text-brand-dark font-mono font-extrabold capitalize">Status: {challenge.status.replace('_', ' ')}</span>
+            <span className="text-slate-800 font-mono font-bold capitalize">Status: {challenge.status.replace('_', ' ')}</span>
           </div>
           <div className="grid grid-cols-5 gap-1.5 text-center text-[10px] font-semibold">
-            <div className="bg-brand-dark text-brand-mint py-1.5 rounded-md">
+            <div className="bg-emerald-600 text-white py-1.5 rounded-md shadow-xs">
               1. Reported
             </div>
-            <div className={`py-1.5 rounded-md ${challenge.verificationStatus === 'verified' ? 'bg-brand-dark text-brand-mint' : 'bg-gray-100 text-gray-400'}`}>
+            <div className={`py-1.5 rounded-md ${challenge.verificationStatus === 'verified' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-400'}`}>
               2. Gov Verified
             </div>
-            <div className={`py-1.5 rounded-md ${challenge.adoption ? 'bg-brand-dark text-brand-mint' : 'bg-gray-100 text-gray-400'}`}>
+            <div className={`py-1.5 rounded-md ${challenge.adoption ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-400'}`}>
               3. Univ Adopted
             </div>
-            <div className={`py-1.5 rounded-md ${challenge.industrySupport ? 'bg-brand-dark text-brand-mint' : 'bg-gray-100 text-gray-400'}`}>
+            <div className={`py-1.5 rounded-md ${challenge.industrySupport ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-400'}`}>
               4. CSR Backed
             </div>
-            <div className={`py-1.5 rounded-md ${challenge.status === 'resolved' ? 'bg-brand-mintSoft text-emerald-800 font-bold border border-brand-mint' : 'bg-gray-100 text-gray-400'}`}>
+            <div className={`py-1.5 rounded-md ${challenge.status === 'resolved' ? 'bg-emerald-50 text-emerald-800 font-bold border border-emerald-300' : 'bg-slate-100 text-slate-400'}`}>
               5. Credentialed
             </div>
           </div>
@@ -641,57 +641,57 @@ export const ChallengeDetailPage: React.FC = () => {
             <div className="flex items-center justify-between border-b border-brand-border pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-brand-mint bg-brand-dark px-2 py-0.5 rounded">
+                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                     #{challenge.code}
                   </span>
-                  <span className="text-xs text-brand-textMuted font-bold uppercase">
+                  <span className="text-xs text-slate-500 font-bold uppercase">
                     Cluster Evidence Dossier
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-brand-text mt-1">
+                <h3 className="text-lg font-bold text-slate-900 mt-1">
                   {linkedReports.length} Linked Citizen Submissions
                 </h3>
               </div>
               <button
                 onClick={() => setShowReportsDrawer(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto py-4 space-y-4 text-xs">
-              <p className="text-brand-textMuted">
+              <p className="text-slate-600">
                 All 37 independent citizen submissions have been clustered into this challenge. Each submission preserves individual geographic coordinates and timestamped photo evidence.
               </p>
 
               {linkedReports.map((r, idx) => (
-                <div key={r.id} className="p-4 rounded-xl border border-brand-border bg-gray-50/70 space-y-2">
+                <div key={r.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-brand-dark text-xs">
+                    <span className="font-mono font-bold text-slate-800 text-xs">
                       #{idx + 1} — {r.trackingId}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-mono">
+                    <span className="text-[10px] text-slate-400 font-mono">
                       {new Date(r.createdAt).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <h4 className="font-bold text-brand-text">{r.title}</h4>
-                  <p className="text-brand-textMuted leading-relaxed">{r.description}</p>
+                  <h4 className="font-bold text-slate-900">{r.title}</h4>
+                  <p className="text-slate-600 leading-relaxed">{r.description}</p>
 
-                  <div className="pt-2 flex items-center justify-between text-[11px] text-gray-500 border-t border-gray-200">
+                  <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-200">
                     <span>Citizen: {r.submittedBy}</span>
                     <span>Locality: {r.locality}</span>
-                    <span className="font-semibold text-red-600">Urgency: {r.urgencyLevel}</span>
+                    <span className="font-semibold text-rose-600">Urgency: {r.urgencyLevel}</span>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="pt-4 border-t border-brand-border">
+            <div className="pt-4 border-t border-slate-200">
               <button
                 onClick={() => setShowReportsDrawer(false)}
-                className="w-full py-2 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition"
+                className="w-full py-2 bg-slate-900 text-white rounded-lg font-bold text-xs hover:bg-slate-800 transition"
               >
                 Close Evidence Dossier
               </button>
@@ -786,7 +786,7 @@ export const ChallengeDetailPage: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-brand-dark text-brand-mint font-bold hover:bg-brand-darkSecondary transition"
+                className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition shadow-xs"
               >
                 Confirm Priority Override
               </button>

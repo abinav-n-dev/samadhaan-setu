@@ -302,7 +302,7 @@ export const LoginPage: React.FC = () => {
 
       {/* TAB CONTENT 1: GOVERNMENT AUTHORITY */}
       {activeTab === 'government' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-blue-50 dark:bg-blue-950/60 rounded-2xl border border-blue-200 dark:border-blue-900 text-blue-600 dark:text-blue-400">
@@ -424,7 +424,7 @@ export const LoginPage: React.FC = () => {
 
       {/* TAB CONTENT 2: CITIZEN REPORTER */}
       {activeTab === 'citizen' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-amber-50 dark:bg-amber-950/60 rounded-2xl border border-amber-200 dark:border-amber-900 text-amber-600 dark:text-amber-400">
@@ -536,7 +536,7 @@ export const LoginPage: React.FC = () => {
 
       {/* TAB CONTENT 3: UNIVERSITY & MENTORS */}
       {activeTab === 'university' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-indigo-50 dark:bg-indigo-950/60 rounded-2xl border border-indigo-200 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400">
@@ -661,7 +661,7 @@ export const LoginPage: React.FC = () => {
 
       {/* TAB CONTENT 4: INDUSTRY & NGO PARTNERS */}
       {activeTab === 'partner' && (
-        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 border border-brand-border rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 rounded-2xl border border-emerald-200 dark:border-emerald-900 text-emerald-600 dark:text-emerald-400">

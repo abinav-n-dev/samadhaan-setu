@@ -90,7 +90,7 @@ export const MentorReviewPage: React.FC = () => {
         {/* Right: Detailed Proposal Review */}
         <div className="lg:col-span-7">
           {selectedChallenge.adoption ? (
-            <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
+            <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-border pb-4">
                 <div>
                   <span className="font-mono text-xs font-bold text-brand-dark bg-brand-bg px-2.5 py-0.5 rounded border">
@@ -180,7 +180,7 @@ export const MentorReviewPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="p-8 text-center text-xs text-brand-textMuted bg-white rounded-3xl border border-dashed border-brand-border">
+            <div className="p-8 text-center text-xs text-brand-textMuted bg-white rounded-xl border border-dashed border-brand-border">
               Select a project to review.
             </div>
           )}

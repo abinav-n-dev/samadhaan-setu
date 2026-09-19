@@ -41,7 +41,7 @@ export const UniversityDashboard: React.FC = () => {
   return (
     <div className="space-y-8 pb-12">
       {/* Top Banner */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="bg-indigo-100 text-indigo-800 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider">
@@ -98,7 +98,7 @@ export const UniversityDashboard: React.FC = () => {
       </div>
 
       {/* Recommended Challenges Section with Match % */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-brand-border pb-4">
           <div>
             <div className="flex items-center gap-2">

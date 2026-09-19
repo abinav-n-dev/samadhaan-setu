@@ -99,39 +99,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
       }`}
     >
       {/* Brand Header */}
-      <div className="p-5 border-b border-brand-sidebarActive">
+      <div className="p-4 border-b border-slate-800">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-brand-sidebarActive border border-brand-mint/40 flex items-center justify-center text-brand-mint">
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 18h16" />
-              <path d="M4 18a8 8 0 0 1 16 0" />
-              <circle cx="12" cy="10" r="2" fill="#8FF0C8" />
-              <path d="M12 10v8" />
-            </svg>
+          <div className="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-extrabold text-base shadow-xs">
+            स
           </div>
           <div>
-            <div className="font-extrabold text-white text-base tracking-wide font-sans">
-              SAMADHAN<span className="text-brand-mint">SETU</span>
+            <div className="font-bold text-white text-sm tracking-tight font-sans">
+              SAMADHAN<span className="text-emerald-400">SETU</span>
             </div>
-            <div className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-              Problem to Impact
+            <div className="text-[10px] text-slate-400 font-medium">
+              झारखण्ड जन-समाधान सेतु
             </div>
           </div>
         </Link>
 
         {/* Role context badge */}
-        <div className="mt-4 px-3 py-1.5 rounded-lg bg-brand-sidebarActive border border-brand-mint/20 flex items-center justify-between">
-          <span className="text-[11px] text-gray-300">
-            {isAuthenticated ? 'Active Portal:' : 'Guest Mode:'}
+        <div className="mt-3.5 px-2.5 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+          <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+            {isAuthenticated ? 'Active Desk:' : 'Portal Access:'}
           </span>
           <Link
             to="/login"
             onClick={onCloseMobile}
-            className="text-[11px] font-bold text-brand-mint uppercase tracking-wider hover:underline flex items-center gap-1"
+            className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 uppercase tracking-wider flex items-center gap-1"
             title="Click to switch portal"
           >
-            <span>{isAuthenticated ? role : 'Select Role'}</span>
-            <span className="text-[10px] text-gray-400 font-normal lowercase">(switch)</span>
+            <span>{isAuthenticated ? role : 'Choose Role'}</span>
+            <span className="text-[10px] text-slate-400 font-normal lowercase">(switch)</span>
           </Link>
         </div>
       </div>
@@ -142,9 +137,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
         {isAuthenticated && currentUser ? (
           <>
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-brand-mint uppercase tracking-wider flex items-center justify-between">
+              <div className="px-3 mb-2 text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center justify-between">
                 <span>{role} Workspace</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-mint animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <nav className="space-y-1">
                 {getRoleLinks().map((link) => (
@@ -156,8 +151,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition ${
                         isActive
-                          ? 'bg-brand-sidebarActive text-brand-mint font-semibold'
-                          : 'text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60'
+                          ? 'bg-slate-800 text-emerald-400 font-semibold border-l-2 border-emerald-400 pl-2.5 shadow-xs'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                       }`
                     }
                   >
@@ -170,7 +165,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
 
             {/* Ecosystem links for logged-in user */}
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Public Discovery
               </div>
               <nav className="space-y-1">
@@ -182,8 +177,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition ${
                         isActive
-                          ? 'bg-brand-sidebarActive text-brand-mint font-semibold'
-                          : 'text-gray-400 hover:text-white hover:bg-brand-sidebarActive/40'
+                          ? 'bg-slate-800 text-emerald-400 font-semibold border-l-2 border-emerald-400 pl-2.5 shadow-xs'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
                       }`
                     }
                   >
@@ -198,7 +193,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
           /* If Logged Out: Show Public Navigation and Stakeholder Portal Selectors */
           <>
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-brand-mint uppercase tracking-wider">
+              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Platform Navigation
               </div>
               <nav className="space-y-1">
@@ -210,8 +205,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition ${
                         isActive
-                          ? 'bg-brand-sidebarActive text-brand-mint font-semibold'
-                          : 'text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60'
+                          ? 'bg-slate-800 text-emerald-400 font-semibold border-l-2 border-emerald-400 pl-2.5 shadow-xs'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                       }`
                     }
                   >
@@ -223,15 +218,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
             </div>
 
             <div>
-              <div className="px-3 mb-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center justify-between">
+              <div className="px-3 mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
                 <span>Stakeholder Portals</span>
-                <span className="text-[9px] text-brand-mint font-normal">Sign In</span>
+                <span className="text-[9px] text-emerald-400 font-normal">Sign In</span>
               </div>
               <nav className="space-y-1">
                 <Link
                   to="/login"
                   onClick={onCloseMobile}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60 font-medium transition"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium transition"
                 >
                   <ShieldCheck className="w-4 h-4 text-blue-400" />
                   <span>Government Center</span>
@@ -239,7 +234,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                 <Link
                   to="/login"
                   onClick={onCloseMobile}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60 font-medium transition"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium transition"
                 >
                   <Home className="w-4 h-4 text-amber-400" />
                   <span>Citizen Portal</span>
@@ -247,7 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                 <Link
                   to="/login"
                   onClick={onCloseMobile}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60 font-medium transition"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium transition"
                 >
                   <GraduationCap className="w-4 h-4 text-indigo-400" />
                   <span>University & Students</span>
@@ -255,7 +250,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                 <Link
                   to="/login"
                   onClick={onCloseMobile}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60 font-medium transition"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium transition"
                 >
                   <Briefcase className="w-4 h-4 text-emerald-400" />
                   <span>Industry / CSR Grants</span>
@@ -263,7 +258,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
                 <Link
                   to="/login"
                   onClick={onCloseMobile}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-brand-sidebarActive/60 font-medium transition"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium transition"
                 >
                   <HeartHandshake className="w-4 h-4 text-purple-400" />
                   <span>Field NGO Desk</span>
@@ -279,7 +274,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
         {isAuthenticated && currentUser ? (
           <div className="space-y-2">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-brand-sidebarActive border border-brand-mint/30 flex items-center justify-center font-bold text-brand-mint shrink-0">
+              <div className="w-8 h-8 rounded-full bg-brand-sidebarActive border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-400 shrink-0">
                 {currentUser.name[0]}
               </div>
               <div className="min-w-0 flex-1">
@@ -295,7 +290,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
               <Link
                 to="/login"
                 onClick={onCloseMobile}
-                className="text-brand-mint hover:underline font-semibold"
+                className="text-emerald-400 hover:text-emerald-300 hover:underline font-semibold"
               >
                 Switch Portal →
               </Link>
@@ -314,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
             <Link
               to="/login"
               onClick={onCloseMobile}
-              className="inline-flex items-center gap-1 text-xs font-bold text-brand-mint hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 hover:underline"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span>Sign In</span>

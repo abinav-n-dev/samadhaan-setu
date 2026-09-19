@@ -45,7 +45,7 @@ export const AuditLogPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle">
         <AuditTimeline logs={filtered} />
       </div>
     </div>

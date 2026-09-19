@@ -61,7 +61,7 @@ export const ImpactVerificationPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 max-w-4xl mx-auto">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6 max-w-4xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-border pb-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">

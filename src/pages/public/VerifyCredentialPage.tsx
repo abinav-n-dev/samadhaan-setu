@@ -117,7 +117,7 @@ export const VerifyCredentialPage: React.FC = () => {
       )}
 
       {/* Verifiable Impact Credential Certificate Card */}
-      <div className={`bg-white dark:bg-slate-900 rounded-3xl border-2 overflow-hidden transition-colors ${
+      <div className={`bg-white dark:bg-slate-900 rounded-xl border-2 overflow-hidden transition-colors ${
         !isVerifying && isValid === false 
           ? 'border-red-500 shadow-lg' 
           : 'border-brand-dark dark:border-slate-700 shadow-modal'
@@ -132,7 +132,7 @@ export const VerifyCredentialPage: React.FC = () => {
                 <span className={`font-mono font-bold text-[10px] px-2 py-0.5 rounded tracking-widest uppercase ${
                   !isVerifying && isValid === false 
                     ? 'bg-red-500 text-white' 
-                    : 'bg-brand-mint text-brand-dark'
+                    : 'bg-emerald-600 text-white'
                 }`}>
                   {!isVerifying && isValid === false ? 'Integrity Failed' : 'Government Validated'}
                 </span>
@@ -143,24 +143,24 @@ export const VerifyCredentialPage: React.FC = () => {
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Verified Impact Credential
               </h1>
-              <p className="text-xs text-brand-mint mt-1">
+              <p className="text-xs text-emerald-300 mt-1">
                 Issued under SamadhanSetu Civic Innovation Registry • Govt of Jharkhand
               </p>
             </div>
 
             {/* Verification Seal Badge */}
-            <div className={`flex items-center gap-3 p-3 rounded-2xl border self-start sm:self-center ${
+            <div className={`flex items-center gap-3 p-3 rounded-xl border self-start sm:self-center ${
               isVerifying 
-                ? 'bg-gray-800 border-gray-700' 
+                ? 'bg-slate-800 border-slate-700' 
                 : isValid 
-                ? 'bg-brand-sidebarActive border-brand-mint/30' 
+                ? 'bg-slate-800 border-emerald-500/40' 
                 : 'bg-red-900/60 border-red-500/50'
             }`}>
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 isVerifying 
-                  ? 'bg-gray-700 text-gray-300' 
+                  ? 'bg-slate-700 text-slate-300' 
                   : isValid 
-                  ? 'bg-brand-mintSoft text-emerald-700' 
+                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
                   : 'bg-red-100 text-red-700'
               }`}>
                 {isVerifying ? (

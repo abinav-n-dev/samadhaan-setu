@@ -92,37 +92,37 @@ export const HowItWorksPage: React.FC = () => {
   return (
     <div className="space-y-12 max-w-4xl mx-auto">
       <div className="text-center space-y-3">
-        <span className="text-xs font-bold uppercase tracking-widest text-brand-dark bg-brand-mintSoft px-3.5 py-1 rounded-full border border-brand-mint/40">
+        <span className="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">
           Complete Ecosystem Lifecycle
         </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-brand-text">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
           How SamadhanSetu Works
         </h1>
-        <p className="text-xs sm:text-sm text-brand-textMuted max-w-xl mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
           From genuine citizen pain point to verified engineering solution. Here is the step-by-step mechanism connecting citizens, administration, universities, and industry.
         </p>
       </div>
 
       {/* Core Principle Comparison Box */}
-      <div className="bg-brand-dark text-white rounded-3xl p-6 sm:p-8 border border-brand-sidebarActive shadow-modal space-y-4">
-        <h3 className="text-lg font-bold text-brand-mint flex items-center gap-2">
-          <Sparkles className="w-5 h-5" />
+      <div className="bg-slate-900 text-white rounded-xl p-6 sm:p-8 border border-slate-800 shadow-md space-y-4">
+        <h3 className="text-lg font-bold text-emerald-400 flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-emerald-400" />
           The Core Paradigm Shift
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-brand-sidebarActive border border-white/10 space-y-1">
-            <span className="font-bold text-red-400 uppercase tracking-wider block">
+          <div className="p-4 rounded-lg bg-slate-800 border border-slate-700 space-y-1">
+            <span className="font-bold text-rose-400 uppercase tracking-wider block">
               Conventional Complaint Portals
             </span>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed">
               Citizens file tickets into a bureaucratic bottleneck; government lacks engineering manpower; tickets stagnate or get closed without root-cause physical solutions.
             </p>
           </div>
-          <div className="p-4 rounded-xl bg-brand-sidebarActive border border-brand-mint/30 space-y-1">
-            <span className="font-bold text-brand-mint uppercase tracking-wider block">
+          <div className="p-4 rounded-lg bg-slate-800 border border-emerald-500/40 space-y-1">
+            <span className="font-bold text-emerald-400 uppercase tracking-wider block">
               SamadhanSetu Ecosystem
             </span>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed">
               Genuine problems are converted into university capstone opportunities with faculty guidance, CSR capital, and field NGO deployment—resulting in measurable, certified impact.
             </p>
           </div>
@@ -134,23 +134,23 @@ export const HowItWorksPage: React.FC = () => {
         {steps.map((s) => (
           <div
             key={s.step}
-            className="p-5 rounded-2xl bg-white border border-brand-border shadow-subtle flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-brand-mint transition"
+            className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-slate-300 transition"
           >
-            <div className="w-12 h-12 rounded-xl bg-brand-bg border border-brand-border flex items-center justify-center font-mono font-black text-brand-dark text-base flex-shrink-0">
+            <div className="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center font-mono font-bold text-slate-800 text-base flex-shrink-0">
               {s.step}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h4 className="font-bold text-sm text-brand-text">{s.title}</h4>
-                <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-gray-100 text-gray-700">
+                <h4 className="font-bold text-sm text-slate-900">{s.title}</h4>
+                <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
                   {s.role}
                 </span>
               </div>
-              <p className="text-xs text-brand-textMuted leading-relaxed">{s.desc}</p>
+              <p className="text-xs text-slate-600 leading-relaxed">{s.desc}</p>
             </div>
 
-            <div className="hidden sm:block p-2 rounded-lg bg-gray-50 flex-shrink-0">
+            <div className="hidden sm:block p-2 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0">
               {s.icon}
             </div>
           </div>
@@ -158,24 +158,24 @@ export const HowItWorksPage: React.FC = () => {
       </div>
 
       {/* Bottom CTA */}
-      <div className="p-8 rounded-3xl bg-brand-bg border border-brand-border text-center space-y-4">
-        <h3 className="text-xl font-bold text-brand-text">
+      <div className="p-8 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-4">
+        <h3 className="text-xl font-bold text-slate-900">
           Ready to Experience the Complete Workflow?
         </h3>
-        <p className="text-xs text-brand-textMuted max-w-md mx-auto">
+        <p className="text-xs text-slate-600 max-w-md mx-auto">
           Select any stakeholder portal from the top Login menu to explore role-specific workflows and dashboards.
         </p>
         <div className="flex justify-center gap-3 pt-2">
           <Link
             to="/government"
-            className="inline-flex items-center gap-2 bg-brand-dark text-brand-mint px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition"
+            className="inline-flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 transition shadow-xs"
           >
             <span>Open Government Center</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             to="/explore"
-            className="inline-flex items-center gap-2 bg-white text-brand-text border border-brand-border px-5 py-2.5 rounded-xl font-semibold text-xs hover:bg-gray-50 transition"
+            className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg font-semibold text-xs hover:bg-slate-50 transition"
           >
             <span>Browse Challenges</span>
           </Link>

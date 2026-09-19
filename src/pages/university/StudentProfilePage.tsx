@@ -40,7 +40,7 @@ export const StudentProfilePage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       {/* Profile Card */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row items-start gap-6">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row items-start gap-6">
         <div className="w-20 h-20 rounded-2xl bg-brand-dark text-brand-mint border border-brand-mint/40 flex items-center justify-center font-extrabold text-2xl flex-shrink-0">
           AS
         </div>
@@ -104,7 +104,7 @@ export const StudentProfilePage: React.FC = () => {
       </div>
 
       {/* Verified Achievement Badges */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-4">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-4">
         <h3 className="text-base font-bold text-brand-text">Verified Competency Badges</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           {profile.achievements.map((ach, i) => (
@@ -119,7 +119,7 @@ export const StudentProfilePage: React.FC = () => {
       </div>
 
       {/* Issued Impact Credentials */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-4">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-4">
         <div className="flex items-center justify-between border-b border-brand-border pb-3">
           <div>
             <h3 className="text-base font-bold text-brand-text">Public Verifiable Credentials</h3>

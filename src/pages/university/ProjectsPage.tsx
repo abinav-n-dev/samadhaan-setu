@@ -40,7 +40,7 @@ export const ProjectsPage: React.FC = () => {
           return (
             <div
               key={challenge.id}
-              className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6"
+              className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6"
             >
               {/* Project Header */}
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-brand-border pb-4">

@@ -125,29 +125,29 @@ export const ExploreChallengesPage: React.FC = () => {
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-white rounded-2xl border border-brand-border p-4 shadow-subtle space-y-3">
+      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search by keywords, challenge code (#JH-WTR-1042), skills, or district..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-brand-bg border border-brand-border rounded-xl text-xs text-brand-text placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-mint focus:bg-white"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
             {/* View Mode Toggle */}
-            <div className="flex items-center gap-1 bg-brand-bg border border-brand-border p-1 rounded-xl">
+            <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 p-1 rounded-lg">
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
                   viewMode === 'grid'
-                    ? 'bg-white text-brand-dark shadow-xs'
-                    : 'text-brand-textMuted hover:text-brand-text'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
@@ -156,10 +156,10 @@ export const ExploreChallengesPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setViewMode('map')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
                   viewMode === 'map'
-                    ? 'bg-white text-brand-dark shadow-xs'
-                    : 'text-brand-textMuted hover:text-brand-text'
+                    ? 'bg-white text-slate-900 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <Map className="w-3.5 h-3.5 text-emerald-600" />
@@ -167,15 +167,15 @@ export const ExploreChallengesPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-brand-text font-semibold pl-2">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-brand-dark" />
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-600 font-semibold pl-2">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-700" />
               <span>Sort:</span>
             </div>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               aria-label="Sort challenges"
-              className="bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs font-medium text-brand-text focus:outline-none"
+              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
               <option value="priority">Priority Score</option>
               <option value="reports">Most Reports</option>
@@ -189,11 +189,11 @@ export const ExploreChallengesPage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-2 border-t border-gray-100 text-xs">
           {/* District */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">District</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">District</label>
             <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-medium text-brand-text focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             >
               {districts.map(d => (
                 <option key={d} value={d}>{d}</option>
@@ -203,11 +203,11 @@ export const ExploreChallengesPage: React.FC = () => {
 
           {/* Category */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Category</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Category</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-medium text-brand-text focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             >
               {categories.map(c => (
                 <option key={c} value={c}>{c}</option>
@@ -217,11 +217,11 @@ export const ExploreChallengesPage: React.FC = () => {
 
           {/* Priority */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Priority</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Priority</label>
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-medium text-brand-text focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             >
               <option value="All">All Priorities</option>
               <option value="CRITICAL">Critical (&gt;85)</option>
@@ -233,11 +233,11 @@ export const ExploreChallengesPage: React.FC = () => {
 
           {/* Status */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Status</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status</label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-medium text-brand-text focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             >
               <option value="All">All Statuses</option>
               <option value="unverified">Under Review</option>
@@ -251,11 +251,11 @@ export const ExploreChallengesPage: React.FC = () => {
 
           {/* Department */}
           <div>
-            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Department</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Department</label>
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 font-medium text-brand-text focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             >
               {departments.map(d => (
                 <option key={d} value={d}>{d}</option>
@@ -265,13 +265,13 @@ export const ExploreChallengesPage: React.FC = () => {
         </div>
 
         {hasActiveFilters && (
-          <div className="flex items-center justify-between pt-2 text-xs">
-            <span className="text-brand-textMuted">
-              Found <strong>{filtered.length}</strong> matching challenges
+          <div className="flex items-center justify-between pt-2 text-xs border-t border-slate-100">
+            <span className="text-slate-500">
+              Found <strong className="text-slate-800">{filtered.length}</strong> matching challenges
             </span>
             <button
               onClick={clearFilters}
-              className="text-brand-dark hover:underline font-semibold flex items-center gap-1"
+              className="text-emerald-700 hover:text-emerald-800 hover:underline font-semibold flex items-center gap-1 transition"
             >
               <X className="w-3.5 h-3.5" />
               <span>Reset all filters</span>
@@ -304,12 +304,12 @@ export const ExploreChallengesPage: React.FC = () => {
           {filtered.map((challenge) => (
             <div
               key={challenge.id}
-              className="bg-white rounded-2xl border border-brand-border shadow-subtle hover:border-brand-mint hover:shadow-elevated transition duration-200 flex flex-col justify-between overflow-hidden"
+              className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition duration-200 flex flex-col justify-between overflow-hidden"
             >
               <div className="p-5 space-y-4">
                 {/* Card Top: Code & Priority */}
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-extrabold text-brand-dark bg-brand-bg px-2 py-0.5 rounded border border-brand-border">
+                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                     #{challenge.code}
                   </span>
                   <PriorityBadge
@@ -323,34 +323,34 @@ export const ExploreChallengesPage: React.FC = () => {
                 <div>
                   <Link
                     to={`/challenges/${challenge.id}`}
-                    className="font-bold text-base text-brand-text hover:text-brand-dark line-clamp-2 leading-snug"
+                    className="font-bold text-base text-slate-900 hover:text-emerald-700 line-clamp-2 leading-snug transition-colors"
                   >
                     {challenge.title}
                   </Link>
-                  <div className="flex items-center gap-1.5 text-xs text-brand-textMuted mt-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
                     <span className="truncate">{challenge.locality}, {challenge.district}</span>
                   </div>
                 </div>
 
                 {/* Description snippet */}
-                <p className="text-xs text-brand-textMuted line-clamp-3 leading-relaxed">
+                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
                   {challenge.description}
                 </p>
 
                 {/* Key Indicators */}
-                <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-brand-bg rounded-xl text-xs">
+                <div className="grid grid-cols-2 gap-2 py-2 px-3 bg-slate-50 border border-slate-100 rounded-lg text-xs">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Citizen Signal</span>
-                    <span className="font-mono font-bold text-brand-text flex items-center gap-1 mt-0.5">
-                      <FileText className="w-3.5 h-3.5 text-brand-dark" />
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Citizen Signal</span>
+                    <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
+                      <FileText className="w-3.5 h-3.5 text-slate-500" />
                       {challenge.reportCount} reports
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Affected Pop.</span>
-                    <span className="font-mono font-bold text-brand-text flex items-center gap-1 mt-0.5">
-                      <Users className="w-3.5 h-3.5 text-brand-dark" />
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Affected Pop.</span>
+                    <span className="font-mono font-bold text-slate-800 flex items-center gap-1 mt-0.5">
+                      <Users className="w-3.5 h-3.5 text-slate-500" />
                       ~{challenge.affectedPopulation.toLocaleString()}
                     </span>
                   </div>
@@ -358,20 +358,20 @@ export const ExploreChallengesPage: React.FC = () => {
 
                 {/* Suggested Departments */}
                 <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
                     Suggested Academic Disciplines:
                   </span>
                   <div className="flex flex-wrap gap-1">
                     {challenge.suggestedDepartments.slice(0, 2).map((dept) => (
                       <span
                         key={dept}
-                        className="text-[11px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-medium truncate max-w-[200px]"
+                        className="text-[11px] bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded font-medium truncate max-w-[200px]"
                       >
                         {dept}
                       </span>
                     ))}
                     {challenge.suggestedDepartments.length > 2 && (
-                      <span className="text-[10px] text-gray-400 self-center">
+                      <span className="text-[10px] text-slate-400 self-center">
                         +{challenge.suggestedDepartments.length - 2} more
                       </span>
                     )}
@@ -380,12 +380,12 @@ export const ExploreChallengesPage: React.FC = () => {
               </div>
 
               {/* Card Footer */}
-              <div className="p-4 bg-gray-50/70 border-t border-brand-border flex items-center justify-between gap-2">
+              <div className="p-3.5 bg-slate-50/80 border-t border-slate-200 flex items-center justify-between gap-2">
                 <StatusBadge status={challenge.status} size="sm" />
 
                 <Link
                   to={`/challenges/${challenge.id}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-dark hover:text-brand-darkSecondary transition"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition"
                 >
                   <span>Details</span>
                   <ArrowRight className="w-3.5 h-3.5" />

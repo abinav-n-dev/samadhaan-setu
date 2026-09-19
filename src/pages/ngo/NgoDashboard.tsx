@@ -21,7 +21,7 @@ export const NgoDashboard: React.FC = () => {
   return (
     <div className="space-y-8 pb-12">
       {/* Top Banner */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="bg-purple-100 text-purple-800 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider">
@@ -78,7 +78,7 @@ export const NgoDashboard: React.FC = () => {
       </div>
 
       {/* Assigned Cases List */}
-      <div className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
+      <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle space-y-6">
         <div className="flex items-center justify-between border-b border-brand-border pb-4">
           <div>
             <h2 className="text-xl font-extrabold text-brand-text">

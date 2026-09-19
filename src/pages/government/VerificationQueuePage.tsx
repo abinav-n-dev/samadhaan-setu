@@ -135,7 +135,7 @@ export const VerificationQueuePage: React.FC = () => {
 
         {/* Right: Detailed Inspection & Actions */}
         <div className="lg:col-span-7">
-          <div className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle space-y-6">
+          <div className="bg-white rounded-xl border border-brand-border p-6 shadow-subtle space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-border pb-4">
               <div>

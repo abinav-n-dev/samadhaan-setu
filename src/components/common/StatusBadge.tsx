@@ -33,7 +33,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
       case 'impact_verification':
         return { label: t('status.impact_verification', 'Impact Verification'), bg: 'bg-amber-50 text-amber-700 border-amber-200' };
       case 'resolved':
-        return { label: t('status.resolved', 'Impact Verified & Credentialed'), bg: 'bg-brand-mintSoft text-brand-dark border-brand-mint' };
+        return { label: t('status.resolved', 'Impact Verified & Credentialed'), bg: 'bg-emerald-50 text-emerald-800 border-emerald-300' };
       default:
         return { label: t(`status.${s}`, status), bg: 'bg-gray-100 text-gray-700 border-gray-200' };
     }

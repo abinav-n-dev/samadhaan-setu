@@ -55,7 +55,7 @@ export const MapPopupContent: React.FC<MapPopupContentProps> = ({ challenge }) =
       <div className="pt-1">
         <Link
           to={`/challenges/${challenge.id}`}
-          className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg bg-brand-dark text-brand-mint hover:bg-brand-darkSecondary transition shadow-xs"
+          className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
         >
           <span>View Challenge</span>
           <ArrowRight className="w-3.5 h-3.5" />

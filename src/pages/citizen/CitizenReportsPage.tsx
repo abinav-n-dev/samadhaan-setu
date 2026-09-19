@@ -96,7 +96,7 @@ export const CitizenReportsPage: React.FC = () => {
         {/* Selected Report Detail & Lifecycle Tracking */}
         <div className="lg:col-span-6">
           {selectedReport ? (
-            <div className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle space-y-6 sticky top-24">
+            <div className="bg-white rounded-xl border border-brand-border p-6 shadow-subtle space-y-6 sticky top-24">
               <div className="flex items-center justify-between border-b border-brand-border pb-3">
                 <div>
                   <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export const CitizenReportsPage: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="p-12 text-center text-xs text-brand-textMuted bg-white rounded-3xl border border-dashed border-brand-border">
+            <div className="p-12 text-center text-xs text-brand-textMuted bg-white rounded-xl border border-dashed border-brand-border">
               {t('tracking.select_prompt', 'Select a report from the left to view detailed lifecycle tracking.')}
             </div>
           )}

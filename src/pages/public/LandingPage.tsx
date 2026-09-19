@@ -200,12 +200,14 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="space-y-16 pb-16">
       {/* Stakeholder Quick Login Bar at Very Top */}
-      <div className="bg-white border border-brand-border rounded-2xl p-4 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-brand-dark">
-          <Lock className="w-4 h-4 text-brand-dark" />
-          <span>PORTAL LOGIN:</span>
-          <span className="text-brand-textMuted font-normal hidden sm:inline">
-            Choose your stakeholder identity to open your custom dashboard:
+      <div className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-4 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <div className="w-5 h-5 rounded bg-slate-900 text-white flex items-center justify-center font-extrabold text-[10px]">
+            स
+          </div>
+          <span className="uppercase tracking-wider text-[11px] font-bold text-slate-700">PORTAL GATEWAY:</span>
+          <span className="text-slate-500 font-normal hidden sm:inline text-xs">
+            Select your institutional stakeholder identity to access your dedicated workspace:
           </span>
         </div>
 
@@ -215,107 +217,103 @@ export const LandingPage: React.FC = () => {
               key={p.role}
               type="button"
               onClick={() => handleRoleLogin(p.role, p.destination)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-bg hover:bg-brand-dark hover:text-white border border-brand-border transition shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition shadow-xs"
             >
               <span>{p.name.split(' ')[0]}</span>
-              <span className="text-[10px] text-brand-textMuted">→</span>
+              <span className="text-[10px] text-slate-400">→</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative rounded-3xl bg-brand-dark text-white p-6 sm:p-10 lg:p-12 overflow-hidden border border-brand-sidebarActive shadow-modal">
-        <div 
-          className="absolute inset-0 opacity-10 bg-[radial-gradient(#8FF0C8_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" 
-        />
-        
+      {/* Hero Section - Official GovTech Flagship Architecture */}
+      <section className="relative rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 text-white p-6 sm:p-10 lg:p-12 overflow-hidden border border-slate-800 shadow-sm">
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-sidebarActive border border-brand-mint/30 text-xs font-semibold text-brand-mint">
-              <span className="w-2 h-2 rounded-full bg-brand-mintBright animate-ping" />
-              <span>{t('hero.tag', 'Smart India Hackathon 2026 Innovation Platform')}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-800/90 border border-slate-700 text-xs font-semibold text-emerald-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>झारखण्ड जन-समाधान सेतु • SIH 2026 Problem Statement #SIH1642</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              {t('hero.title_prefix', 'Bridging Civic Problems with')} <span className="text-brand-mint">{t('hero.title_highlight', 'Engineered, Funded & Verified Solutions.')}</span>
+              Connecting Citizen Ground Realities with <span className="text-emerald-400">University Engineering & CSR Impact</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal max-w-2xl">
-              {t('hero.desc', 'SamadhanSetu (समाधान सेतु) turns verified community problems into accredited University Capstone projects, funded by Corporate CSR grants, deployed with grassroots NGOs, and audited by District Administration.')}
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal max-w-2xl">
+              SamadhanSetu (समाधान सेतु) turns verified community challenges from 24 Jharkhand districts into accredited University Capstone projects, funded by Corporate Section 135 CSR grants, deployed with grassroots NGOs, and certified by District Administration.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a
-                href="#portals"
-                className="inline-flex items-center gap-2 bg-brand-mint text-brand-dark px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm hover:bg-brand-mintBright transition shadow-elevated"
-              >
-                <Lock className="w-4 h-4" />
-                <span>{t('nav.portal_login', 'Select Portal & Log In')}</span>
-              </a>
-
               <Link
                 to="/citizen/report"
-                className="inline-flex items-center gap-2 bg-brand-sidebarActive text-white border border-brand-border/30 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm hover:bg-brand-sidebarActive/80 transition"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-lg shadow-xs transition"
               >
-                <span>{t('hero.btn_report', 'Report a Problem')}</span>
+                <span>Report a Problem</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
+              <a
+                href="#portals"
+                className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-lg transition"
+              >
+                <Lock className="w-4 h-4 text-slate-400" />
+                <span>Choose Stakeholder Portal</span>
+              </a>
+
               <Link
                 to="/map"
-                className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm hover:bg-emerald-500/30 transition"
+                className="inline-flex items-center gap-2 bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-4 py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-emerald-900/50 transition"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Live GIS Map</span>
+                <span>Live GIS Problem Map</span>
               </Link>
 
               <Link
                 to="/explore"
-                className="inline-flex items-center gap-2 text-gray-300 hover:text-white text-xs sm:text-sm font-semibold px-3 py-2"
+                className="inline-flex items-center gap-1.5 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold px-3 py-2"
               >
-                <span>{t('hero.btn_explore', 'Explore Challenges')}</span>
+                <span>Browse Verified Challenges →</span>
               </Link>
             </div>
           </div>
 
-          {/* Live Problem Network Metrics Card (Non-overlapping Grid Item) */}
+          {/* Real-time Field Telemetry & Verification Card */}
           <div className="lg:col-span-4 w-full">
-            <div className="bg-brand-sidebarActive/90 backdrop-blur-md rounded-2xl border border-brand-mint/20 p-5 shadow-modal text-xs">
-              <div className="flex items-center justify-between border-b border-brand-border/20 pb-2 mb-3">
-                <span className="font-bold text-brand-mint uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5" />
-                  Live Network Metrics
+            <div className="bg-slate-800/80 backdrop-blur-sm rounded-xl border border-slate-700 p-5 shadow-sm text-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-700/80 pb-2.5">
+                <span className="font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                  State Field Telemetry
                 </span>
-                <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono font-bold">
+                <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  ACTIVE
+                  JHARKHAND PILOT
                 </span>
               </div>
 
               <div className="space-y-2.5 font-mono">
-                <div className="flex justify-between items-center text-gray-200">
-                  <span className="text-gray-400 font-sans">Total Reports:</span>
+                <div className="flex justify-between items-center text-slate-200">
+                  <span className="text-slate-400 font-sans text-xs">Citizen Submissions:</span>
                   <span className="font-bold text-white text-sm">{totalReports.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-gray-200">
-                  <span className="text-gray-400 font-sans">Gov-Verified:</span>
-                  <span className="font-bold text-brand-mint text-sm">{verifiedCount}</span>
+                <div className="flex justify-between items-center text-slate-200">
+                  <span className="text-slate-400 font-sans text-xs">District Admin Verified:</span>
+                  <span className="font-bold text-emerald-400 text-sm">{verifiedCount}</span>
                 </div>
-                <div className="flex justify-between items-center text-gray-200">
-                  <span className="text-gray-400 font-sans">Critical Priority:</span>
+                <div className="flex justify-between items-center text-slate-200">
+                  <span className="text-slate-400 font-sans text-xs">Critical Severity Hotspots:</span>
                   <span className="font-bold text-red-400 text-sm">{criticalCount}</span>
                 </div>
-                <div className="flex justify-between items-center text-gray-200">
-                  <span className="text-gray-400 font-sans">University Teams:</span>
+                <div className="flex justify-between items-center text-slate-200">
+                  <span className="text-slate-400 font-sans text-xs">University R&D Teams:</span>
                   <span className="font-bold text-white text-sm">{universityTeamsCount}</span>
                 </div>
               </div>
 
-              <div className="mt-4 pt-2 border-t border-brand-border/20 text-[10px] text-gray-400 flex justify-between items-center">
-                <span>Verified Impact Pipeline</span>
-                <Link to="/government" className="text-brand-mint hover:underline font-semibold font-sans">
-                  Command Center →
+              <div className="pt-2 border-t border-slate-700/80 text-[10px] text-slate-400 flex justify-between items-center">
+                <span>Verified across 24 Districts</span>
+                <Link to="/map" className="text-emerald-400 hover:underline font-semibold font-sans">
+                  Open GIS View →
                 </Link>
               </div>
             </div>
@@ -326,51 +324,51 @@ export const LandingPage: React.FC = () => {
       {/* THE CORE IDEA SECTION */}
       <section className="space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-dark bg-brand-mintSoft px-3.5 py-1 rounded-full border border-brand-mint/40">
-            {t('vision.tag', 'The Vision & Core Architecture')}
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+            {t('vision.tag', 'The Core Architecture & Mission')}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-brand-text tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             {t('vision.title', 'Why Traditional Grievance Systems Fail & How SamadhanSetu Solves It')}
           </h2>
-          <p className="text-xs sm:text-sm text-brand-textMuted leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
             {t('vision.desc', 'India does not lack citizen complaints — it lacks an engineering and execution bridge to turn those complaints into verified, sustainable public infrastructure.')}
           </p>
         </div>
 
         {/* 3 Core Pillars of the Idea */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle hover:border-brand-mint transition space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-              <Users className="w-6 h-6" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs hover:border-slate-300 hover:shadow-md transition space-y-3.5">
+            <div className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+              <Users className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">
+            <h3 className="font-bold text-base text-slate-900">
               {t('vision.pillar1_title', '1. Ground Reality & Spatial De-Duplication')}
             </h3>
-            <p className="text-xs text-brand-textMuted leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               {t('vision.pillar1_desc', 'Instead of fragmented duplicate text tickets, citizens submit geo-tagged, photo-verified reports. The spatial engine aggregates reports within a 500m radius and scores severity objectively across 6 vital civic factors.')}
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle hover:border-brand-mint transition space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
-              <GraduationCap className="w-6 h-6" />
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs hover:border-slate-300 hover:shadow-md transition space-y-3.5">
+            <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700">
+              <GraduationCap className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">
+            <h3 className="font-bold text-base text-slate-900">
               {t('vision.pillar2_title', '2. Academic Capstones with Real-World Purpose')}
             </h3>
-            <p className="text-xs text-brand-textMuted leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               {t('vision.pillar2_desc', 'Channels talent from accredited engineering colleges into verified public infrastructure problems as credit-bearing capstone projects under experienced faculty mentorship.')}
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle hover:border-brand-mint transition space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
-              <Building className="w-6 h-6" />
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs hover:border-slate-300 hover:shadow-md transition space-y-3.5">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+              <Building className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-base text-brand-text">
+            <h3 className="font-bold text-base text-slate-900">
               {t('vision.pillar3_title', '3. CSR Co-Financing & Verified Public Impact')}
             </h3>
-            <p className="text-xs text-brand-textMuted leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               {t('vision.pillar3_desc', 'Corporate CSR grants provide milestone-locked disbursements. Grassroots NGOs coordinate field adoption, while District Administration conducts public social audits and issues tamper-proof impact credentials.')}
             </p>
           </div>
@@ -378,53 +376,53 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* MULTI-ROLE LOGIN PORTAL SECTION */}
-      <section id="portals" className="space-y-8 scroll-mt-20">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brand-border pb-4">
+      <section id="portals" className="space-y-6 scroll-mt-20">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-dark bg-brand-mintSoft px-2.5 py-0.5 rounded">
+            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
               {t('portals.tag', 'Multi-Stakeholder Architecture')}
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text mt-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
               {t('portals.title', 'Select Your Institutional Portal to Log In')}
             </h2>
           </div>
-          <p className="text-xs text-brand-textMuted max-w-md">
+          <p className="text-xs text-slate-600 max-w-md">
             {t('portals.desc', 'Select your role to access your custom administrative dashboard with role-specific operational permissions.')}
           </p>
         </div>
 
         {/* 6 Role Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {portalRoles.map((p) => (
             <div
               key={p.role}
-              className="bg-white rounded-3xl border border-brand-border p-6 shadow-subtle hover:shadow-modal hover:border-brand-dark transition duration-200 flex flex-col justify-between"
+              className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition duration-150 flex flex-col justify-between"
             >
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
-                  <div className="p-3 bg-brand-bg rounded-2xl border border-brand-border/60">
+                  <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
                     {p.icon}
                   </div>
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border uppercase tracking-wider ${p.badgeBg}`}>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-md border uppercase tracking-wider ${p.badgeBg}`}>
                     {p.badge}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-extrabold text-base text-brand-text">{p.name}</h3>
-                  <div className="text-xs font-semibold text-brand-dark mt-0.5">{p.title}</div>
-                  <p className="text-xs text-brand-textMuted mt-2 leading-relaxed">
+                  <h3 className="font-bold text-base text-slate-900">{p.name}</h3>
+                  <div className="text-xs font-semibold text-emerald-700 mt-0.5">{p.title}</div>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     {p.description}
                   </p>
                 </div>
 
                 {/* Key Features Pill List */}
-                <div className="space-y-1.5 pt-2 border-t border-gray-100">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
-                    Dashboard Capabilities:
+                <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                    Operational Capabilities:
                   </span>
                   {p.features.map((feat, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-brand-text">
+                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       <span>{feat}</span>
                     </div>
@@ -433,20 +431,20 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Action Button & Demo Persona */}
-              <div className="mt-6 pt-4 border-t border-gray-100 space-y-3">
-                <div className="text-[11px] bg-brand-bg p-2 rounded-xl">
-                  <span className="text-gray-400 text-[10px] block font-semibold uppercase">Persona:</span>
-                  <strong className="text-brand-text block">{p.persona}</strong>
-                  <span className="text-brand-textMuted truncate block">{p.institution}</span>
+              <div className="mt-5 pt-3.5 border-t border-slate-100 space-y-2.5">
+                <div className="text-[11px] bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
+                  <span className="text-slate-400 text-[10px] block font-semibold uppercase">Verified Persona:</span>
+                  <strong className="text-slate-800 block">{p.persona}</strong>
+                  <span className="text-slate-500 truncate block">{p.institution}</span>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleRoleLogin(p.role, p.destination)}
-                  className="w-full py-2.5 px-4 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition flex items-center justify-center gap-2 shadow-xs"
+                  className="w-full py-2 px-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold text-xs transition flex items-center justify-center gap-2 shadow-xs active:scale-[0.98]"
                 >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Log In as {p.name.split(' ')[0]}</span>
+                  <Lock className="w-3.5 h-3.5 text-slate-300" />
+                  <span>Enter {p.name.split(' ')[0]} Desk</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -458,44 +456,44 @@ export const LandingPage: React.FC = () => {
       {/* COMPARISON TABLE: TRADITIONAL VS SAMADHANSETU */}
       <section className="space-y-6">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-dark bg-brand-mintSoft px-3 py-1 rounded-full">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
             Ecosystem Comparison
           </span>
-          <h2 className="text-2xl font-extrabold text-brand-text">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             Traditional Complaint Portals vs. SamadhanSetu
           </h2>
-          <p className="text-xs text-brand-textMuted">
-            See how SamadhanSetu transforms dead-end complaints into verifiable engineering impact.
+          <p className="text-xs sm:text-sm text-slate-600">
+            How SamadhanSetu transforms dead-end complaints into verifiable engineering impact.
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl border border-brand-border overflow-hidden shadow-subtle">
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-brand-bg border-b border-brand-border">
-                  <th className="py-3.5 px-5 font-bold text-brand-text uppercase text-[11px] w-1/4">Workflow Phase</th>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="py-3.5 px-5 font-bold text-slate-800 uppercase text-[11px] w-1/4">Workflow Phase</th>
                   <th className="py-3.5 px-5 font-bold text-red-700 uppercase text-[11px] w-3/8">
                     Conventional Grievance Portals
                   </th>
                   <th className="py-3.5 px-5 font-bold text-emerald-800 uppercase text-[11px] w-3/8 bg-emerald-50/50">
-                    SamadhanSetu Pipeline
+                    SamadhanSetu Nexus
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-100">
                 {comparisonRows.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50/60 transition">
-                    <td className="py-3.5 px-5 font-bold text-brand-text">
+                  <tr key={idx} className="hover:bg-slate-50/70 transition">
+                    <td className="py-3.5 px-5 font-semibold text-slate-900">
                       {row.criteria}
                     </td>
-                    <td className="py-3.5 px-5 text-gray-600">
+                    <td className="py-3.5 px-5 text-slate-600">
                       <div className="flex items-start gap-2">
                         <X className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                         <span>{row.traditional}</span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-5 font-medium text-brand-text bg-emerald-50/30">
+                    <td className="py-3.5 px-5 font-medium text-slate-900 bg-emerald-50/20">
                       <div className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{row.samadhan}</span>
@@ -510,19 +508,19 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Real-World Case Study: Dumka Solar Water Micro-Filtration */}
-      <section className="rounded-3xl bg-white border border-brand-border p-6 sm:p-10 shadow-elevated">
-        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-brand-border pb-4 mb-6">
+      <section className="rounded-xl bg-white border border-slate-200 p-6 sm:p-8 shadow-xs">
+        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-4 mb-6">
           <div className="flex items-center gap-2.5">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Verified Case Study
             </span>
-            <span className="font-mono text-xs text-brand-textMuted">Challenge #JH-WTR-1042</span>
+            <span className="font-mono text-xs text-slate-500 font-medium">Challenge #JH-WTR-1042</span>
           </div>
 
           <Link
             to="/challenges/c-wtr-1042"
-            className="text-xs font-bold text-brand-dark hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline flex items-center gap-1"
           >
             <span>View Full Journey</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -531,28 +529,28 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <h3 className="text-2xl font-extrabold text-brand-text leading-tight">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
               Solar Water Micro-Filtration Kiosk — Hansdiha, Dumka
             </h3>
-            <p className="text-xs sm:text-sm text-brand-textMuted leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               In Hansdiha Panchayat, 37 citizen reports flagged alarming fluoride and iron turbidity. Clustered by SamadhanSetu's duplicate intelligence, the challenge was validated by the District Magistrate, adopted by <strong>BIT Mesra</strong> engineering students, funded by <strong>Tata Steel CSR</strong>, and deployed in partnership with <strong>Pratham Gramin Vikas Trust</strong>.
             </p>
 
             {/* Before vs After comparison */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="bg-red-50/70 border border-red-200 rounded-xl p-3.5 text-xs space-y-1">
+              <div className="bg-red-50/70 border border-red-200/80 rounded-lg p-3 text-xs space-y-1">
                 <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">
                   Ground Problem (Before)
                 </span>
-                <p className="font-semibold text-brand-text">TDS: 890 ppm | Fluoride 3.8 mg/L</p>
-                <p className="text-red-700 text-[11px]">Pediatric gastrointestinal & fluorosis outbreak</p>
+                <p className="font-semibold text-slate-900">TDS: 890 ppm | Fluoride 3.8 mg/L</p>
+                <p className="text-red-700 text-[11px]">Pediatric fluorosis & contamination cluster</p>
               </div>
 
-              <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 text-xs space-y-1">
+              <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-lg p-3 text-xs space-y-1">
                 <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
                   Verified Outcome (After)
                 </span>
-                <p className="font-semibold text-brand-text">TDS: 142 ppm | Fluoride 0.45 mg/L</p>
+                <p className="font-semibold text-slate-900">TDS: 142 ppm | Fluoride 0.45 mg/L</p>
                 <p className="text-emerald-700 text-[11px]">2,615 citizens secured clean potable water</p>
               </div>
             </div>
@@ -560,15 +558,15 @@ export const LandingPage: React.FC = () => {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 to="/verify/SS-2026-1042"
-                className="inline-flex items-center gap-2 bg-brand-dark text-brand-mint text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-brand-darkSecondary transition shadow-xs"
+                className="inline-flex items-center gap-2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition shadow-xs"
               >
-                <FileCheck2 className="w-4 h-4" />
-                <span>View Verifiable Credential SS-2026-1042</span>
+                <FileCheck2 className="w-4 h-4 text-emerald-400" />
+                <span>Verify Credential SS-2026-1042</span>
               </Link>
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden border border-brand-border bg-gray-100 shadow-subtle">
+          <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-xs">
             <img
               src="/images/water-remediated.svg"
               onError={(e) => {
@@ -577,15 +575,15 @@ export const LandingPage: React.FC = () => {
                 target.src = "/images/water-turbid.svg";
               }}
               alt="Solar water micro-filtration installation in Dumka"
-              className="w-full h-72 object-cover"
+              className="w-full h-64 object-cover"
             />
-            <div className="p-4 bg-brand-bg border-t border-brand-border flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-brand-text font-semibold">
-                <MapPin className="w-4 h-4 text-brand-dark" />
-                <span>Hansdiha, Dumka, Jharkhand</span>
+            <div className="p-3.5 bg-white border-t border-slate-200 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-slate-800 font-semibold">
+                <MapPin className="w-4 h-4 text-emerald-700" />
+                <span>Hansdiha, Dumka District, Jharkhand</span>
               </div>
-              <span className="font-mono text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">
-                92.1% Coverage Reached
+              <span className="font-mono text-emerald-800 font-semibold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[11px]">
+                92.1% Target Coverage
               </span>
             </div>
           </div>

@@ -67,9 +67,9 @@ export const SolutionsPage: React.FC = () => {
         {solutions.map((sol) => (
           <div
             key={sol.credentialId}
-            className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 shadow-elevated grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
+            className="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
           >
-            <div className="lg:col-span-4 rounded-2xl overflow-hidden border border-brand-border bg-gray-100 h-64 lg:h-full">
+            <div className="lg:col-span-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 h-64 lg:h-full">
               <img
                 src={sol.image}
                 alt={sol.title}
@@ -85,71 +85,71 @@ export const SolutionsPage: React.FC = () => {
             <div className="lg:col-span-8 space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-extrabold text-brand-dark bg-brand-bg px-2.5 py-1 rounded border border-brand-border">
+                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">
                     #{sol.challengeCode}
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-brand-mintSoft px-2.5 py-0.5 rounded-full border border-brand-mint">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                     Government Impact Certified
                   </span>
                 </div>
 
-                <span className="text-xs text-brand-textMuted flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                  <strong>{sol.district}</strong>
+                <span className="text-xs text-slate-500 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <strong className="text-slate-700">{sol.district}</strong>
                 </span>
               </div>
 
-              <h3 className="text-xl font-extrabold text-brand-text">
+              <h3 className="text-xl font-bold text-slate-900">
                 {sol.title}
               </h3>
 
               {/* Stakeholders pill grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <div className="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">University R&D</span>
-                  <span className="font-semibold text-brand-text truncate block mt-0.5">{sol.university}</span>
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">University R&D</span>
+                  <span className="font-semibold text-slate-800 truncate block mt-0.5">{sol.university}</span>
                 </div>
-                <div className="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Industry Sponsor</span>
-                  <span className="font-semibold text-brand-text truncate block mt-0.5">{sol.partner}</span>
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Industry Sponsor</span>
+                  <span className="font-semibold text-slate-800 truncate block mt-0.5">{sol.partner}</span>
                 </div>
-                <div className="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Field Deployer</span>
-                  <span className="font-semibold text-brand-text truncate block mt-0.5">{sol.ngo}</span>
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Field Deployer</span>
+                  <span className="font-semibold text-slate-800 truncate block mt-0.5">{sol.ngo}</span>
                 </div>
               </div>
 
               {/* Before vs After comparative metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                <div className="p-3 bg-red-50/60 border border-red-200 rounded-xl text-xs space-y-1">
-                  <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">
+                <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-lg text-xs space-y-1">
+                  <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider block">
                     Before Implementation
                   </span>
-                  <p className="font-mono font-bold text-brand-text">{sol.beforeMetric}</p>
-                  <p className="text-red-700 text-[11px]">{sol.beforeImpact}</p>
+                  <p className="font-mono font-bold text-slate-900">{sol.beforeMetric}</p>
+                  <p className="text-rose-700 text-[11px]">{sol.beforeImpact}</p>
                 </div>
 
-                <div className="p-3 bg-emerald-50/60 border border-emerald-200 rounded-xl text-xs space-y-1">
-                  <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
+                <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-lg text-xs space-y-1">
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">
                     Verified Measured Impact
                   </span>
-                  <p className="font-mono font-bold text-brand-text">{sol.afterMetric}</p>
-                  <p className="text-emerald-700 text-[11px]">{sol.afterImpact}</p>
+                  <p className="font-mono font-bold text-slate-900">{sol.afterMetric}</p>
+                  <p className="text-emerald-800 text-[11px]">{sol.afterImpact}</p>
                 </div>
               </div>
 
               <div className="pt-2 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-brand-text font-bold">
-                  <Users className="w-4 h-4 text-brand-dark" />
+                <div className="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
+                  <Users className="w-4 h-4 text-slate-600" />
                   <span>{sol.beneficiaries.toLocaleString()} Citizens Impacted</span>
                 </div>
 
                 <Link
                   to={`/verify/${sol.credentialId}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-dark bg-brand-bg hover:bg-brand-mint hover:text-brand-dark px-4 py-2 rounded-xl border border-brand-border transition"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg border border-slate-200 transition"
                 >
-                  <FileCheck2 className="w-4 h-4" />
+                  <FileCheck2 className="w-4 h-4 text-slate-600" />
                   <span>Verify Credential #{sol.credentialId}</span>
                 </Link>
               </div>

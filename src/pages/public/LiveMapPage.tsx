@@ -84,20 +84,20 @@ export const LiveMapPage: React.FC = () => {
   return (
     <div className="space-y-5 pb-8">
       {/* Header & Live GIS Telemetry Bar */}
-      <div className="bg-white rounded-2xl border border-brand-border p-5 sm:p-6 shadow-subtle space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Live Telemetry Active
               </span>
-              <span className="text-xs text-brand-textMuted font-mono">Jharkhand State Spatial GIS</span>
+              <span className="text-xs text-slate-500 font-mono">Jharkhand State Spatial GIS</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-text mt-1.5 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5 tracking-tight">
               Live GIS Problem Map
             </h1>
-            <p className="text-xs sm:text-sm text-brand-textMuted mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
               Real-time geospatial distribution of verified civic challenges. Click any pin to inspect verified severity, population impact, and university adoption status.
             </p>
           </div>
@@ -106,14 +106,14 @@ export const LiveMapPage: React.FC = () => {
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to="/citizen/report"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-brand-dark text-brand-mint hover:bg-brand-darkSecondary transition shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>Report Local Problem</span>
             </Link>
             <Link
               to="/explore"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-brand-bg text-brand-text border border-brand-border hover:bg-gray-100 transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition"
             >
               <span>Explore List View</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -122,28 +122,28 @@ export const LiveMapPage: React.FC = () => {
         </div>
 
         {/* Telemetry Metrics Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-3 border-t border-gray-100 text-xs">
-          <div className="p-3 bg-brand-bg rounded-xl border border-brand-border">
-            <div className="text-gray-500 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-brand-dark" />
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-3 border-t border-slate-100 text-xs">
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="text-slate-500 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-slate-700" />
               <span>Plotted Problems</span>
             </div>
-            <div className="text-xl font-extrabold text-brand-text font-mono mt-1">
+            <div className="text-xl font-extrabold text-slate-900 font-mono mt-1">
               {stats.total}
             </div>
           </div>
 
-          <div className="p-3 bg-red-50/70 rounded-xl border border-red-100">
-            <div className="text-red-700 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
-              <Flame className="w-3.5 h-3.5 text-red-600" />
+          <div className="p-3 bg-rose-50/70 rounded-lg border border-rose-200">
+            <div className="text-rose-700 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5 text-rose-600" />
               <span>Critical Hotspots</span>
             </div>
-            <div className="text-xl font-extrabold text-red-600 font-mono mt-1">
+            <div className="text-xl font-extrabold text-rose-700 font-mono mt-1">
               {stats.critical}
             </div>
           </div>
 
-          <div className="p-3 bg-indigo-50/70 rounded-xl border border-indigo-100">
+          <div className="p-3 bg-indigo-50/70 rounded-lg border border-indigo-200">
             <div className="text-indigo-700 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
               <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
               <span>Univ. Adopted</span>
@@ -153,22 +153,22 @@ export const LiveMapPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-100">
-            <div className="text-emerald-700 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
+          <div className="p-3 bg-emerald-50/70 rounded-lg border border-emerald-200">
+            <div className="text-emerald-800 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>Impact Verified</span>
             </div>
-            <div className="text-xl font-extrabold text-emerald-700 font-mono mt-1">
+            <div className="text-xl font-extrabold text-emerald-800 font-mono mt-1">
               {stats.resolved}
             </div>
           </div>
 
-          <div className="col-span-2 sm:col-span-1 p-3 bg-brand-bg rounded-xl border border-brand-border">
-            <div className="text-gray-500 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-brand-dark" />
+          <div className="col-span-2 sm:col-span-1 p-3 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="text-slate-500 text-[11px] font-medium uppercase tracking-wider flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-slate-700" />
               <span>Citizens Impacted</span>
             </div>
-            <div className="text-xl font-extrabold text-brand-text font-mono mt-1">
+            <div className="text-xl font-extrabold text-slate-900 font-mono mt-1">
               ~{stats.totalAffected.toLocaleString()}
             </div>
           </div>
@@ -178,7 +178,7 @@ export const LiveMapPage: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2">
           {/* Quick District Buttons */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            <span className="text-[11px] font-bold text-brand-textMuted uppercase shrink-0 mr-1 flex items-center gap-1">
+            <span className="text-[11px] font-bold text-slate-500 uppercase shrink-0 mr-1 flex items-center gap-1">
               <Filter className="w-3 h-3" />
               District:
             </span>
@@ -187,10 +187,10 @@ export const LiveMapPage: React.FC = () => {
                 key={dist}
                 type="button"
                 onClick={() => setActiveDistrict(dist)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                className={`px-2.5 py-1 rounded-md text-xs font-semibold whitespace-nowrap transition ${
                   activeDistrict === dist
-                    ? 'bg-brand-dark text-brand-mint shadow-xs'
-                    : 'bg-brand-bg text-brand-text border border-brand-border hover:bg-gray-100'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
                 }`}
               >
                 {dist}
@@ -200,19 +200,19 @@ export const LiveMapPage: React.FC = () => {
 
           {/* Quick Search */}
           <div className="relative w-full lg:w-72">
-            <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Filter by title, block, #JH-..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded-xl pl-8 pr-7 py-1.5 text-xs text-brand-text placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-mint"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-7 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white transition"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -234,23 +234,23 @@ export const LiveMapPage: React.FC = () => {
           />
 
           {/* Map Helper Guide */}
-          <div className="bg-white rounded-xl border border-brand-border p-3 flex items-center justify-between text-xs text-brand-textMuted">
+          <div className="bg-white rounded-xl border border-slate-200 p-3 flex items-center justify-between text-xs text-slate-600 shadow-xs">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-brand-dark" />
+              <span className="w-2 h-2 rounded-full bg-emerald-600" />
               <span>Tip: Click any marker on the map to inspect full problem analytics in the side panel.</span>
             </div>
-            <span className="font-mono text-[11px]">{displayedChallenges.length} challenges displayed</span>
+            <span className="font-mono text-[11px] font-semibold text-slate-700">{displayedChallenges.length} challenges displayed</span>
           </div>
         </div>
 
         {/* Right Column: Problem Details Panel */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-4">
           {selectedChallenge ? (
-            <div className="bg-white rounded-2xl border-2 border-brand-dark/15 shadow-elevated p-5 space-y-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 animate-in fade-in duration-200">
               {/* Header: Code & Priority */}
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-extrabold text-brand-dark bg-brand-bg px-2.5 py-1 rounded-lg border border-brand-border">
+                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
                     #{selectedChallenge.code}
                   </span>
                   <StatusBadge status={selectedChallenge.status} size="sm" />
@@ -265,14 +265,14 @@ export const LiveMapPage: React.FC = () => {
 
               {/* Title & Location */}
               <div>
-                <h3 className="text-base font-extrabold text-brand-text leading-snug">
+                <h3 className="text-base font-bold text-slate-900 leading-snug">
                   {selectedChallenge.title}
                 </h3>
-                <div className="flex items-center gap-1.5 text-xs text-brand-textMuted mt-1.5">
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1.5">
                   <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                  <span className="font-medium">{selectedChallenge.locality}, {selectedChallenge.district}</span>
-                  <span className="text-gray-300">•</span>
-                  <span className="font-mono text-[11px] text-gray-400">
+                  <span className="font-medium text-slate-700">{selectedChallenge.locality}, {selectedChallenge.district}</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="font-mono text-[11px] text-slate-400">
                     {selectedChallenge.coordinates.lat.toFixed(3)}°N, {selectedChallenge.coordinates.lng.toFixed(3)}°E
                   </span>
                 </div>
@@ -280,34 +280,34 @@ export const LiveMapPage: React.FC = () => {
 
               {/* Category & Department */}
               <div className="flex flex-wrap gap-1.5 text-[11px]">
-                <span className="px-2 py-0.5 rounded-md font-semibold bg-brand-bg text-brand-text border border-brand-border">
+                <span className="px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-slate-800 border border-slate-200">
                   {selectedChallenge.category}
                 </span>
                 {selectedChallenge.suggestedDepartments.map(dept => (
-                  <span key={dept} className="px-2 py-0.5 rounded-md font-medium bg-gray-100 text-gray-700">
+                  <span key={dept} className="px-2 py-0.5 rounded-md font-medium bg-slate-50 text-slate-600 border border-slate-200">
                     {dept}
                   </span>
                 ))}
               </div>
 
               {/* Description */}
-              <p className="text-xs text-gray-600 leading-relaxed bg-brand-bg/60 p-3 rounded-xl border border-gray-100">
+              <p className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
                 {selectedChallenge.description}
               </p>
 
               {/* Impact & Citizen Signal Metrics */}
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2.5 bg-brand-bg rounded-xl border border-brand-border">
-                  <span className="text-[10px] uppercase font-bold text-gray-400 block">Affected Population</span>
-                  <span className="font-mono text-sm font-extrabold text-brand-text flex items-center gap-1.5 mt-0.5">
-                    <Users className="w-3.5 h-3.5 text-brand-dark" />
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Affected Population</span>
+                  <span className="font-mono text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
+                    <Users className="w-3.5 h-3.5 text-slate-600" />
                     ~{selectedChallenge.affectedPopulation.toLocaleString()}
                   </span>
                 </div>
-                <div className="p-2.5 bg-brand-bg rounded-xl border border-brand-border">
-                  <span className="text-[10px] uppercase font-bold text-gray-400 block">Citizen Reports</span>
-                  <span className="font-mono text-sm font-extrabold text-brand-text flex items-center gap-1.5 mt-0.5">
-                    <FileText className="w-3.5 h-3.5 text-brand-dark" />
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Citizen Reports</span>
+                  <span className="font-mono text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
+                    <FileText className="w-3.5 h-3.5 text-slate-600" />
                     {selectedChallenge.reportCount} Verified
                   </span>
                 </div>
@@ -316,32 +316,32 @@ export const LiveMapPage: React.FC = () => {
               {/* AI Priority Breakdown Scores */}
               {selectedChallenge.breakdown && (
                 <div className="space-y-1.5 pt-1">
-                  <div className="flex items-center justify-between text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                     <span>AI Priority Engine Breakdown</span>
-                    <span className="font-mono text-brand-dark font-extrabold">{selectedChallenge.priorityScore}/100</span>
+                    <span className="font-mono text-slate-900 font-bold">{selectedChallenge.priorityScore}/100</span>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5 text-center text-[10px]">
-                    <div className="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
-                      <div className="text-gray-400 font-semibold">Severity</div>
-                      <div className="font-mono font-bold text-brand-text mt-0.5">
+                    <div className="bg-slate-50 p-1.5 rounded-md border border-slate-200">
+                      <div className="text-slate-400 font-semibold">Severity</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5">
                         {selectedChallenge.breakdown.severity}/30
                       </div>
                     </div>
-                    <div className="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
-                      <div className="text-gray-400 font-semibold">Impact</div>
-                      <div className="font-mono font-bold text-brand-text mt-0.5">
+                    <div className="bg-slate-50 p-1.5 rounded-md border border-slate-200">
+                      <div className="text-slate-400 font-semibold">Impact</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5">
                         {selectedChallenge.breakdown.populationImpact}/25
                       </div>
                     </div>
-                    <div className="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
-                      <div className="text-gray-400 font-semibold">Urgency</div>
-                      <div className="font-mono font-bold text-brand-text mt-0.5">
+                    <div className="bg-slate-50 p-1.5 rounded-md border border-slate-200">
+                      <div className="text-slate-400 font-semibold">Urgency</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5">
                         {selectedChallenge.breakdown.urgency}/15
                       </div>
                     </div>
-                    <div className="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
-                      <div className="text-gray-400 font-semibold">Spread</div>
-                      <div className="font-mono font-bold text-brand-text mt-0.5">
+                    <div className="bg-slate-50 p-1.5 rounded-md border border-slate-200">
+                      <div className="text-slate-400 font-semibold">Spread</div>
+                      <div className="font-mono font-bold text-slate-800 mt-0.5">
                         {selectedChallenge.breakdown.geographicSpread}/15
                       </div>
                     </div>
@@ -351,7 +351,7 @@ export const LiveMapPage: React.FC = () => {
 
               {/* University Adoption Status */}
               {selectedChallenge.adoption ? (
-                <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl space-y-1 text-xs text-indigo-900">
+                <div className="p-3 bg-indigo-50/80 border border-indigo-200 rounded-lg space-y-1 text-xs text-indigo-900">
                   <div className="flex items-center gap-1.5 font-bold text-indigo-950">
                     <GraduationCap className="w-4 h-4 text-indigo-600" />
                     <span>Adopted by {selectedChallenge.adoption.university}</span>
@@ -361,7 +361,7 @@ export const LiveMapPage: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                <div className="p-3 bg-amber-50/80 border border-amber-200/60 rounded-xl flex items-center justify-between text-xs text-amber-900">
+                <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-lg flex items-center justify-between text-xs text-amber-900">
                   <div className="flex items-center gap-1.5 font-medium">
                     <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
                     <span>Open for University Innovation & CSR Adoption</span>
@@ -371,12 +371,12 @@ export const LiveMapPage: React.FC = () => {
 
               {/* Required Skills */}
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                   Required Student Innovation Skills:
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {selectedChallenge.requiredSkills.map(skill => (
-                    <span key={skill} className="text-[11px] bg-brand-bg text-brand-text px-2 py-0.5 rounded-md font-medium border border-brand-border">
+                    <span key={skill} className="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-medium border border-slate-200">
                       {skill}
                     </span>
                   ))}
@@ -387,7 +387,7 @@ export const LiveMapPage: React.FC = () => {
               <div className="pt-2 flex flex-col gap-2">
                 <Link
                   to={`/challenges/${selectedChallenge.id}`}
-                  className="w-full inline-flex items-center justify-center gap-2 text-xs font-bold py-2.5 px-4 rounded-xl bg-brand-dark text-brand-mint hover:bg-brand-darkSecondary transition shadow-subtle"
+                  className="w-full inline-flex items-center justify-center gap-2 text-xs font-bold py-2.5 px-4 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
                 >
                   <span>Open Full Challenge Dossier</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -395,28 +395,28 @@ export const LiveMapPage: React.FC = () => {
 
                 <Link
                   to={`/citizen/report?district=${encodeURIComponent(selectedChallenge.district)}`}
-                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl bg-brand-bg text-brand-text hover:bg-gray-100 transition border border-brand-border"
+                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 transition border border-slate-200"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-gray-500" />
+                  <MapPin className="w-3.5 h-3.5 text-slate-500" />
                   <span>Report Related Issue in {selectedChallenge.district}</span>
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl border border-brand-border p-8 text-center space-y-3">
-              <Compass className="w-10 h-10 text-gray-300 mx-auto" />
-              <h4 className="font-bold text-sm text-brand-text">Select a Pin on the Map</h4>
-              <p className="text-xs text-brand-textMuted max-w-xs mx-auto">
+            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center space-y-3 shadow-xs">
+              <Compass className="w-10 h-10 text-slate-300 mx-auto" />
+              <h4 className="font-bold text-sm text-slate-900">Select a Pin on the Map</h4>
+              <p className="text-xs text-slate-600 max-w-xs mx-auto">
                 Click any colored pin across Jharkhand to view real-time problem analytics, citizen signals, and adoption details.
               </p>
             </div>
           )}
 
           {/* Quick List of Other Hotspots */}
-          <div className="bg-white rounded-2xl border border-brand-border p-4 space-y-2.5 shadow-subtle text-xs">
-            <div className="flex items-center justify-between pb-1 border-b border-gray-100">
-              <span className="font-bold text-brand-text">Nearby Hotspots ({displayedChallenges.length})</span>
-              <span className="text-[10px] text-brand-textMuted uppercase font-mono">Top Priority</span>
+          <div className="bg-white rounded-xl border border-slate-200 p-4 space-y-2.5 shadow-xs text-xs">
+            <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+              <span className="font-bold text-slate-900">Nearby Hotspots ({displayedChallenges.length})</span>
+              <span className="text-[10px] text-slate-500 uppercase font-mono">Top Priority</span>
             </div>
 
             <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1">
@@ -425,16 +425,16 @@ export const LiveMapPage: React.FC = () => {
                   key={c.id}
                   type="button"
                   onClick={() => setSelectedChallenge(c)}
-                  className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between gap-2 border ${
+                  className={`w-full text-left p-2 rounded-lg transition flex items-center justify-between gap-2 border ${
                     selectedChallenge?.id === c.id
-                      ? 'bg-brand-bg border-brand-dark text-brand-dark font-semibold'
-                      : 'hover:bg-gray-50 border-gray-100 text-brand-text'
+                      ? 'bg-emerald-50/70 border-emerald-500 text-slate-900 font-semibold shadow-xs'
+                      : 'hover:bg-slate-50 border-slate-100 text-slate-700'
                   }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="font-bold text-xs truncate">{c.title}</div>
-                    <div className="text-[10px] text-brand-textMuted flex items-center gap-1 mt-0.5">
-                      <MapPin className="w-3 h-3 text-gray-400" />
+                    <div className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
+                      <MapPin className="w-3 h-3 text-slate-400" />
                       <span>{c.locality}, {c.district}</span>
                     </div>
                   </div>
