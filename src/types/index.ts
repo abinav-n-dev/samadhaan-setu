@@ -14,6 +14,10 @@ export interface UserProfile {
   title: string;
   organization: string;
   location: string;
+  governmentId?: string;
+  isGovtVerified?: boolean;
+  departmentCode?: string;
+  authProvider?: 'credentials' | 'google' | 'govt_sso';
 }
 
 export type PriorityLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';

@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Lock,
   ShieldCheck,
+  BadgeCheck,
   GraduationCap,
   Building,
   HeartHandshake,
@@ -216,11 +217,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                     {currentUser.name[0]}
                   </div>
                   <div className="hidden md:block text-left">
-                    <div className="font-bold text-brand-text leading-tight max-w-[130px] truncate">
-                      {currentUser.name}
+                    <div className="font-bold text-brand-text leading-tight max-w-[140px] truncate flex items-center gap-1">
+                      <span>{currentUser.name}</span>
+                      {currentUser.isGovtVerified && (
+                        <span title="NIC Verified Government Officer">
+                          <BadgeCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        </span>
+                      )}
                     </div>
-                    <div className="text-[10px] text-brand-textMuted capitalize">
-                      {currentUser.role} Portal
+                    <div className="text-[10px] text-brand-textMuted capitalize flex items-center gap-1">
+                      <span>{currentUser.role} Portal</span>
+                      {currentUser.authProvider === 'google' && (
+                        <span className="text-[9px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950 px-1 py-0.2 rounded">Google</span>
+                      )}
                     </div>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -229,11 +238,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                 {showUserDropdown && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-modal border border-brand-border p-2 z-50 text-xs animate-in fade-in zoom-in-95 duration-100">
                     <div className="p-2.5 border-b border-gray-100 mb-1">
-                      <p className="font-bold text-brand-text truncate">{currentUser.name}</p>
+                      <div className="flex items-center gap-1">
+                        <p className="font-bold text-brand-text truncate">{currentUser.name}</p>
+                        {currentUser.isGovtVerified && (
+                          <BadgeCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        )}
+                      </div>
                       <p className="text-[11px] text-brand-textMuted truncate">{currentUser.title}</p>
-                      <span className="inline-block mt-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-brand-mintSoft text-emerald-800">
-                        {currentUser.role}
-                      </span>
+                      {currentUser.governmentId && (
+                        <p className="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded mt-1 inline-block">
+                          ID: {currentUser.governmentId}
+                        </p>
+                      )}
+                      <div>
+                        <span className="inline-block mt-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-brand-mintSoft text-emerald-800">
+                          {currentUser.role}
+                        </span>
+                      </div>
                     </div>
 
                     <Link

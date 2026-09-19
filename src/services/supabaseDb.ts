@@ -407,3 +407,4 @@ export async function seedSupabaseIfEmpty(
     console.warn('[SamadhanSetu] Error during auto-seeding Supabase:', err);
   }
 }
+

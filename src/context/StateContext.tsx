@@ -45,6 +45,10 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile> = {
     title: 'District Magistrate & Collector',
     organization: 'District Administration Dumka',
     location: 'Dumka, Jharkhand',
+    governmentId: 'IAS-JH-1998-042',
+    isGovtVerified: true,
+    departmentCode: 'JH-GOV-DM-04',
+    authProvider: 'govt_sso',
   },
   citizen: {
     id: 'usr-cit-01',
@@ -105,7 +109,7 @@ interface StateContextType {
   switchRole: (newRole: UserRole) => void;
   isAuthenticated: boolean;
   currentUser: UserProfile | null;
-  login: (role: UserRole) => void;
+  login: (role: UserRole, customProfile?: Partial<UserProfile>) => void;
   logout: () => void;
   challenges: Challenge[];
   reports: CitizenReport[];
@@ -200,7 +204,18 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   });
 
-  const currentUser = isAuthenticated ? ROLE_PROFILES[role] : null;
+  const [customUserOverrides, setCustomUserOverrides] = useState<Partial<UserProfile> | null>(() => {
+    try {
+      const raw = sessionStorage.getItem('samadhansetu_custom_user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const currentUser = isAuthenticated 
+    ? { ...ROLE_PROFILES[role], ...(customUserOverrides || {}) }
+    : null;
 
   const [challenges, setChallenges] = useState<Challenge[]>(() => {
     return safeParseJSON(localStorage.getItem(STORAGE_KEY_CHALLENGES), INITIAL_CHALLENGES);
@@ -344,18 +359,31 @@ export const StateProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     sessionStorage.setItem(STORAGE_KEY_AUTH, isAuthenticated ? 'true' : 'false');
   }, [isAuthenticated]);
 
-  const login = (selectedRole: UserRole) => {
+  const login = (selectedRole: UserRole, customProfile?: Partial<UserProfile>) => {
     setRole(selectedRole);
     setIsAuthenticated(true);
     sessionStorage.setItem(STORAGE_KEY_AUTH, 'true');
     sessionStorage.setItem(STORAGE_KEY_ROLE, selectedRole);
-    const profile = ROLE_PROFILES[selectedRole];
+
+    if (customProfile) {
+      setCustomUserOverrides(customProfile);
+      try {
+        sessionStorage.setItem('samadhansetu_custom_user', JSON.stringify(customProfile));
+      } catch {}
+    } else {
+      setCustomUserOverrides(null);
+      sessionStorage.removeItem('samadhansetu_custom_user');
+    }
+
+    const profile = { ...ROLE_PROFILES[selectedRole], ...(customProfile || {}) };
     addToast('Authenticated', `Signed in as ${profile.name} (${profile.title})`, 'success');
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    setCustomUserOverrides(null);
     sessionStorage.removeItem(STORAGE_KEY_AUTH);
+    sessionStorage.removeItem('samadhansetu_custom_user');
     addToast('Signed Out', 'You have been signed out to public visitor mode.', 'info');
   };
 
