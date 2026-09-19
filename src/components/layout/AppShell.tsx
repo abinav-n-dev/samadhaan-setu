@@ -10,37 +10,6 @@ export const AppShell: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col font-sans text-brand-text selection:bg-emerald-100 selection:text-emerald-900">
-      {/* Official Government & SIH 2026 Masthead Strip */}
-      <div className="bg-slate-900 text-slate-300 text-[11px] border-b border-slate-800 py-1.5 px-4 sm:px-6 relative z-40">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          {/* Left: Official State & Initiative Accreditation */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="font-semibold text-white tracking-wide">झारखण्ड सरकार</span>
-              <span className="text-slate-500">|</span>
-              <span className="hidden sm:inline text-slate-300">Government of Jharkhand</span>
-            </div>
-            <span className="text-slate-600 hidden md:inline">•</span>
-            <span className="text-slate-400 hidden md:inline text-[10px]">
-              Dept. of Higher, Technical Education & Skill Development
-            </span>
-          </div>
-
-          {/* Right: National Helpline & SIH Badge */}
-          <div className="flex items-center gap-3 font-mono text-[10px]">
-            <span className="hidden lg:inline bg-slate-800 text-emerald-400 px-2 py-0.5 rounded border border-slate-700">
-              SIH 2026 PS #SIH1642
-            </span>
-            <div className="flex items-center gap-1 text-slate-300 font-sans">
-              <Phone className="w-3 h-3 text-emerald-400" />
-              <span className="hidden sm:inline">Citizen Helpline:</span>
-              <span className="font-mono font-bold text-white">1800-345-6570</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Layout Container */}
       <div className="flex-1 flex min-h-0 relative">
         {/* Fixed Desktop / Offcanvas Mobile Sidebar */}
@@ -59,6 +28,37 @@ export const AppShell: React.FC = () => {
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col lg:pl-64 min-w-0">
+          {/* Official Government & SIH 2026 Masthead Strip */}
+          <div className="bg-slate-900 text-slate-300 text-[11px] border-b border-slate-800 py-1.5 px-4 sm:px-6">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              {/* Left: Official State & Initiative Accreditation */}
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span className="font-semibold text-white tracking-wide">झारखण्ड सरकार</span>
+                  <span className="text-slate-500">|</span>
+                  <span className="hidden sm:inline text-slate-300">Government of Jharkhand</span>
+                </div>
+                <span className="text-slate-600 hidden md:inline">•</span>
+                <span className="text-slate-400 hidden md:inline text-[10px]">
+                  Dept. of Higher, Technical Education & Skill Development
+                </span>
+              </div>
+
+              {/* Right: National Helpline & SIH Badge */}
+              <div className="flex items-center gap-3 font-mono text-[10px]">
+                <span className="hidden xl:inline bg-slate-800 text-emerald-400 px-2 py-0.5 rounded border border-slate-700">
+                  SIH 2026 PS #SIH1642
+                </span>
+                <div className="flex items-center gap-1 text-slate-300 font-sans">
+                  <Phone className="w-3 h-3 text-emerald-400" />
+                  <span className="hidden sm:inline">Citizen Helpline:</span>
+                  <span className="font-mono font-bold text-white">1800-345-6570</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Top Navbar */}
           <Navbar onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
 
