@@ -145,7 +145,7 @@ export const ProjectDiscoveryPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleSupport(c)}
-                    className="px-3.5 py-1.5 bg-brand-dark text-brand-mint rounded-lg font-bold text-xs hover:bg-brand-darkSecondary transition"
+                    className="px-3.5 py-1.5 bg-slate-900 text-white rounded-lg font-semibold text-xs hover:bg-slate-800 transition shadow-sm"
                   >
                     Commit CSR Support
                   </button>

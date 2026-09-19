@@ -130,30 +130,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {/* Refined Bilingual Language Selector: English | हिन्दी */}
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl border border-brand-border bg-brand-bg text-xs font-semibold shadow-xs">
-            <Languages className="w-3.5 h-3.5 text-brand-dark dark:text-brand-mint shrink-0" />
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold shadow-xs">
+            <Languages className="w-3.5 h-3.5 text-slate-700 shrink-0" />
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => setLanguage('EN')}
                 aria-label="Switch to English"
-                className={`px-2 py-0.5 rounded-lg text-xs transition-all ${
+                className={`px-2 py-0.5 rounded-md text-xs transition ${
                   language === 'EN'
-                    ? 'bg-brand-dark text-brand-mint dark:bg-brand-mint dark:text-brand-dark font-bold shadow-xs'
-                    : 'text-brand-textMuted hover:text-brand-text'
+                    ? 'bg-slate-900 text-white font-bold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 English
               </button>
-              <span className="text-gray-300 dark:text-gray-600 select-none text-[11px]">|</span>
+              <span className="text-slate-300 select-none text-[11px]">|</span>
               <button
                 type="button"
                 onClick={() => setLanguage('HI')}
                 aria-label="हिन्दी में बदलें"
-                className={`px-2 py-0.5 rounded-lg text-xs transition-all ${
+                className={`px-2 py-0.5 rounded-md text-xs transition ${
                   language === 'HI'
-                    ? 'bg-brand-dark text-brand-mint dark:bg-brand-mint dark:text-brand-dark font-bold shadow-xs'
-                    : 'text-brand-textMuted hover:text-brand-text'
+                    ? 'bg-slate-900 text-white font-bold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 हिन्दी
@@ -224,9 +224,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                 <button
                   type="button"
                   onClick={() => setShowUserDropdown(prev => !prev)}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-brand-border hover:bg-brand-bg transition text-xs"
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition text-xs"
                 >
-                  <div className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center font-bold text-[11px]">
+                  <div className="w-6 h-6 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-[11px]">
                     {currentUser.name[0]}
                   </div>
                   <div className="hidden md:block text-left">

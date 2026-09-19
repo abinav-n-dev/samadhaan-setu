@@ -68,7 +68,7 @@ export const VerifyCredentialPage: React.FC = () => {
         <div className="pt-3 flex justify-center gap-3">
           <Link
             to="/solutions"
-            className="px-4 py-2 bg-brand-dark text-brand-mint text-xs font-bold rounded-xl hover:bg-brand-darkSecondary transition"
+            className="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition shadow-sm"
           >
             Browse Verified Solutions
           </Link>
@@ -120,11 +120,11 @@ export const VerifyCredentialPage: React.FC = () => {
       <div className={`bg-white dark:bg-slate-900 rounded-xl border-2 overflow-hidden transition-colors ${
         !isVerifying && isValid === false 
           ? 'border-red-500 shadow-lg' 
-          : 'border-brand-dark dark:border-slate-700 shadow-modal'
+          : 'border-slate-900 dark:border-slate-700 shadow-md'
       }`}>
         {/* Certificate Top Header */}
         <div className={`${
-          !isVerifying && isValid === false ? 'bg-red-950' : 'bg-brand-dark'
+          !isVerifying && isValid === false ? 'bg-red-950' : 'bg-slate-900'
         } text-white p-6 sm:p-8 relative overflow-hidden`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
             <div>
@@ -305,7 +305,7 @@ export const VerifyCredentialPage: React.FC = () => {
           }`}>
             <div className="flex items-center justify-between text-[11px] font-bold text-brand-text dark:text-white">
               <span className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-brand-dark dark:text-brand-mint" />
+                <Lock className="w-3.5 h-3.5 text-slate-900 dark:text-emerald-400" />
                 Immutable Verification Hash (SHA-256)
               </span>
               <span className={`font-mono text-[10px] px-2 py-0.5 rounded font-bold ${

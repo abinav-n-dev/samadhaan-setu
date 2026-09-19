@@ -56,14 +56,14 @@ export const GovernmentDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             to="/government/verification"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-dark text-brand-mint text-xs font-bold rounded-xl hover:bg-brand-darkSecondary transition shadow-subtle"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition shadow-sm"
           >
             <Layers className="w-4 h-4" />
             <span>Verification Queue</span>
           </Link>
           <Link
             to="/government/impact"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white text-xs font-bold rounded-xl hover:bg-emerald-800 transition shadow-subtle"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition shadow-sm"
           >
             <Award className="w-4 h-4" />
             <span>Verify Field Impact</span>
@@ -105,7 +105,7 @@ export const GovernmentDashboard: React.FC = () => {
           title="Impact Resolved"
           value="127"
           subtitle="Verified by DM/DC"
-          icon={<Award className="w-5 h-5 text-brand-mint" />}
+          icon={<Award className="w-5 h-5 text-emerald-400" />}
           highlight
         />
       </div>
@@ -143,7 +143,7 @@ export const GovernmentDashboard: React.FC = () => {
                 <h3 className="font-bold text-sm text-brand-text">Priority Queue</h3>
                 <p className="text-[11px] text-brand-textMuted">Sorted by Priority Score (↓)</p>
               </div>
-              <span className="text-[10px] font-bold text-brand-mint bg-brand-dark px-2 py-0.5 rounded font-mono">
+              <span className="text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-mono">
                 {priorityQueue.length} Challenges
               </span>
             </div>
@@ -253,7 +253,7 @@ export const GovernmentDashboard: React.FC = () => {
 
           <Link
             to="/government/analytics"
-            className="w-full inline-flex items-center justify-center gap-1.5 py-2 mt-2 bg-brand-dark text-brand-mint rounded-xl font-bold hover:bg-brand-darkSecondary transition"
+            className="w-full inline-flex items-center justify-center gap-1.5 py-2 mt-2 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition shadow-sm"
           >
             <span>District Analytics & Heatmaps</span>
             <ArrowRight className="w-3.5 h-3.5" />

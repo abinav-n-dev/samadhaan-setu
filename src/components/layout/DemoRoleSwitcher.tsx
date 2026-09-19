@@ -157,7 +157,7 @@ export const DemoRoleSwitcher: React.FC = () => {
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                         isCurrent
-                          ? 'bg-brand-dark text-brand-mint'
+                          ? 'bg-slate-900 text-white'
                           : 'bg-gray-100 text-gray-600'
                       }`}
                     >
@@ -184,7 +184,7 @@ export const DemoRoleSwitcher: React.FC = () => {
               </span>
               <button
                 onClick={() => setShowTourModal(false)}
-                className="px-4 py-2 bg-brand-dark text-brand-mint rounded-lg text-xs font-bold hover:bg-brand-darkSecondary transition"
+                className="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg text-xs font-semibold transition shadow-sm"
               >
                 Close Tour Guide
               </button>

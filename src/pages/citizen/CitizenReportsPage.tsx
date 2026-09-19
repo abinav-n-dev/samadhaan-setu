@@ -152,7 +152,7 @@ export const CitizenReportsPage: React.FC = () => {
                 <div className="pt-2 border-t border-brand-border">
                   <Link
                     to={`/challenges/${selectedReport.challengeId}`}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint text-xs font-bold py-2.5 rounded-xl hover:bg-brand-darkSecondary transition"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 text-white text-xs font-semibold py-2.5 rounded-lg hover:bg-slate-800 transition shadow-sm"
                   >
                     <span>{t('tracking.view_challenge', 'View Master Challenge Page')}</span>
                     <ChevronRight className="w-4 h-4" />

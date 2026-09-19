@@ -103,20 +103,20 @@ export const ExploreChallengesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-brand-textMuted">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             Academic Discovery & Adoption
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-text mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
             Explore Verified Challenges
           </h1>
-          <p className="text-xs sm:text-sm text-brand-textMuted mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
             Real-world civic and infrastructure challenges verified by district administrations, ready for university innovation, research, and CSR sponsorship.
           </p>
         </div>
 
         <Link
           to="/map"
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition shrink-0 shadow-xs"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition shrink-0 shadow-xs"
         >
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <Map className="w-3.5 h-3.5 text-emerald-600" />

@@ -172,7 +172,7 @@ export const MentorReviewPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleApprove}
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold hover:bg-brand-darkSecondary transition shadow-subtle"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700 transition shadow-sm"
                 >
                   <Check className="w-4 h-4" />
                   <span>Authorize & Approve Capstone Credit</span>

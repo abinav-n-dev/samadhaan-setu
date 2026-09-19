@@ -41,7 +41,7 @@ export const StudentProfilePage: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       {/* Profile Card */}
       <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col sm:flex-row items-start gap-6">
-        <div className="w-20 h-20 rounded-2xl bg-brand-dark text-brand-mint border border-brand-mint/40 flex items-center justify-center font-extrabold text-2xl flex-shrink-0">
+        <div className="w-20 h-20 rounded-xl bg-slate-900 text-emerald-400 border border-slate-700 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-sm">
           AS
         </div>
 
@@ -153,7 +153,7 @@ export const StudentProfilePage: React.FC = () => {
 
               <Link
                 to={`/verify/${cred.id}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-dark text-brand-mint font-bold text-xs rounded-xl hover:bg-brand-darkSecondary transition shadow-xs self-start sm:self-center flex-shrink-0"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white font-semibold text-xs rounded-lg hover:bg-slate-800 transition shadow-sm self-start sm:self-center flex-shrink-0"
               >
                 <FileCheck2 className="w-4 h-4" />
                 <span>Verify Credential</span>

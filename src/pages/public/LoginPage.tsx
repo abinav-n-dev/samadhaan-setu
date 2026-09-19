@@ -234,7 +234,7 @@ export const LoginPage: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-2 max-w-xl mx-auto">
-        <div className="w-12 h-12 rounded-2xl bg-brand-dark text-brand-mint border border-brand-mint/30 flex items-center justify-center mx-auto mb-2">
+        <div className="w-12 h-12 rounded-xl bg-slate-900 text-emerald-400 border border-slate-700 flex items-center justify-center mx-auto mb-2 shadow-sm">
           <Lock className="w-6 h-6" />
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
@@ -246,7 +246,7 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 p-1.5 bg-gray-100 dark:bg-slate-800/80 rounded-2xl border border-brand-border">
+      <div className="flex flex-wrap gap-2 p-1.5 bg-gray-100 dark:bg-slate-800/80 rounded-xl border border-slate-200">
         <button
           type="button"
           onClick={() => setActiveTab('government')}

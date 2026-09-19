@@ -61,7 +61,7 @@ export const UniversityDashboard: React.FC = () => {
 
         <Link
           to="/university/challenges"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-dark text-brand-mint text-xs font-bold rounded-xl hover:bg-brand-darkSecondary transition shadow-subtle flex-shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition shadow-sm flex-shrink-0"
         >
           <GraduationCap className="w-4 h-4" />
           <span>Browse Capstone Registry</span>
@@ -92,7 +92,7 @@ export const UniversityDashboard: React.FC = () => {
           title="Impact Completed"
           value={impactCount}
           subtitle="Certified community reach"
-          icon={<Award className="w-5 h-5 text-brand-mint" />}
+          icon={<Award className="w-5 h-5 text-emerald-400" />}
           highlight
         />
       </div>

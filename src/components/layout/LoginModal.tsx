@@ -135,16 +135,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
       <div className="bg-white rounded-xl border border-brand-border shadow-modal max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="p-6 bg-brand-dark text-white flex items-center justify-between">
+        <div className="p-5 bg-slate-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-sidebarActive border border-brand-mint/40 flex items-center justify-center text-brand-mint">
+            <div className="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[10px] font-bold text-brand-mint uppercase tracking-widest">
+              <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
                 SamadhanSetu Single Sign-On
               </div>
-              <h3 className="text-xl font-extrabold text-white mt-0.5">
+              <h3 className="text-lg font-bold text-white mt-0.5">
                 Select Your Stakeholder Portal
               </h3>
             </div>
@@ -255,7 +255,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <button
             type="button"
             onClick={() => handleLoginSubmit(currentOption.role, currentOption.destination)}
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition shadow-elevated"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700 transition shadow-sm"
           >
             <span>Enter as {currentOption.persona.split(' ')[0]}</span>
             <ArrowRight className="w-4 h-4" />

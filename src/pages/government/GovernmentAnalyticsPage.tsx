@@ -58,7 +58,7 @@ export const GovernmentAnalyticsPage: React.FC = () => {
           title="CSR Capital Leveraged"
           value="₹42.8 Lakh"
           subtitle="Committed by industry partners"
-          icon={<Award className="w-5 h-5 text-brand-mint" />}
+          icon={<Award className="w-5 h-5 text-emerald-400" />}
           highlight
         />
         <MetricCard

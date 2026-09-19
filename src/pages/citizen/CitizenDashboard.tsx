@@ -37,7 +37,7 @@ export const CitizenDashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Welcome Banner */}
-      <div className="bg-white rounded-2xl border border-brand-border p-6 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-brand-textMuted">
             {t('citizen.dashboard_tag', 'Citizen Voice & Community Action')}
@@ -52,7 +52,7 @@ export const CitizenDashboard: React.FC = () => {
 
         <Link
           to="/citizen/report"
-          className="inline-flex items-center justify-center gap-2 bg-brand-dark text-brand-mint px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-brand-darkSecondary shadow-subtle transition flex-shrink-0"
+          className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-semibold text-xs shadow-sm transition flex-shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>{t('citizen.report_problem_btn', 'Report a Community Problem')}</span>

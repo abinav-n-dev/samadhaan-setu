@@ -239,7 +239,7 @@ export const VerificationQueuePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleVerify(selectedChallenge)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-extrabold hover:bg-brand-darkSecondary transition shadow-subtle"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700 transition shadow-sm"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>Verify & Publish Challenge</span>
@@ -306,7 +306,7 @@ export const VerificationQueuePage: React.FC = () => {
                   overridePriority(selectedChallenge.id, overrideScore, overrideLevel, overrideReason);
                   setShowOverrideModal(false);
                 }}
-                className="px-4 py-2 bg-brand-dark text-brand-mint font-bold rounded-lg"
+                className="px-4 py-2 bg-slate-900 text-white font-semibold text-xs rounded-lg hover:bg-slate-800 transition shadow-sm"
               >
                 Confirm Override
               </button>

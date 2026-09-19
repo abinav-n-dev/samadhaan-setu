@@ -147,7 +147,7 @@ const QUICK_TEMPLATES = [
 ];
 
 const renderCategoryIcon = (category: string, isSelected: boolean) => {
-  const cls = `w-4 h-4 shrink-0 ${isSelected ? 'text-brand-mint' : 'text-brand-dark'}`;
+  const cls = `w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-slate-800'}`;
   switch (category) {
     case 'Water & Sanitation': return <Droplets className={cls} />;
     case 'Roads & Infrastructure': return <Construction className={cls} />;
@@ -379,26 +379,26 @@ export const ReportProblemWizard: React.FC = () => {
         </div>
 
         {/* Mode Selector Toggle */}
-        <div className="bg-brand-bg p-1 rounded-2xl border border-brand-border flex items-center shrink-0 self-start sm:self-center">
+        <div className="bg-slate-100 p-1 rounded-lg border border-slate-200 flex items-center shrink-0 self-start sm:self-center">
           <button
             type="button"
             onClick={() => setReportMode('quick')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
               reportMode === 'quick'
-                ? 'bg-brand-dark text-brand-mint shadow-xs'
-                : 'text-brand-text hover:text-brand-dark'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Zap className="w-3.5 h-3.5 text-brand-mint" />
+            <Zap className="w-3.5 h-3.5 text-emerald-400" />
             <span>{t('report.mode_quick', 'Quick Mode (1-Min)')}</span>
           </button>
           <button
             type="button"
             onClick={() => setReportMode('detailed')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
               reportMode === 'detailed'
-                ? 'bg-brand-dark text-brand-mint shadow-xs'
-                : 'text-brand-text hover:text-brand-dark'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
@@ -477,7 +477,7 @@ export const ReportProblemWizard: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
             <Link
               to="/citizen/reports"
-              className="px-6 py-3 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition shadow-xs flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700 transition shadow-xs flex items-center justify-center gap-2"
             >
               <span>{t('report.track_live', 'Track Resolution Live')}</span>
               <ArrowRight className="w-4 h-4" />
@@ -519,7 +519,7 @@ export const ReportProblemWizard: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">1</span>
+                  <span className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">1</span>
                   <span>{t('report.step1_photo', 'Take or Upload Photo')}</span>
                 </label>
                 <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">
@@ -532,13 +532,13 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => cameraInputRef.current?.click()}
-                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 border-dashed border-brand-mint hover:bg-brand-mintSoft/30 bg-emerald-50/40 text-brand-dark transition active:scale-95"
+                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-emerald-300 hover:bg-emerald-50/60 bg-emerald-50/30 text-slate-900 transition active:scale-95"
                 >
-                  <div className="w-10 h-10 rounded-2xl bg-brand-dark text-brand-mint flex items-center justify-center shadow-xs">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
                     <Camera className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <span className="font-extrabold text-xs block text-brand-dark">{t('report.take_photo', 'Take Photo')}</span>
+                    <span className="font-bold text-xs block text-slate-900">{t('report.take_photo', 'Take Photo')}</span>
                     <span className="text-[10px] text-brand-textMuted block">{t('report.take_photo_sub', 'Open phone camera')}</span>
                   </div>
                 </button>
@@ -546,14 +546,14 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => galleryInputRef.current?.click()}
-                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 border-dashed border-gray-200 hover:bg-gray-50 bg-gray-50/50 text-brand-text transition active:scale-95"
+                  className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-slate-200 hover:bg-slate-50 bg-white text-slate-800 transition active:scale-95"
                 >
-                  <div className="w-10 h-10 rounded-2xl bg-gray-200 text-gray-700 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shadow-xs">
                     <Upload className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <span className="font-extrabold text-xs block text-brand-text">{t('report.choose_gallery', 'Choose from Gallery')}</span>
-                    <span className="text-[10px] text-brand-textMuted block">{t('report.choose_gallery_sub', 'Select from gallery')}</span>
+                    <span className="font-bold text-xs block text-slate-900">{t('report.choose_gallery', 'Choose Files')}</span>
+                    <span className="text-[10px] text-brand-textMuted block">{t('report.choose_gallery_sub', 'Browse gallery')}</span>
                   </div>
                 </button>
               </div>
@@ -609,7 +609,7 @@ export const ReportProblemWizard: React.FC = () => {
             <div className="space-y-3 pt-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">2</span>
+                  <span className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">2</span>
                   <span>{t('report.step2_category', 'Pick Category & Details')}</span>
                 </label>
                 <span className="text-[11px] text-brand-textMuted">{t('report.tap_to_autofill', 'Tap to auto-fill')}</span>
@@ -631,14 +631,14 @@ export const ReportProblemWizard: React.FC = () => {
                       }}
                       className={`p-2.5 rounded-xl border text-left transition flex items-center gap-2 ${
                         isSelected
-                          ? 'border-brand-dark bg-brand-dark text-white shadow-xs'
+                          ? 'border-slate-900 bg-slate-900 text-white shadow-xs'
                           : 'border-brand-border bg-brand-bg hover:bg-gray-100 text-brand-text'
                       }`}
                     >
                       {renderCategoryIcon(item.category, isSelected)}
                       <div className="min-w-0">
                         <span className="font-bold text-xs truncate block">{language === 'HI' ? item.labelHi : item.labelEn}</span>
-                        <span className={`text-[10px] truncate block ${isSelected ? 'text-brand-mint' : 'text-brand-textMuted'}`}>
+                        <span className={`text-[10px] truncate block ${isSelected ? 'text-slate-300' : 'text-brand-textMuted'}`}>
                           {language === 'HI' ? item.labelEn : item.labelHi}
                         </span>
                       </div>
@@ -715,7 +715,7 @@ export const ReportProblemWizard: React.FC = () => {
             <div className="space-y-3 pt-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-extrabold text-brand-text flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-brand-dark text-brand-mint flex items-center justify-center text-xs font-bold">3</span>
+                  <span className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">3</span>
                   <span>{t('report.step3_location', 'Location')}</span>
                 </label>
                 <button
@@ -825,9 +825,9 @@ export const ReportProblemWizard: React.FC = () => {
           {/* SUBMIT BUTTON */}
           <button
             type="submit"
-            className="w-full py-4 bg-brand-dark text-brand-mint rounded-2xl font-extrabold text-sm hover:bg-brand-darkSecondary transition shadow-elevated flex items-center justify-center gap-2 active:scale-98"
+            className="w-full py-3.5 bg-emerald-600 text-white rounded-lg font-bold text-sm hover:bg-emerald-700 transition shadow-sm flex items-center justify-center gap-2 active:scale-[0.98]"
           >
-            <Zap className="w-4 h-4 text-brand-mint" />
+            <Zap className="w-4 h-4 text-emerald-200" />
             <span>{t('report.submit_btn', 'Submit Community Report')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -855,9 +855,9 @@ export const ReportProblemWizard: React.FC = () => {
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                         currentStep === s.num
-                          ? 'bg-brand-dark text-brand-mint'
+                          ? 'bg-slate-900 text-white'
                           : currentStep > s.num
-                          ? 'bg-emerald-500 text-white'
+                          ? 'bg-emerald-600 text-white'
                           : 'bg-gray-100 text-gray-400'
                       }`}
                     >
@@ -925,7 +925,7 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(2)}
-                  className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold text-xs hover:bg-brand-darkSecondary transition"
+                  className="px-5 py-2.5 bg-slate-900 text-white rounded-lg font-semibold text-xs hover:bg-slate-800 transition shadow-sm"
                 >
                   {t('wizard.next_location', 'Next: Location & GPS →')}
                 </button>
@@ -994,14 +994,14 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
+                  className="px-4 py-2 border border-slate-300 bg-white text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition shadow-xs"
                 >
                   {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(3)}
-                  className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
+                  className="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition shadow-sm"
                 >
                   {t('wizard.next_photo', 'Next: Photo Evidence →')}
                 </button>
@@ -1058,14 +1058,14 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(2)}
-                  className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
+                  className="px-4 py-2 border border-slate-300 bg-white text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition shadow-xs"
                 >
                   {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(4)}
-                  className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
+                  className="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition shadow-sm"
                 >
                   {t('wizard.next_impact', 'Next: Community Impact →')}
                 </button>
@@ -1089,7 +1089,7 @@ export const ReportProblemWizard: React.FC = () => {
                   step={10}
                   value={affectedEstimate}
                   onChange={(e) => setAffectedEstimate(Number(e.target.value))}
-                  className="w-full accent-brand-dark"
+                  className="w-full accent-slate-900"
                 />
               </div>
 
@@ -1101,12 +1101,12 @@ export const ReportProblemWizard: React.FC = () => {
                       key={lvl}
                       type="button"
                       onClick={() => setUrgency(lvl)}
-                      className={`p-2 rounded-xl text-center font-bold border transition ${
+                      className={`p-2 rounded-lg text-center font-bold text-xs border transition ${
                         urgency === lvl
                           ? lvl === 'Emergency'
-                            ? 'bg-red-600 text-white border-red-600'
-                            : 'bg-brand-dark text-brand-mint border-brand-dark'
-                          : 'bg-brand-bg text-brand-text border-brand-border'
+                            ? 'bg-red-600 text-white border-red-600 shadow-xs'
+                            : 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
                       {lvl}
@@ -1119,14 +1119,14 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(3)}
-                  className="px-4 py-2 border border-brand-border rounded-xl font-semibold"
+                  className="px-4 py-2 border border-slate-300 bg-white text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition shadow-xs"
                 >
                   {t('wizard.back', 'Back')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentStep(5)}
-                  className="px-5 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-bold"
+                  className="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition shadow-sm"
                 >
                   {t('wizard.next_review', 'Next: Final Review →')}
                 </button>
@@ -1158,7 +1158,7 @@ export const ReportProblemWizard: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleFinalSubmit}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-dark text-brand-mint rounded-xl font-extrabold hover:bg-brand-darkSecondary transition shadow-xs"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition shadow-xs"
                 >
                   <Send className="w-4 h-4" />
                   <span>{t('wizard.submit_official', 'Submit Official Citizen Report')}</span>
