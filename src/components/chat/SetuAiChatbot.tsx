@@ -170,31 +170,59 @@ export const SetuAiChatbot: React.FC = () => {
         return <div key={idx} className="h-1.5" />;
       }
 
-      // Check if line contains a challenge reference like CH-2026-089 or report #JH-1042
+      // Check for markdown links [text](url)
+      const linkMatch = line.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      // Check if line contains a challenge reference like CH-2026-089
       const challengeMatch = line.match(/(CH-2026-\d+)/);
       const isBullet = line.trim().startsWith('- ') || line.trim().startsWith('* ');
       const cleanLine = isBullet ? line.trim().substring(2) : line;
 
-      // Parse bold segments **bold**
-      const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
+      // Parse markdown links or bold segments
+      const renderSegments = (textSegment: string) => {
+        // Split by markdown link [label](url)
+        const linkParts = textSegment.split(/(\[[^\]]+\]\([^)]+\))/g);
+        return linkParts.map((lPart, lpIdx) => {
+          const m = lPart.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+          if (m) {
+            const label = m[1];
+            const href = m[2];
+            return (
+              <button
+                key={lpIdx}
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate(href);
+                }}
+                className="inline-flex items-center gap-1 mx-1 my-0.5 px-2.5 py-1 text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition shadow-xs hover:scale-105 active:scale-95"
+              >
+                <span>{label}</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            );
+          }
 
-      const renderedContent = parts.map((part, pIdx) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return (
-            <strong key={pIdx} className="font-semibold text-slate-900 dark:text-white">
-              {part.slice(2, -2)}
-            </strong>
-          );
-        }
-        return part;
-      });
+          // Otherwise split by bold **text**
+          const boldParts = lPart.split(/(\*\*.*?\*\*)/g);
+          return boldParts.map((part, pIdx) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+              return (
+                <strong key={pIdx} className="font-semibold text-slate-900 dark:text-white">
+                  {part.slice(2, -2)}
+                </strong>
+              );
+            }
+            return part;
+          });
+        });
+      };
 
       return (
         <div key={idx} className={`${isBullet ? 'flex items-start gap-1.5 ml-2 my-0.5' : 'my-0.5'}`}>
           {isBullet && <span className="text-emerald-600 font-bold">•</span>}
           <div className="flex-1">
-            {renderedContent}
-            {challengeMatch && (
+            {renderSegments(cleanLine)}
+            {challengeMatch && !linkMatch && (
               <button
                 type="button"
                 onClick={() => {

@@ -86,5 +86,38 @@ describe('Gemini Chat Service (Setu AI Sahayak)', () => {
     const response = await sendChatMessage(messages, { userRole: 'student' });
     expect(response.text).toContain('Hello from Setu AI Sahayak');
   });
+
+  it('handles general report inquiries dynamically with guided steps', async () => {
+    const messages: ChatMessage[] = [
+      {
+        id: '1',
+        sender: 'user',
+        text: 'hey i saw this issieu, i want ot report this, can you help',
+        timestamp: '10:04 AM',
+      },
+    ];
+
+    const response = await sendChatMessage(messages, { userRole: 'citizen' });
+    expect(response.text).toContain('help you report this right now');
+    expect(response.text).toContain('What is the problem?');
+    expect(response.text).toContain('Where did you see it?');
+    expect(response.text).toContain('[Launch Citizen Report Wizard](/citizen)');
+  });
+
+  it('extracts specific issue entities and estimates priority accurately', async () => {
+    const messages: ChatMessage[] = [
+      {
+        id: '1',
+        sender: 'user',
+        text: 'I saw an open drain near the primary school, dirty water is overflowing',
+        timestamp: '10:05 AM',
+      },
+    ];
+
+    const response = await sendChatMessage(messages, { userRole: 'citizen' });
+    expect(response.text).toContain('Sanitation & Solid Waste Management');
+    expect(response.text).toContain('HIGH');
+    expect(response.text).toContain('[Submit This Report on Citizen Portal](/citizen)');
+  });
 });
 

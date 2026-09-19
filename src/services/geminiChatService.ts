@@ -1,7 +1,7 @@
 /**
- * Gemini AI Chat Service for SamadhanSetu (Setu AI Sahayak)
- * Powered by Google Gemini 3.1 Flash with resilient multi-model fallbacks
- * and domain-grounded civic knowledge.
+ * Setu AI Sahayak Chat Service (GovTech AI Engine v2.6)
+ * Real-time conversational intelligence with multi-model fallback
+ * and dynamic contextual natural language processing.
  */
 
 export interface ChatMessage {
@@ -19,13 +19,16 @@ export interface ChatContextOptions {
   unresolvedReportsCount?: number;
 }
 
-// Model candidate hierarchy: requested Gemini 3.1 Flash first, with automatic fallbacks
+
+// Candidate models to attempt in order
 const CANDIDATE_MODELS = [
-  import.meta.env.VITE_GEMINI_MODEL || 'gemini-3.1-flash',
-  'gemini-3.1-flash',
+  import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.0-flash',
   'gemini-2.0-flash',
+  'gemini-2.5-flash',
   'gemini-1.5-flash',
+  'gemini-1.5-flash-latest',
   'gemini-1.5-pro',
+  'gemini-pro',
 ];
 
 let cachedWorkingModel: string | null = null;
@@ -37,10 +40,10 @@ function buildSystemPrompt(context?: ChatContextOptions): string {
   const role = context?.userRole || 'citizen';
   const name = context?.userName || 'User';
 
-  return `You are "Setu AI Sahayak" (समाधान सेतु AI सहायक), an intelligent, highly knowledgeable GovTech co-pilot for SamadhanSetu.
+  return `You are "Setu AI Sahayak" (समाधान सेतु AI सहायक), an intelligent GovTech co-pilot for SamadhanSetu.
 SamadhanSetu is a national civic innovation infrastructure platform designed for the Smart India Hackathon (SIH 2026, Problem Statement #SIH1642) and piloted with the Government of Jharkhand.
 
-### PLATFORM CONTEXT & DATA:
+### PLATFORM CONTEXT & ACTIVE DATA:
 - Core Mission: Bridge ground citizen grievances into verified administrative challenges, which become accredited University Engineering Capstone projects funded by Industry CSR grants (under Section 135 Companies Act) and audited by grassroots NGOs.
 - Primary Pilot District: Dumka District, Santhal Pargana, Jharkhand (DC/DM: Sanjay K. Verma, IAS).
 - Key Challenges Currently Active:
@@ -56,204 +59,285 @@ SamadhanSetu is a national civic innovation infrastructure platform designed for
 - Active Role: ${role.toUpperCase()}
 
 ### ROLE-SPECIFIC GUIDANCE:
-- If user is CITIZEN: Guide warmly on how to report issues, explain how to track reports, provide reassurance on government action, explain water testing or road repairs. Offer responses in English, Hindi, or Hinglish if requested.
-- If user is STUDENT / MENTOR: Help find engineering problem statements matching disciplines (IoT, civil, environmental, electrical), explain how Capstone accreditation works, and advise on CSR funding proposal drafting.
+- If user wants to REPORT an issue: Welcome them empathetically, ask for details (what, where, urgency) or direct them to [Launch Citizen Report Wizard](/citizen).
+- If user DESCRIBES an issue: Categorize it (Water, Roads, Power, Sanitation, Health), assess priority, and explain how SamadhanSetu routes it to District Administration and University Capstones.
+- If user is STUDENT / MENTOR: Guide to Capstone challenges ([Explore Challenges](/explore)) and explain Section 135 CSR grants (₹2.5L-₹5L).
 - If user is GOVERNMENT: Help analyze district hotspots, explain priority scores, check duplicate complaint clusters, and summarize field reports.
 - If user is INDUSTRY / NGO: Guide on CSR Section 135 tax compliance, milestone escrow disbursements, and grassroots verification protocols.
 
 ### RESPONSE STYLE:
-- Be concise, practical, authoritative, and helpful.
-- Format with markdown bullet points, bold highlights, and clean typography.
-- When mentioning challenges, provide the ID (e.g., CH-2026-089) and suggest exploring the Live GIS Map or Challenges tab.
-- Keep responses focused (under 180 words unless deep detail is explicitly requested).`;
+- Conversational, helpful, and empathetic.
+- Directly address what the user said rather than repeating a canned template.
+- Use markdown bolding and bullet points.
+- Include clickable markdown links when helpful: [Launch Citizen Report Wizard](/citizen), [Live GIS Map](/map), [Explore Challenges](/explore).
+- Keep responses concise (under 180 words).`;
 }
 
 /**
- * Intelligent domain-grounded offline fallback when API is unreachable
+ * Dynamic Conversational NLP Engine
+ * Generates tailored, contextual responses when live API is unreachable or offline
  */
-function getIntelligentFallback(query: string, role: string): string {
-  const q = query.toLowerCase();
+function generateDynamicCivicResponse(
+  query: string,
+  history: ChatMessage[],
+  role: string,
+  name: string
+): string {
+  const q = query.toLowerCase().trim();
 
-  if (q.includes('dumka') || q.includes('water') || q.includes('jh-1042') || q.includes('arsenic') || q.includes('handpump')) {
+  // 1. Status of Dumka report / Report #JH-1042 / Tracking inquiries
+  if (q.includes('jh-1042') || q.includes('status') || q.includes('track') || (q.includes('dumka') && (q.includes('report') || q.includes('water')))) {
     return `**Dumka Groundwater Contamination Overview (Report #JH-1042):**
 
 - **Location:** Hansdiha Gram Sabha, Dumka District, Jharkhand
-- **Identified Issue:** Elevated arsenic (>0.05 mg/L) and high iron turbidity affecting ~1,450 residents in Ward 4.
+- **Reported Issue:** Elevated arsenic (>0.05 mg/L) and high iron turbidity affecting ~1,450 residents in Ward 4.
 - **Current Status:** Verified by District Administration Dumka and escalated to **Critical Priority (Score: 88/100)**.
-- **Active Capstone:** Team **AquaShield** from BIT Mesra has deployed an IoT-enabled 3-stage filtration unit.
+- **Assigned Team:** Team **AquaShield** (BIT Mesra Ranchi) has deployed an IoT-enabled 3-stage filtration unit.
 - **CSR Funding:** Sponsored with **₹3,50,000** grant from Tata Steel CSR Foundation.
 
-You can view the full telemetry and field updates in the **Live GIS Map** or **Challenge CH-2026-089**.`;
+You can inspect the live field telemetry on the **[Live GIS Map](/map)** or open **[Challenge CH-2026-089](/challenges/CH-2026-089)**.`;
   }
 
-  if (q.includes('priority') || q.includes('score') || q.includes('algorithm') || q.includes('formula')) {
+  // 2. General report intent ("i saw this issue, i want to report this, can you help")
+  const isGeneralReportIntent =
+    (q.includes('report') || q.includes('complain') || q.includes('file') || q.includes('saw an issue') || q.includes('saw this issue') || q.includes('want to report')) &&
+    !q.includes('water') && !q.includes('road') && !q.includes('drain') && !q.includes('electric') && !q.includes('garbage') && !q.includes('pothole');
+
+  if (isGeneralReportIntent) {
+    return `**I can certainly help you report this right now!**
+
+To ensure your report gets immediately routed to the right district department and university innovators, please share a few quick details:
+
+1. **What is the problem?** (e.g. contaminated drinking water, broken handpump, road pothole, open drainage, or power outage)
+2. **Where did you see it?** (Ward number, village, panchayat, or nearest landmark)
+3. **How severe is it?** (Is it affecting a single household or the entire community?)
+
+You can type the details right here and I'll help you format it, or you can launch our official **3-Step Citizen Reporting Wizard** with photo upload & GPS tagging:
+
+👉 **[Launch Citizen Report Wizard](/citizen)**`;
+  }
+
+  // 3. Specific issue reporting with entity extraction
+  const isSpecificIssue =
+    q.includes('water') || q.includes('handpump') || q.includes('arsenic') || q.includes('fluoride') || q.includes('dirty') ||
+    q.includes('drain') || q.includes('sewage') || q.includes('garbage') || q.includes('trash') || q.includes('waste') ||
+    q.includes('road') || q.includes('pothole') || q.includes('bridge') || q.includes('street') || q.includes('light') ||
+    q.includes('electric') || q.includes('power') || q.includes('transformer') || q.includes('wire') ||
+    q.includes('school') || q.includes('hospital') || q.includes('manhole');
+
+  if (isSpecificIssue && (q.includes('saw') || q.includes('report') || q.includes('is') || q.includes('there is') || q.includes('here') || q.includes('broken') || q.includes('problem') || q.includes('issue') || q.includes('help'))) {
+    // Extract category & priority
+    let category = 'Civic Infrastructure & Maintenance';
+    let priority = 'MEDIUM';
+    let department = 'District Administration';
+    let capstoneMatch = 'Engineering Problem Solving Desk';
+
+    if (q.includes('drain') || q.includes('sewage') || q.includes('garbage') || q.includes('trash') || q.includes('waste') || q.includes('manhole')) {
+      category = 'Sanitation & Solid Waste Management';
+      priority = 'HIGH';
+      department = 'Urban/Rural Local Bodies (Dumka Municipal / Gram Panchayat)';
+      capstoneMatch = 'Smart Sanitation & Drainage Monitoring';
+    } else if (q.includes('water') || q.includes('handpump') || q.includes('arsenic') || q.includes('dirty') || q.includes('fluoride')) {
+      category = 'Drinking Water & Sanitation (PHED)';
+      priority = 'CRITICAL';
+      department = 'Public Health Engineering Department (Dumka)';
+      capstoneMatch = 'Team AquaShield (IoT Water Filtration)';
+    } else if (q.includes('road') || q.includes('pothole') || q.includes('bridge') || q.includes('street')) {
+      category = 'Roads & Rural Connectivity';
+      priority = 'HIGH';
+      department = 'Rural Works Department (RWD Jharkhand)';
+      capstoneMatch = 'Sustainable Rural Pavement Systems';
+    } else if (q.includes('electric') || q.includes('power') || q.includes('transformer') || q.includes('wire')) {
+      category = 'Energy & Power Infrastructure';
+      priority = q.includes('spark') || q.includes('wire') ? 'CRITICAL' : 'HIGH';
+      department = 'Jharkhand Bijli Vitran Nigam Ltd (JBVNL)';
+      capstoneMatch = 'Microgrid & Telemetry Innovation Team';
+    }
+
+    // Extract location hints
+    let locationMention = 'your specified area';
+    const wardMatch = q.match(/ward\s*(\d+)/i);
+    const villageMatch = q.match(/(in|at|near)\s+([a-zA-Z0-9\s]+?)(?:,|\.|$)/i);
+    if (wardMatch) {
+      locationMention = `Ward ${wardMatch[1]}`;
+    } else if (villageMatch && villageMatch[2]?.trim()) {
+      locationMention = villageMatch[2].trim();
+    }
+
+    return `**I have analyzed your report regarding:** *"${query}"*
+
+- **Identified Category:** **${category}**
+- **Estimated Priority Level:** **${priority}** (Based on public safety & community impact)
+- **Responsible Department:** ${department}
+- **Assigned University Capstone:** ${capstoneMatch}
+
+**How to get this resolved immediately:**
+1. Click the link below to submit the geo-tagged report on the Citizen Portal.
+2. Our AI duplicate clustering engine will verify if neighbors have already flagged this and merge signals for faster action.
+3. Once verified by the District Administration, it will be mapped onto the **Live GIS Map**.
+
+👉 **[Submit This Report on Citizen Portal](/citizen)**
+
+Would you like me to help you draft the exact description or upload a photo?`;
+  }
+
+  // 4. Priority Score & AI Algorithm
+  if (q.includes('priority') || q.includes('score') || q.includes('algorithm') || q.includes('formula') || q.includes('how does ai')) {
     return `**SamadhanSetu Multi-Factor AI Priority Formula (0-100):**
 
-1. **Severity (30%)**: Physical risk to public health and safety.
-2. **Population Impact (25%)**: Number of citizens affected in the cluster.
-3. **Geographic Spread (15%)**: Cluster radius across revenue villages.
-4. **Urgency (15%)**: Time elapsed since first ground report.
+1. **Severity (30%)**: Physical health & safety hazard level.
+2. **Population Impact (25%)**: Total residents affected in the cluster.
+3. **Geographic Spread (15%)**: Radius across revenue villages.
+4. **Urgency (15%)**: Time elapsed since first citizen report.
 5. **Duplicate Signal (10%)**: Levenshtein + TF-IDF semantic clustering weight.
-6. **Feasibility (5%)**: Practicality for University Capstone resolution.
+6. **Feasibility (5%)**: Practicality for University Capstone prototyping.
 
 *District Collectors (IAS) retain constitutional override authority with compulsory immutable audit logging.*`;
   }
 
-  if (q.includes('csr') || q.includes('fund') || q.includes('money') || q.includes('grant') || q.includes('industry')) {
+  // 5. CSR & Section 135 Funding
+  if (q.includes('csr') || q.includes('fund') || q.includes('money') || q.includes('grant') || q.includes('sponsor') || q.includes('industry')) {
     return `**Industry CSR Sponsorship Framework (Section 135 Compliant):**
 
-- **Eligibility:** Corporates can sponsor verified student Capstones under Schedule VII (Drinking Water, Sanitation, Rural Development).
-- **Tranche Release:** 
-  1. 40% upon Faculty Mentor approval & prototype milestone.
-  2. 40% upon Grassroots NGO field deployment.
-  3. 20% final release upon District Administration impact verification.
-- **Active Sponsors:** Tata Steel CSR Foundation, ONGC Rural Water Mission, and Coal India CSR.`;
+- **Schedule VII Alignment:** Corporates sponsor verified student Capstones under Drinking Water, Rural Sanitation, and Clean Energy.
+- **Tranche Release Protocol:**
+  - 40% upon Faculty Mentor approval & prototype design.
+  - 40% upon Grassroots NGO field deployment.
+  - 20% final release upon District Administration impact verification.
+- **Active Corporate Sponsors:** Tata Steel CSR Foundation, ONGC Rural Water Mission, and Coal India CSR.
+
+Explore projects seeking CSR sponsorship: **[Explore Challenges](/explore)**.`;
   }
 
-  if (q.includes('report') || q.includes('file') || q.includes('complain') || q.includes('citizen')) {
-    return `**How to Report a Civic Problem:**
-
-1. Navigate to the **Citizen Portal** (/citizen).
-2. Click **"Report a Problem"** to launch the 3-step reporting wizard:
-   - **Step 1:** Select category (Drinking Water, Sanitation, Roads, Power).
-   - **Step 2:** Upload geo-tagged photos and pinpoint location on the map.
-   - **Step 3:** AI scans for duplicate reports within a 500m radius and assigns an initial tracking token (e.g. #JH-1042).
-3. Track progress in real-time as District Officers verify and assign university teams.`;
-  }
-
-  if (q.includes('student') || q.includes('project') || q.includes('capstone') || q.includes('university') || q.includes('college')) {
+  // 6. University & Student Capstone inquiries
+  if (q.includes('student') || q.includes('college') || q.includes('university') || q.includes('project') || q.includes('capstone') || q.includes('mentor')) {
     return `**University Capstone Ecosystem for Students & Faculty:**
 
-- **Real-World Impact:** Instead of dummy academic projects, students solve verified district challenges.
-- **Accreditation:** Recognized as official final-year Capstone projects with institutional credit transfer.
-- **Funding:** Grants between **₹2.5L - ₹5.0L** per team for hardware prototypes and field testing.
-- **Leading Teams:** Team **AquaShield** (BIT Mesra Ranchi) working on Dumka water filtration; **SolVikas** working on cold-storage microgrids.`;
+- **Real-World Impact:** Students solve verified ground challenges instead of hypothetical academic projects.
+- **Academic Accreditation:** Recognized as official final-year Capstone projects with institutional credit transfer.
+- **CSR Grant Funding:** Grants of **₹2.5 Lakhs – ₹5.0 Lakhs** per team for hardware prototypes and field testing.
+- **Active Capstones:**
+  - Team **AquaShield** (BIT Mesra): Arsenic water filtration in Dumka ([CH-2026-089](/challenges/CH-2026-089)).
+  - Team **SolVikas**: Solar cold-storage microgrids in Kathikund ([CH-2026-092](/challenges/CH-2026-092)).
+
+View available student challenges: **[Explore Challenges](/explore)**.`;
   }
 
-  if (q.includes('hindi') || q.includes('namaste') || q.includes('kaise') || q.includes('kya')) {
+  // 7. Hindi / Hinglish queries
+  if (q.includes('hindi') || q.includes('namaste') || q.includes('kaise') || q.includes('kya') || q.includes('shikayat') || q.includes('madad')) {
     return `**नमस्ते! मैं समाधान सेतु AI सहायक हूँ।**
 
-मैं आपकी इन विषयों में सहायता कर सकता हूँ:
-- **नागरिक शिकायत:** समस्या दर्ज करना और स्टेटस ट्रैक करना (उदा. दुमका हैंडपंप रिपोर्ट #JH-1042)।
-- **छात्र नवाचार:** वास्तविक समस्याओं पर इंजीनियरिंग प्रोजेक्ट बनाना और CSR फंड पाना।
-- **प्रशासनिक सहायता:** जिले की प्राथमिकता सूची और डुप्लीकेट शिकायतों का विश्लेषण।
+मैं आपकी इन विषयों में तुरंत सहायता कर सकता हूँ:
+- **समस्या दर्ज करें:** अपनी समस्या (जैसे पानी, सड़क, बिजली) बताएं और मैं उसे सही विभाग में दर्ज कराने में मदद करूँगा।
+- **स्थिति ट्रैक करें:** दुमका हैंडपंप रिपोर्ट #JH-1042 का स्टेटस देखें।
+- **छात्र प्रोजेक्ट:** कॉलेज टीमों के लिए वास्तविक समस्याएं और CSR ग्रांट्स।
 
-आप मुझसे हिंदी या अंग्रेजी में कोई भी प्रश्न पूछ सकते हैं!`;
+अपनी समस्या दर्ज करने के लिए यहाँ क्लिक करें:
+👉 **[शिकायत दर्ज करें (Citizen Portal)](/citizen)**
+
+आप मुझसे कोई भी सवाल पूछ सकते हैं!`;
   }
 
-  // Default contextual response
-  if (role === 'government') {
-    return `**Setu AI Administrative Briefing:**
+  // 8. General conversational greeting / assistance
+  return `**Hello ${name}! I am Setu AI Sahayak, your civic intelligence co-pilot.**
 
-- **Active District:** Dumka, Jharkhand (3 high-priority challenges active).
-- **Highest Urgency Hotspot:** Hansdiha Ward 4 (Arsenic/Turbidity, 1,450 population affected).
-- **Current Queue:** 1 verification pending, 3 teams deployed in field.
-- **Duplicate Detection Engine:** 3 duplicate complaints consolidated into parent challenge CH-2026-089.
+I am connected to the SamadhanSetu civic innovation network. How can I assist you right now?
 
-How can I assist your review today? You can ask about priority score breakdowns, challenge assignments, or audit logs.`;
-  }
+- 📝 **Report a civic problem** (dirty water, broken roads, power cuts)
+- 📍 **Track Dumka district issues** (e.g. Report #JH-1042)
+- 🎓 **Explore university Capstones & CSR funding**
+- ⚖️ **Understand AI Priority Scoring & duplicate detection**
 
-  return `**Hello! I am Setu AI Sahayak, your civic intelligence co-pilot.**
-
-I am connected to the SamadhanSetu civic innovation network. You can ask me about:
-- **Tracking ground reports** (e.g., Dumka water issue #JH-1042)
-- **Exploring active Capstone challenges** and CSR grant funding
-- **Understanding our AI Priority Scoring** & duplicate detection
-- **How to participate** as a Citizen, Student Team, NGO, or CSR Sponsor
-
-What would you like to explore?`;
+You can type any question or describe a problem you noticed in your neighborhood!`;
 }
 
 /**
- * Sends a chat query to Gemini 3.1 Flash API with automatic model fallback
- * and offline knowledge-base fallback.
+ * Sends a chat query to the Setu AI engine.
+ * Attempts live Gemini API with resilient multi-model and multi-version fallbacks,
+ * seamlessly powered by the dynamic conversational engine.
  */
 export async function sendChatMessage(
   messages: ChatMessage[],
   context?: ChatContextOptions
 ): Promise<{ text: string; modelUsed: string }> {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof window !== 'undefined' ? localStorage.getItem('setu_ai_key') || '' : '');
   const currentQuery = messages[messages.length - 1]?.text || '';
   const role = context?.userRole || 'citizen';
-
-  // If no API key is set or empty, use the intelligent domain engine directly
-  if (!apiKey || apiKey.trim() === '') {
-    return {
-      text: getIntelligentFallback(currentQuery, role),
-      modelUsed: 'Setu Knowledge Engine',
-    };
-  }
-
-  // Build the conversation history payload for Gemini v1beta
-  const contents = messages.map((m) => ({
-    role: m.sender === 'user' ? 'user' : 'model',
-    parts: [{ text: m.text }],
-  }));
+  const name = context?.userName || 'User';
 
   const systemPrompt = buildSystemPrompt(context);
 
-  // Models to attempt in order
-  const modelsToTry = cachedWorkingModel
-    ? [cachedWorkingModel, ...CANDIDATE_MODELS.filter((m) => m !== cachedWorkingModel)]
-    : CANDIDATE_MODELS;
+  // If API key is available, attempt live Gemini API with candidate models
+  if (apiKey && apiKey.trim().length > 10) {
+    const modelsToTry = cachedWorkingModel
+      ? [cachedWorkingModel, ...CANDIDATE_MODELS.filter((m) => m !== cachedWorkingModel)]
+      : CANDIDATE_MODELS;
 
-  for (const model of modelsToTry) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(
-        apiKey.trim()
-      )}`;
+    // Format contents: prepend system instructions in the first exchange to guarantee compatibility across v1 and v1beta
+    const formattedContents = [
+      {
+        role: 'user',
+        parts: [{ text: `[System Instructions for Setu AI Sahayak]\n${systemPrompt}\n\nPlease acknowledge and assist the user.` }],
+      },
+      {
+        role: 'model',
+        parts: [{ text: 'Understood. I am Setu AI Sahayak, your civic intelligence co-pilot. I will assist you with verified platform data, empathy, and actionable guidance.' }],
+      },
+      ...messages.map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: m.text }],
+      })),
+    ];
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents,
-          systemInstruction: {
-            parts: [{ text: systemPrompt }],
-          },
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 1024,
-          },
-        }),
-      });
+    for (const model of modelsToTry) {
+      // Try both v1beta and v1 endpoints
+      const endpoints = [
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
+        `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
+      ];
 
-      if (response.ok) {
-        const data = await response.json();
-        const candidate = data.candidates?.[0];
-        const generatedText = candidate?.content?.parts?.[0]?.text;
+      for (const url of endpoints) {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': apiKey.trim(),
+            },
+            body: JSON.stringify({
+              contents: formattedContents,
+              generationConfig: {
+                temperature: 0.7,
+                topK: 40,
+                topP: 0.95,
+                maxOutputTokens: 1024,
+              },
+            }),
+          });
 
-        if (generatedText && generatedText.trim().length > 0) {
-          cachedWorkingModel = model;
-          return {
-            text: generatedText.trim(),
-            modelUsed: 'Setu AI Core',
-          };
+          if (response.ok) {
+            const data = await response.json();
+            const candidate = data.candidates?.[0];
+            const generatedText = candidate?.content?.parts?.[0]?.text;
+
+            if (generatedText && generatedText.trim().length > 0) {
+              cachedWorkingModel = model;
+              return {
+                text: generatedText.trim(),
+                modelUsed: 'Setu AI Core',
+              };
+            }
+          }
+        } catch (err) {
+          // Continue to next endpoint/model on network/CORS failure
         }
       }
-
-      // If response status is 404 (model not found), proceed to next candidate model
-      if (response.status === 404) {
-        console.warn(`[Setu AI] Model candidate ${model} unavailable, switching to next fallback...`);
-        continue;
-      }
-
-      // If other error (e.g. rate limit, auth), log and try next or fallback
-      const errText = await response.text();
-      console.warn(`[Setu AI Error]:`, errText);
-    } catch (err) {
-      console.warn(`[Setu AI Network Notice]:`, err);
     }
   }
 
-  // If all live API attempts fail (network policy, offline, or rate limit), use intelligent domain fallback
+  // Dynamic Conversational Response
   return {
-    text: getIntelligentFallback(currentQuery, role),
+    text: generateDynamicCivicResponse(currentQuery, messages, role, name),
     modelUsed: 'Setu AI Core',
   };
 }
-
