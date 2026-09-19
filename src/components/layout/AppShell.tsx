@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { NotificationToastContainer } from '../common/NotificationToast';
 import { SamadhanLogo } from '../common/SamadhanLogo';
+import { SetuAiChatbot } from '../chat/SetuAiChatbot';
 import { Phone, ShieldCheck, CheckCircle2, Globe, Heart } from 'lucide-react';
 
 export const AppShell: React.FC = () => {
@@ -113,6 +114,9 @@ export const AppShell: React.FC = () => {
           </footer>
         </div>
       </div>
+
+      {/* Setu AI Sahayak Floating Chatbot (Gemini 3.1 Flash) */}
+      <SetuAiChatbot />
 
       {/* Floating System Toasts */}
       <NotificationToastContainer />
