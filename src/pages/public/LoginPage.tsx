@@ -364,9 +364,16 @@ export const LoginPage: React.FC = () => {
         {activeTab === 'government' && (
           <form onSubmit={handleGovSubmit} className="space-y-3.5 text-xs">
             <div className="flex items-center justify-between pb-1">
-              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                Government Officer Login
-              </span>
+              <div className="flex items-center gap-1.5">
+                <img
+                  src="/images/jharkhand-govt-logo.png"
+                  alt="Govt of Jharkhand"
+                  className="w-5 h-5 object-contain shrink-0"
+                />
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  Government Officer Login
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={fillGovDemo}

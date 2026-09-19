@@ -35,8 +35,12 @@ export const AppShell: React.FC = () => {
             <div className="flex items-center justify-between gap-2">
               {/* Left: Official State & Initiative Accreditation */}
               <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                <div className="flex items-center gap-1.5 font-medium truncate">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <div className="flex items-center gap-1.5 sm:gap-2 font-medium truncate">
+                  <img
+                    src="/images/jharkhand-govt-logo.png"
+                    alt="Emblem of Jharkhand"
+                    className="w-4 h-4 sm:w-5 sm:h-5 object-contain shrink-0"
+                  />
                   <span className="font-semibold text-white tracking-wide shrink-0">झारखण्ड सरकार</span>
                   <span className="text-slate-500 hidden sm:inline">|</span>
                   <span className="hidden sm:inline text-slate-300 truncate">Government of Jharkhand</span>
@@ -107,7 +111,15 @@ export const AppShell: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span>Institutional Alignment & Ecosystem Recognition:</span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-5">
+                  <div className="bg-white px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs flex items-center gap-2">
+                    <img
+                      src="/images/jharkhand-govt-logo.png"
+                      alt="Government of Jharkhand"
+                      className="h-7 w-auto object-contain"
+                    />
+                    <span className="text-[11px] font-bold text-slate-800 hidden sm:inline">Govt. of Jharkhand</span>
+                  </div>
                   <div className="bg-white px-3 py-1.5 rounded-lg border border-slate-200/80 shadow-2xs flex items-center">
                     <img
                       src="/images/nif-india.png"

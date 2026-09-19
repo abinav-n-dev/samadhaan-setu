@@ -38,10 +38,15 @@ export const GovernmentDashboard: React.FC = () => {
       <div className="bg-white rounded-xl border border-brand-border p-6 sm:p-8 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="bg-blue-100 text-blue-800 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider">
+            <img
+              src="/images/jharkhand-govt-logo.png"
+              alt="Government of Jharkhand"
+              className="w-6 h-6 object-contain shrink-0"
+            />
+            <span className="bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded tracking-wider">
               Executive Administration
             </span>
-            <span className="text-xs font-mono text-brand-textMuted font-semibold">
+            <span className="text-xs font-mono text-brand-textMuted dark:text-slate-400 font-semibold">
               Govt of Jharkhand • State Civic Command
             </span>
           </div>

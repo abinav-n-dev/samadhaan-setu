@@ -619,41 +619,60 @@ export const LandingPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+          {/* Government of Jharkhand Card */}
+          <div className="flex flex-col sm:flex-row md:flex-col items-center gap-3.5 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
+            <div className="bg-white p-2.5 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto md:w-full flex items-center justify-center">
+              <img
+                src="/images/jharkhand-govt-logo.png"
+                alt="Government of Jharkhand"
+                className="h-14 sm:h-16 w-auto object-contain max-w-full"
+              />
+            </div>
+            <div className="text-center space-y-1">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                Government of Jharkhand
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                State Pilot Authority • Department of Higher, Technical Education & Skill Development.
+              </p>
+            </div>
+          </div>
+
           {/* NIF India Card */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-            <div className="bg-white p-3 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row md:flex-col items-center gap-3.5 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
+            <div className="bg-white p-2.5 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto md:w-full flex items-center justify-center">
               <img
                 src="/images/nif-india.png"
                 alt="National Innovation Foundation - India"
                 className="h-14 sm:h-16 w-auto object-contain max-w-full"
               />
             </div>
-            <div className="text-center sm:text-left space-y-1">
+            <div className="text-center space-y-1">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white">
                 National Innovation Foundation – India
               </h4>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
-                Autonomous Institute of the Department of Science and Technology (DST), Govt. of India — fostering grassroots technological innovation.
+                Autonomous Institute of DST, Govt. of India — fostering grassroots innovation.
               </p>
             </div>
           </div>
 
           {/* Startup India Card */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-            <div className="bg-white p-3 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row md:flex-col items-center gap-3.5 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
+            <div className="bg-white p-2.5 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto md:w-full flex items-center justify-center">
               <img
                 src="/images/startup-india.png"
                 alt="#startupindia"
                 className="h-12 sm:h-14 w-auto object-contain max-w-full"
               />
             </div>
-            <div className="text-center sm:text-left space-y-1">
+            <div className="text-center space-y-1">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white">
                 #StartupIndia Ecosystem
               </h4>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
-                Empowering university students and innovators to incubate ground-tested capstones into registered civic and social impact startups.
+                Incubating ground-tested capstone solutions into registered civic startups.
               </p>
             </div>
           </div>
