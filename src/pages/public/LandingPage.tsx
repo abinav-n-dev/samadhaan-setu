@@ -602,6 +602,63 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* National Institutional Alignment & Ecosystem Backing */}
+      <section className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4 mb-6">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold border border-emerald-200 dark:border-emerald-800">
+              <span>National Innovation & Ecosystem Alignment</span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white mt-1.5">
+              Institutional Framework & Innovation Backing
+            </h3>
+          </div>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+            Smart India Hackathon 2026 • PS #SIH1642
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          {/* NIF India Card */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto flex items-center justify-center">
+              <img
+                src="/images/nif-india.png"
+                alt="National Innovation Foundation - India"
+                className="h-14 sm:h-16 w-auto object-contain max-w-full"
+              />
+            </div>
+            <div className="text-center sm:text-left space-y-1">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                National Innovation Foundation – India
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                Autonomous Institute of the Department of Science and Technology (DST), Govt. of India — fostering grassroots technological innovation.
+              </p>
+            </div>
+          </div>
+
+          {/* Startup India Card */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 dark:border-slate-700 shrink-0 w-full sm:w-auto flex items-center justify-center">
+              <img
+                src="/images/startup-india.png"
+                alt="#startupindia"
+                className="h-12 sm:h-14 w-auto object-contain max-w-full"
+              />
+            </div>
+            <div className="text-center sm:text-left space-y-1">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                #StartupIndia Ecosystem
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                Empowering university students and innovators to incubate ground-tested capstones into registered civic and social impact startups.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

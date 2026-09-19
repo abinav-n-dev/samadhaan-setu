@@ -101,6 +101,33 @@ export const AppShell: React.FC = () => {
                 </div>
               </div>
 
+              {/* National Institutional Backing & Recognition */}
+              <div className="flex flex-wrap items-center justify-between gap-4 py-3 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>Institutional Alignment & Ecosystem Recognition:</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                  <div className="bg-white px-3 py-1.5 rounded-lg border border-slate-200/80 shadow-2xs flex items-center">
+                    <img
+                      src="/images/nif-india.png"
+                      alt="National Innovation Foundation - India"
+                      className="h-7 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="bg-white px-3 py-1.5 rounded-lg border border-slate-200/80 shadow-2xs flex items-center">
+                    <img
+                      src="/images/startup-india.png"
+                      alt="#startupindia"
+                      className="h-6 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200/80 dark:border-slate-700">
+                    <span className="text-emerald-600">DST</span> • Govt. of India
+                  </div>
+                </div>
+              </div>
+
               <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
