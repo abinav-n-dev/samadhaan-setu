@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { UserRole } from '../../types';
+import { SamadhanLogo } from '../../components/common/SamadhanLogo';
 import { 
   ArrowRight, 
   ShieldCheck, 
@@ -203,9 +204,12 @@ export const LandingPage: React.FC = () => {
       <section className="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 lg:p-10 shadow-xs space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Smart India Hackathon 2026 • PS #SIH1642 • Dept. of Higher & Technical Education, Jharkhand</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <SamadhanLogo size={40} />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Smart India Hackathon 2026 • PS #SIH1642 • Dept. of Higher & Technical Education, Jharkhand</span>
+              </div>
             </div>
 
             <h1 className="text-2xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-slate-900 leading-tight">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
+import { SamadhanLogo } from '../common/SamadhanLogo';
 import { 
   Home, 
   Compass, 
@@ -100,18 +101,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
     >
       {/* Brand Header */}
       <div className="p-4 border-b border-slate-800">
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-extrabold text-base shadow-xs">
-            स
-          </div>
-          <div>
-            <div className="font-bold text-white text-sm tracking-tight font-sans">
-              SAMADHAN<span className="text-emerald-400">SETU</span>
-            </div>
-            <div className="text-[10px] text-slate-400 font-medium">
-              झारखण्ड जन-समाधान सेतु
-            </div>
-          </div>
+        <Link to="/" className="block">
+          <SamadhanLogo size={34} showText textColor="light" />
         </Link>
 
         {/* Role context badge */}

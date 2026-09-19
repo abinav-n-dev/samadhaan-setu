@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { LoginModal } from './LoginModal';
+import { SamadhanLogo } from '../common/SamadhanLogo';
 import { 
   Menu, 
   Search, 
@@ -79,11 +80,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {/* Compact Mobile Brand Logo */}
-          <Link to="/" className="lg:hidden flex items-center gap-1.5 font-bold text-slate-900 dark:text-white text-xs sm:text-sm tracking-tight">
-            <div className="w-5 h-5 rounded bg-emerald-700 text-white flex items-center justify-center font-black text-[10px]">
-              स
-            </div>
-            <span>SAMADHAN</span><span className="text-emerald-700 font-extrabold">SETU</span>
+          <Link to="/" className="lg:hidden flex items-center">
+            <SamadhanLogo size={26} showText textColor="dark" />
           </Link>
 
           {/* Global Search */}
