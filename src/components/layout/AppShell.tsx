@@ -11,9 +11,9 @@ export const AppShell: React.FC = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-brand-bg flex flex-col font-sans text-brand-text selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-brand-bg flex flex-col font-sans text-brand-text selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden w-full max-w-full">
       {/* Main Layout Container */}
-      <div className="flex-1 flex min-h-0 relative">
+      <div className="flex-1 flex min-h-0 relative w-full max-w-full overflow-x-hidden">
         {/* Fixed Desktop / Offcanvas Mobile Sidebar */}
         <Sidebar
           isOpenMobile={mobileSidebarOpen}
@@ -29,17 +29,17 @@ export const AppShell: React.FC = () => {
         )}
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col lg:pl-64 min-w-0">
+        <div className="flex-1 flex flex-col lg:pl-64 min-w-0 w-full max-w-full overflow-x-hidden">
           {/* Official Government & SIH 2026 Masthead Strip */}
-          <div className="bg-slate-900 text-slate-300 text-[11px] border-b border-slate-800 py-1.5 px-4 sm:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="bg-slate-900 text-slate-300 text-[10px] sm:text-[11px] border-b border-slate-800 py-1 sm:py-1.5 px-3 sm:px-6 w-full max-w-full overflow-x-hidden">
+            <div className="flex items-center justify-between gap-2">
               {/* Left: Official State & Initiative Accreditation */}
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center gap-1.5 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  <span className="font-semibold text-white tracking-wide">झारखण्ड सरकार</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="hidden sm:inline text-slate-300">Government of Jharkhand</span>
+              <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                <div className="flex items-center gap-1.5 font-medium truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span className="font-semibold text-white tracking-wide shrink-0">झारखण्ड सरकार</span>
+                  <span className="text-slate-500 hidden sm:inline">|</span>
+                  <span className="hidden sm:inline text-slate-300 truncate">Government of Jharkhand</span>
                 </div>
                 <span className="text-slate-600 hidden md:inline">•</span>
                 <span className="text-slate-400 hidden md:inline text-[10px]">
@@ -48,14 +48,14 @@ export const AppShell: React.FC = () => {
               </div>
 
               {/* Right: National Helpline & SIH Badge */}
-              <div className="flex items-center gap-3 font-mono text-[10px]">
+              <div className="flex items-center gap-2 sm:gap-3 font-mono text-[10px] shrink-0">
                 <span className="hidden xl:inline bg-slate-800 text-emerald-400 px-2 py-0.5 rounded border border-slate-700">
                   SIH 2026 PS #SIH1642
                 </span>
                 <div className="flex items-center gap-1 text-slate-300 font-sans">
-                  <Phone className="w-3 h-3 text-emerald-400" />
+                  <Phone className="w-3 h-3 text-emerald-400 shrink-0" />
                   <span className="hidden sm:inline">Citizen Helpline:</span>
-                  <span className="font-mono font-bold text-white">1800-345-6570</span>
+                  <span className="font-mono font-bold text-white text-[10px] sm:text-[11px]">1800-345-6570</span>
                 </div>
               </div>
             </div>
@@ -65,7 +65,7 @@ export const AppShell: React.FC = () => {
           <Navbar onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
 
           {/* Dynamic Page Content */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto overflow-x-hidden">
             <Outlet />
           </main>
 
