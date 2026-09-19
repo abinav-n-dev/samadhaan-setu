@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { LoginModal } from './LoginModal';
-import { DbStatusIndicator } from '../common/DbStatusIndicator';
 import { 
   Menu, 
   Search, 
@@ -12,7 +11,6 @@ import {
   User,
   LogOut,
   ChevronDown,
-  Lock,
   ShieldCheck,
   BadgeCheck,
   GraduationCap,
@@ -98,9 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Cloud Database Status & Config */}
-          <DbStatusIndicator />
-
           {/* Light / Dark Mode Toggle */}
           <button
             type="button"
@@ -296,16 +291,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                 )}
               </div>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setShowLoginModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-brand-dark bg-brand-dark text-brand-mint text-xs font-bold hover:bg-brand-darkSecondary transition shadow-xs"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Portal Login</span>
-            </button>
-          )}
+          ) : null}
 
           {/* Primary CTA */}
           <Link

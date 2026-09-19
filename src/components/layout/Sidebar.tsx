@@ -314,7 +314,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
               className="inline-flex items-center gap-1 text-xs font-bold text-brand-mint hover:underline"
             >
               <LogIn className="w-3.5 h-3.5" />
-              <span>Portal Login</span>
+              <span>Sign In</span>
             </Link>
           </div>
         )}
