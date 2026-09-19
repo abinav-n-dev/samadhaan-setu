@@ -33,7 +33,7 @@ export const SetuAiChatbot: React.FC = () => {
       const initialGreeting: ChatMessage = {
         id: 'init-1',
         sender: 'assistant',
-        text: `**Namaste! I am Setu AI Sahayak, your civic intelligence co-pilot.**\n\nI can help you track ground grievances, explore university Capstone challenges, explain AI priority scores, or navigate CSR funding. How can I assist you today?`,
+        text: `Hello! How can I help you today?`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         modelUsed: 'Setu AI Core',
       };
