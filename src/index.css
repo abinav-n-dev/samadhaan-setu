@@ -60,83 +60,377 @@
   background: #94A8B8;
 }
 
-/* Dark Mode Overrides & Support */
+/* ==========================================================================
+   DARK THEME REFINEMENT (100% High-Contrast, Professional GovTech Accessibility)
+   Light theme remains 100% untouched. Dark theme ensures instant readability.
+   ========================================================================== */
+
 .dark {
   color-scheme: dark;
 }
 
 .dark body {
-  background-color: #0F172A;
-  color: #F8FAFC;
+  background-color: #0b1120;
+  color: #f8fafc;
 }
 
+/* Base Surfaces & Card Backgrounds */
 .dark .bg-white {
-  background-color: #1E293B !important;
-  color: #F8FAFC;
+  background-color: #1e293b !important;
+  color: #f8fafc;
 }
 
 .dark .bg-brand-bg {
-  background-color: #0F172A !important;
+  background-color: #0b1120 !important;
 }
 
+.dark .bg-slate-50,
 .dark .bg-gray-50 {
-  background-color: #162032 !important;
+  background-color: #151e2e !important;
+  color: #e2e8f0;
 }
 
+.dark .bg-slate-100,
 .dark .bg-gray-100 {
-  background-color: #1E293B !important;
-  color: #E2E8F0 !important;
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
 }
 
-.dark .border-brand-border,
+.dark .bg-slate-200,
+.dark .bg-gray-200 {
+  background-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark .bg-brand-mintSoft {
+  background-color: rgba(6, 95, 70, 0.3) !important;
+}
+
+.dark .bg-brand-saffronSoft {
+  background-color: rgba(194, 65, 12, 0.3) !important;
+}
+
+.dark .bg-brand-navySoft {
+  background-color: rgba(30, 58, 138, 0.3) !important;
+}
+
+/* Borders & Dividers */
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300,
 .dark .border-gray-100,
 .dark .border-gray-200,
-.dark .border-gray-300 {
+.dark .border-gray-300,
+.dark .border-brand-border {
   border-color: #334155 !important;
 }
 
-.dark .text-brand-text,
-.dark .text-gray-900,
-.dark .text-gray-800 {
-  color: #F8FAFC !important;
+.dark .border-slate-400,
+.dark .border-slate-500,
+.dark .border-brand-dark {
+  border-color: #475569 !important;
 }
 
-.dark .text-brand-textMuted,
-.dark .text-gray-500,
-.dark .text-gray-600 {
-  color: #94A3B8 !important;
+.dark .border-dashed {
+  border-color: #475569 !important;
 }
+
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155 !important;
+}
+
+/* ==========================================================================
+   TEXT READABILITY & CONTRAST (Fixes unreadable dark text in dark mode)
+   ========================================================================== */
+
+/* Primary Headings & Bold Titles (White / Off-White) */
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-brand-text,
+.dark .text-brand-dark {
+  color: #f8fafc !important;
+}
+
+/* Body Text, Labels & Section Descriptions (Slate-300 High Contrast) */
+.dark .text-slate-700,
+.dark .text-slate-600,
+.dark .text-gray-700,
+.dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+/* Muted Subtitles, Microcopy, Timestamps (Slate-400) */
+.dark .text-slate-500,
+.dark .text-gray-500,
+.dark .text-brand-textMuted {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-400,
+.dark .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+/* Hover States on Links */
+.dark a.text-slate-900:hover,
+.dark a.text-slate-800:hover,
+.dark a.text-slate-700:hover,
+.dark a.text-slate-600:hover {
+  color: #34d399 !important;
+}
+
+/* ==========================================================================
+   ACTION BUTTONS & INTERACTIVE CONTROLS IN DARK MODE
+   ========================================================================== */
+
+/* Elevate dark-slate buttons so they don't blend into dark cards */
+.dark button.bg-slate-900,
+.dark a.bg-slate-900,
+.dark .bg-slate-900.text-white {
+  background-color: #0f172a !important;
+  border: 1px solid #475569 !important;
+  color: #ffffff !important;
+}
+
+.dark button.bg-slate-900:hover,
+.dark a.bg-slate-900:hover {
+  background-color: #1e293b !important;
+  border-color: #64748b !important;
+}
+
+/* Secondary outline buttons */
+.dark button.bg-white,
+.dark a.bg-white:not([class*="leaflet"]) {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark button.bg-white:hover,
+.dark a.bg-white:hover {
+  background-color: #334155 !important;
+}
+
+/* Neutral Gray/Slate buttons */
+.dark button.bg-slate-100,
+.dark a.bg-slate-100 {
+  background-color: #243042 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+.dark button.bg-slate-100:hover,
+.dark a.bg-slate-100:hover {
+  background-color: #334155 !important;
+}
+
+/* ==========================================================================
+   STATUS BADGES & CHIPS (Eliminates blinding light boxes in dark mode)
+   ========================================================================== */
+
+/* Emerald / Success */
+.dark .bg-emerald-50,
+.dark .bg-emerald-100 {
+  background-color: rgba(6, 95, 70, 0.35) !important;
+}
+.dark .text-emerald-700,
+.dark .text-emerald-800,
+.dark .text-emerald-900 {
+  color: #6ee7b7 !important;
+}
+.dark .border-emerald-200,
+.dark .border-emerald-300 {
+  border-color: rgba(52, 211, 153, 0.35) !important;
+}
+
+/* Blue / Primary Gov */
+.dark .bg-blue-50,
+.dark .bg-blue-100 {
+  background-color: rgba(30, 58, 138, 0.35) !important;
+}
+.dark .text-blue-700,
+.dark .text-blue-800,
+.dark .text-blue-900 {
+  color: #93c5fd !important;
+}
+.dark .border-blue-200,
+.dark .border-blue-300 {
+  border-color: rgba(96, 165, 250, 0.35) !important;
+}
+
+/* Purple / NGO */
+.dark .bg-purple-50,
+.dark .bg-purple-100 {
+  background-color: rgba(88, 28, 135, 0.35) !important;
+}
+.dark .text-purple-700,
+.dark .text-purple-800,
+.dark .text-purple-900 {
+  color: #d8b4fe !important;
+}
+.dark .border-purple-200,
+.dark .border-purple-300 {
+  border-color: rgba(192, 132, 252, 0.35) !important;
+}
+
+/* Amber / Warning / Priority */
+.dark .bg-amber-50,
+.dark .bg-amber-100,
+.dark .bg-yellow-50 {
+  background-color: rgba(120, 53, 15, 0.35) !important;
+}
+.dark .text-amber-700,
+.dark .text-amber-800,
+.dark .text-amber-900,
+.dark .text-yellow-800 {
+  color: #fde68a !important;
+}
+.dark .border-amber-200,
+.dark .border-amber-300 {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+/* Orange / High */
+.dark .bg-orange-50,
+.dark .bg-orange-100 {
+  background-color: rgba(194, 65, 12, 0.35) !important;
+}
+.dark .text-orange-700,
+.dark .text-orange-800,
+.dark .text-orange-900 {
+  color: #fdba74 !important;
+}
+.dark .border-orange-200,
+.dark .border-orange-300 {
+  border-color: rgba(251, 146, 60, 0.35) !important;
+}
+
+/* Indigo / Capstone */
+.dark .bg-indigo-50,
+.dark .bg-indigo-100 {
+  background-color: rgba(67, 56, 202, 0.35) !important;
+}
+.dark .text-indigo-700,
+.dark .text-indigo-800,
+.dark .text-indigo-900 {
+  color: #a5b4fc !important;
+}
+.dark .border-indigo-200,
+.dark .border-indigo-300 {
+  border-color: rgba(129, 140, 248, 0.35) !important;
+}
+
+/* Cyan / In Progress */
+.dark .bg-cyan-50,
+.dark .bg-cyan-100 {
+  background-color: rgba(14, 116, 144, 0.35) !important;
+}
+.dark .text-cyan-700,
+.dark .text-cyan-800,
+.dark .text-cyan-900 {
+  color: #67e8f9 !important;
+}
+.dark .border-cyan-200,
+.dark .border-cyan-300 {
+  border-color: rgba(34, 211, 238, 0.35) !important;
+}
+
+/* Red / Critical / Error */
+.dark .bg-red-50,
+.dark .bg-red-100,
+.dark .bg-rose-50 {
+  background-color: rgba(153, 27, 27, 0.35) !important;
+}
+.dark .text-red-700,
+.dark .text-red-800,
+.dark .text-rose-700 {
+  color: #fca5a5 !important;
+}
+.dark .border-red-200,
+.dark .border-rose-200 {
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+
+/* ==========================================================================
+   INPUTS, SELECTS, FORMS & TABLES
+   ========================================================================== */
 
 .dark input,
 .dark select,
 .dark textarea {
-  background-color: #162032 !important;
-  color: #F8FAFC !important;
+  background-color: #151e2e !important;
+  color: #f8fafc !important;
   border-color: #334155 !important;
 }
 
-.dark .shadow-subtle,
-.dark .shadow-xs,
-.dark .shadow-elevated {
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
 }
 
+.dark select option {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+.dark table {
+  border-color: #334155 !important;
+}
+
+.dark th {
+  background-color: #151e2e !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+.dark td {
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+.dark tr:hover td {
+  background-color: rgba(51, 65, 85, 0.25) !important;
+}
+
+/* Shadows with subtle dark elevation */
+.dark .shadow-xs,
+.dark .shadow-sm,
+.dark .shadow-subtle {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .shadow-elevated,
+.dark .shadow-modal,
+.dark .shadow-lg {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Leaflet in Dark Mode */
 .dark .leaflet-container {
-  background-color: #0F172A !important;
+  background-color: #0b1120 !important;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px) !important;
 }
 
 .dark .leaflet-popup-content-wrapper {
-  background-color: #1E293B !important;
-  color: #F8FAFC !important;
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
   border: 1px solid #334155 !important;
 }
 
 .dark .leaflet-popup-tip {
-  background: #1E293B !important;
+  background: #1e293b !important;
 }
 
+/* Dark Scrollbar */
 .dark ::-webkit-scrollbar-track {
-  background: #0F172A;
+  background: #0b1120;
 }
 
 .dark ::-webkit-scrollbar-thumb {
@@ -146,5 +440,6 @@
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
 
 

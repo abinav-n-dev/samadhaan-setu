@@ -3,6 +3,7 @@ import { Outlet, Link } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { NotificationToastContainer } from '../common/NotificationToast';
+import { SamadhanLogo } from '../common/SamadhanLogo';
 import { Phone, ShieldCheck, CheckCircle2, Globe, Heart } from 'lucide-react';
 
 export const AppShell: React.FC = () => {
@@ -73,9 +74,7 @@ export const AppShell: React.FC = () => {
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
                 <div>
                   <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
-                    <div className="w-5 h-5 rounded bg-emerald-700 text-white flex items-center justify-center font-extrabold text-[10px]">
-                      स
-                    </div>
+                    <SamadhanLogo size={22} />
                     <span>समाधान सेतु • SamadhanSetu</span>
                     <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
                       National Civic Innovation Infrastructure
