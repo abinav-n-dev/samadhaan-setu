@@ -37,7 +37,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
     toggleTheme, 
     language, 
     setLanguage, 
-    t 
+    t,
+    addToast
   } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
@@ -307,17 +308,33 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                 )}
               </div>
             </div>
-          ) : null}
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Sign In</span>
+            </Link>
+          )}
 
           {/* Primary CTA */}
-          <Link
-            to="/citizen/report"
-            className="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg hover:bg-emerald-800 shadow-xs transition active:scale-[0.98]"
+          <button
+            type="button"
+            onClick={() => {
+              if (isAuthenticated) {
+                navigate('/citizen/report');
+              } else {
+                addToast('Authentication Required', 'Please log in with verified citizen credentials to report a problem.', 'info');
+                navigate('/login?tab=citizen');
+              }
+            }}
+            className="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg hover:bg-emerald-800 shadow-xs transition active:scale-[0.98] cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Report a Problem</span>
             <span className="sm:hidden">Report</span>
-          </Link>
+          </button>
         </div>
       </header>
 

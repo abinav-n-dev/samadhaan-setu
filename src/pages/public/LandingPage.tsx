@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  const { login, challenges, t } = useAppState();
+  const { login, challenges, t, isAuthenticated, addToast } = useAppState();
   const navigate = useNavigate();
 
   const totalReports = 1284;
@@ -38,8 +38,20 @@ export const LandingPage: React.FC = () => {
   const universityTeamsCount = 42;
 
   const handleRoleLogin = (role: UserRole, destination: string) => {
-    login(role);
-    navigate(destination);
+    if (isAuthenticated) {
+      navigate(destination);
+    } else {
+      const tabMap: Record<string, string> = {
+        government: 'government',
+        citizen: 'citizen',
+        student: 'university',
+        mentor: 'university',
+        industry: 'partner',
+        ngo: 'partner',
+      };
+      addToast('Authentication Required', `Please sign in with verified credentials to access the ${role.toUpperCase()} desk.`, 'info');
+      navigate(`/login?tab=${tabMap[role] || 'government'}`);
+    }
   };
 
   const portalRoles: {
@@ -221,13 +233,21 @@ export const LandingPage: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Link
-                to="/citizen/report"
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-lg shadow-xs transition"
+              <button
+                type="button"
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate('/citizen/report');
+                  } else {
+                    addToast('Authentication Required', 'Please log in with verified citizen credentials to report a problem.', 'info');
+                    navigate('/login?tab=citizen');
+                  }
+                }}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-lg shadow-xs transition cursor-pointer"
               >
                 <span>Report a Problem</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
 
               <Link
                 to="/map"

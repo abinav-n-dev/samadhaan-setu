@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { 
@@ -28,7 +28,8 @@ import {
   HeartPulse,
   Sprout,
   Info,
-  Send
+  Send,
+  Lock
 } from 'lucide-react';
 import { analyzeReportSimilarity } from '../../services/duplicateService';
 
@@ -160,8 +161,16 @@ const renderCategoryIcon = (category: string, isSelected: boolean) => {
 };
 
 export const ReportProblemWizard: React.FC = () => {
-  const { submitCitizenReport, reports, t, language } = useAppState();
+  const { submitCitizenReport, reports, t, language, isAuthenticated, addToast } = useAppState();
   const navigate = useNavigate();
+
+  // Guard: Redirect unauthenticated users to citizen login
+  useEffect(() => {
+    if (!isAuthenticated) {
+      addToast('Authentication Required', 'Please log in with verified citizen credentials to report a problem.', 'warning');
+      navigate('/login?tab=citizen', { replace: true });
+    }
+  }, [isAuthenticated, navigate, addToast]);
 
   // Mode: 'quick' (simple 1-page mobile flow) vs 'detailed' (5-step wizard)
   const [reportMode, setReportMode] = useState<'quick' | 'detailed'>('quick');
@@ -361,6 +370,28 @@ export const ReportProblemWizard: React.FC = () => {
     { num: 4, label: t('wizard.step_impact', 'Impact') },
     { num: 5, label: t('wizard.step_review', 'Review') },
   ];
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto my-12 p-6 bg-white rounded-2xl border border-brand-border text-center space-y-4 shadow-subtle">
+        <div className="w-12 h-12 bg-amber-50 border border-amber-200 text-amber-600 rounded-xl flex items-center justify-center mx-auto">
+          <Lock className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900">Authentication Required</h2>
+        <p className="text-xs text-slate-600">
+          Only verified citizens can report ground problems to the District Administration. Redirecting you to sign in...
+        </p>
+        <div className="pt-2">
+          <Link
+            to="/login?tab=citizen"
+            className="inline-flex items-center justify-center w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition"
+          >
+            Sign in as Citizen
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 pb-16 px-1 sm:px-0">

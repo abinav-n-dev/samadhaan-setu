@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { ProblemMap } from '../../components/map/ProblemMap';
 import { PriorityBadge } from '../../components/common/PriorityBadge';
@@ -26,7 +26,8 @@ import {
 } from 'lucide-react';
 
 export const LiveMapPage: React.FC = () => {
-  const { challenges } = useAppState();
+  const { challenges, isAuthenticated, addToast } = useAppState();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const initialId = searchParams.get('id');
 
@@ -104,13 +105,21 @@ export const LiveMapPage: React.FC = () => {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2 shrink-0">
-            <Link
-              to="/citizen/report"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
+            <button
+              type="button"
+              onClick={() => {
+                if (isAuthenticated) {
+                  navigate('/citizen/report');
+                } else {
+                  addToast('Authentication Required', 'Please log in with verified citizen credentials to report a problem.', 'info');
+                  navigate('/login?tab=citizen');
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs cursor-pointer"
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>Report Local Problem</span>
-            </Link>
+            </button>
             <Link
               to="/explore"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition"
@@ -393,13 +402,21 @@ export const LiveMapPage: React.FC = () => {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </Link>
 
-                <Link
-                  to={`/citizen/report?district=${encodeURIComponent(selectedChallenge.district)}`}
-                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 transition border border-slate-200"
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      navigate(`/citizen/report?district=${encodeURIComponent(selectedChallenge.district)}`);
+                    } else {
+                      addToast('Authentication Required', 'Please log in with verified citizen credentials to report a problem.', 'info');
+                      navigate('/login?tab=citizen');
+                    }
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 transition border border-slate-200 cursor-pointer"
                 >
                   <MapPin className="w-3.5 h-3.5 text-slate-500" />
                   <span>Report Related Issue in {selectedChallenge.district}</span>
-                </Link>
+                </button>
               </div>
             </div>
           ) : (

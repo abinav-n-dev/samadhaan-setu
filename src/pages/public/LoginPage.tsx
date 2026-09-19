@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { UserRole, UserProfile } from '../../types';
 import { getSupabaseClient, isSupabaseConfigured } from '../../services/supabase';
@@ -23,7 +23,21 @@ import {
 export const LoginPage: React.FC = () => {
   const { login, addToast } = useAppState();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'government' | 'citizen' | 'university' | 'partner'>('government');
+  const [searchParams] = useSearchParams();
+  const queryTab = searchParams.get('tab');
+
+  const [activeTab, setActiveTab] = useState<'government' | 'citizen' | 'university' | 'partner'>(() => {
+    if (queryTab === 'citizen' || queryTab === 'government' || queryTab === 'university' || queryTab === 'partner') {
+      return queryTab;
+    }
+    return 'government';
+  });
+
+  useEffect(() => {
+    if (queryTab === 'citizen' || queryTab === 'government' || queryTab === 'university' || queryTab === 'partner') {
+      setActiveTab(queryTab);
+    }
+  }, [queryTab]);
 
   // Government Form State
   const [govEmail, setGovEmail] = useState('dm.dumka@jharkhand.gov.in');

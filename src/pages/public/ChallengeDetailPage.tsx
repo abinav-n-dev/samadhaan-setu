@@ -35,6 +35,7 @@ export const ChallengeDetailPage: React.FC = () => {
     challenges, 
     reports, 
     role, 
+    isAuthenticated,
     verifyChallenge, 
     overridePriority, 
     adoptChallenge, 
@@ -258,76 +259,88 @@ export const ChallengeDetailPage: React.FC = () => {
 
           {/* Quick Role Actions CTA Box */}
           <div className="flex flex-col gap-2 min-w-[200px] sm:self-center">
-            {role === 'government' && (
+            {!isAuthenticated ? (
+              <Link
+                to="/login"
+                className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-slate-800 shadow-xs transition"
+              >
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Sign In to Take Action</span>
+              </Link>
+            ) : (
               <>
-                {challenge.verificationStatus !== 'verified' ? (
-                  <button
-                    onClick={handleVerify}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-xs transition"
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Verify Challenge</span>
-                  </button>
-                ) : (
-                  <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                    <div>
-                      <div className="font-bold">Government Verified</div>
-                      <div className="text-[11px] text-blue-700">{challenge.verifiedBy || 'DM Dumka'}</div>
-                    </div>
-                  </div>
+                {role === 'government' && (
+                  <>
+                    {challenge.verificationStatus !== 'verified' ? (
+                      <button
+                        onClick={handleVerify}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-xs transition"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Verify Challenge</span>
+                      </button>
+                    ) : (
+                      <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                        <div>
+                          <div className="font-bold">Government Verified</div>
+                          <div className="text-[11px] text-blue-700">{challenge.verifiedBy || 'DM Dumka'}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {challenge.status === 'impact_verification' && (
+                      <button
+                        onClick={handleImpactSignoff}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-emerald-700 shadow-subtle transition"
+                      >
+                        <Award className="w-4 h-4" />
+                        <span>Sign Off & Issue Credential</span>
+                      </button>
+                    )}
+                  </>
                 )}
 
-                {challenge.status === 'impact_verification' && (
+                {role === 'student' && !challenge.adoption && (
                   <button
-                    onClick={handleImpactSignoff}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-emerald-700 shadow-subtle transition"
+                    onClick={() => setShowAdoptModal(true)}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-700 shadow-subtle transition"
                   >
-                    <Award className="w-4 h-4" />
-                    <span>Sign Off & Issue Credential</span>
+                    <GraduationCap className="w-4 h-4" />
+                    <span>Adopt Challenge for Capstone</span>
+                  </button>
+                )}
+
+                {role === 'mentor' && challenge.adoption && challenge.adoption.mentorStatus === 'pending' && (
+                  <button
+                    onClick={() => approveMentorProposal(challenge.id)}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-800 shadow-subtle transition"
+                  >
+                    <UserCheck className="w-4 h-4" />
+                    <span>Approve Student Proposal</span>
+                  </button>
+                )}
+
+                {role === 'industry' && !challenge.industrySupport && (
+                  <button
+                    onClick={() => setShowSupportModal(true)}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-emerald-800 shadow-subtle transition"
+                  >
+                    <Building className="w-4 h-4" />
+                    <span>Commit Industry / CSR Support</span>
+                  </button>
+                )}
+
+                {role === 'ngo' && !challenge.fieldEvidence && (
+                  <button
+                    onClick={() => setShowEvidenceModal(true)}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-purple-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-purple-800 shadow-subtle transition"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>Upload Field Evidence</span>
                   </button>
                 )}
               </>
-            )}
-
-            {role === 'student' && !challenge.adoption && (
-              <button
-                onClick={() => setShowAdoptModal(true)}
-                className="w-full inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-700 shadow-subtle transition"
-              >
-                <GraduationCap className="w-4 h-4" />
-                <span>Adopt Challenge for Capstone</span>
-              </button>
-            )}
-
-            {role === 'mentor' && challenge.adoption && challenge.adoption.mentorStatus === 'pending' && (
-              <button
-                onClick={() => approveMentorProposal(challenge.id)}
-                className="w-full inline-flex items-center justify-center gap-2 bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-800 shadow-subtle transition"
-              >
-                <UserCheck className="w-4 h-4" />
-                <span>Approve Student Proposal</span>
-              </button>
-            )}
-
-            {role === 'industry' && !challenge.industrySupport && (
-              <button
-                onClick={() => setShowSupportModal(true)}
-                className="w-full inline-flex items-center justify-center gap-2 bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-emerald-800 shadow-subtle transition"
-              >
-                <Building className="w-4 h-4" />
-                <span>Commit Industry / CSR Support</span>
-              </button>
-            )}
-
-            {role === 'ngo' && !challenge.fieldEvidence && (
-              <button
-                onClick={() => setShowEvidenceModal(true)}
-                className="w-full inline-flex items-center justify-center gap-2 bg-purple-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-purple-800 shadow-subtle transition"
-              >
-                <Send className="w-4 h-4" />
-                <span>Upload Field Evidence</span>
-              </button>
             )}
 
             {challenge.status === 'resolved' && challenge.impactVerification && (
