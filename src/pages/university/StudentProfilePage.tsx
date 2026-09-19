@@ -3,14 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppState } from '../../context/StateContext';
 import { 
   Award, 
-  CheckCircle2, 
   GraduationCap, 
   Users, 
   Building, 
   ShieldCheck, 
   ExternalLink,
   MapPin,
-  FileCheck2,
   Code,
   User,
   Mail,
@@ -29,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export const StudentProfilePage: React.FC = () => {
-  const { currentUser, credentials, updateProfile, addToast } = useAppState();
+  const { currentUser, updateProfile, addToast } = useAppState();
   const navigate = useNavigate();
 
   // Profile data from currentUser or defaults matching user's reference mockup
@@ -512,85 +510,6 @@ export const StudentProfilePage: React.FC = () => {
               </p>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Verified Academic & Impact Metrics Section */}
-      <div className="pt-4 space-y-4">
-        <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
-          Verified Academic & Societal Impact
-        </h3>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono text-center">
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block font-sans">Projects Solved</span>
-            <span className="text-2xl font-black text-slate-900 dark:text-white mt-1 block">4</span>
-          </div>
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block font-sans">Gov Approved</span>
-            <span className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1 block">3</span>
-          </div>
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block font-sans">Pilots Done</span>
-            <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1 block">2</span>
-          </div>
-          <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 shadow-xs">
-            <span className="text-[10px] text-emerald-800 dark:text-emerald-400 font-bold uppercase block font-sans">People Impacted</span>
-            <span className="text-2xl font-black text-emerald-900 dark:text-emerald-200 mt-1 block">4,280</span>
-          </div>
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block font-sans">CSR Mentors</span>
-            <span className="text-2xl font-black text-slate-900 dark:text-white mt-1 block">2</span>
-          </div>
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block font-sans">NGO Partners</span>
-            <span className="text-2xl font-black text-slate-900 dark:text-white mt-1 block">1</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Issued Impact Credentials */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Public Verifiable Credentials</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Cryptographic certificates authenticated by state administration</p>
-          </div>
-          <span className="text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded">
-            {credentials.length} Credentials
-          </span>
-        </div>
-
-        <div className="space-y-3">
-          {credentials.map((cred) => (
-            <div
-              key={cred.id}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs"
-            >
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
-                    #{cred.id}
-                  </span>
-                  <span className="inline-flex items-center gap-1 font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded-full text-[10px]">
-                    <CheckCircle2 className="w-3 h-3" /> Impact Verified
-                  </span>
-                </div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white">{cred.title}</h4>
-                <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-                  Beneficiaries: <strong>{cred.impactPopulation.toLocaleString()} citizens</strong> • Issued by {cred.verifiedByOfficer}
-                </p>
-              </div>
-
-              <Link
-                to={`/verify/${cred.id}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg transition shadow-xs self-start sm:self-center shrink-0"
-              >
-                <FileCheck2 className="w-4 h-4" />
-                <span>Verify Credential</span>
-              </Link>
-            </div>
-          ))}
         </div>
       </div>
 
