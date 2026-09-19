@@ -263,6 +263,14 @@ export const LandingPage: React.FC = () => {
               </Link>
 
               <Link
+                to="/map"
+                className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm hover:bg-emerald-500/30 transition"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Live GIS Map</span>
+              </Link>
+
+              <Link
                 to="/explore"
                 className="inline-flex items-center gap-2 text-gray-300 hover:text-white text-xs sm:text-sm font-semibold px-3 py-2"
               >

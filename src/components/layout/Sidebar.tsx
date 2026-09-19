@@ -48,12 +48,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
       case 'citizen':
         return [
           { to: '/citizen', label: t('side.citizen_dashboard', 'Citizen Dashboard'), icon: <Home className="w-4 h-4" /> },
+          { to: '/map', label: t('side.live_gis_map', 'Live GIS Problem Map'), icon: <Map className="w-4 h-4" /> },
           { to: '/citizen/report', label: t('side.report_problem', 'Report a Problem'), icon: <PlusCircle className="w-4 h-4" /> },
           { to: '/citizen/reports', label: t('side.my_reports', 'My Submissions & Tracking'), icon: <ListOrdered className="w-4 h-4" /> },
         ];
       case 'student':
         return [
           { to: '/university', label: t('side.university_dashboard', 'Innovation Dashboard'), icon: <GraduationCap className="w-4 h-4" /> },
+          { to: '/map', label: t('side.live_gis_map', 'Live GIS Problem Map'), icon: <Map className="w-4 h-4" /> },
           { to: '/university/challenges', label: t('side.recommended_challenges', 'Recommended Challenges'), icon: <Compass className="w-4 h-4" /> },
           { to: '/university/projects', label: t('side.active_projects', 'Active Projects & Milestones'), icon: <CheckCircle className="w-4 h-4" /> },
           { to: '/university/achievements', label: t('side.student_profile', 'Student Impact Profile'), icon: <Award className="w-4 h-4" /> },
@@ -74,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
         return [
           { to: '/ngo', label: t('side.field_ops', 'Field Operations Desk'), icon: <HeartHandshake className="w-4 h-4" /> },
           { to: '/ngo/evidence', label: t('side.submit_evidence', 'Submit Field Evidence'), icon: <UploadCloud className="w-4 h-4" /> },
-          { to: '/government/map', label: t('side.incident_map', 'Ground Incident Map'), icon: <Map className="w-4 h-4" /> },
+          { to: '/map', label: t('side.incident_map', 'Ground Incident Map'), icon: <Map className="w-4 h-4" /> },
         ];
       default:
         return [];
@@ -83,6 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile = false, onCloseM
 
   const publicLinks = [
     { to: '/', label: t('side.overview', 'Overview'), icon: <Home className="w-4 h-4" /> },
+    { to: '/map', label: t('side.live_gis_map', 'Live GIS Problem Map'), icon: <Map className="w-4 h-4" /> },
     { to: '/explore', label: t('side.explore_challenges', 'Explore Challenges'), icon: <Compass className="w-4 h-4" /> },
     { to: '/solutions', label: t('side.solutions', 'Impact Showcase'), icon: <Award className="w-4 h-4" /> },
     { to: '/how-it-works', label: t('side.how_it_works', 'How Ecosystem Works'), icon: <HelpCircle className="w-4 h-4" /> },

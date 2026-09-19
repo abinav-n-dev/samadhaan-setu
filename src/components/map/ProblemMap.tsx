@@ -8,12 +8,14 @@ import { Layers, Filter, RefreshCw, ZoomIn, ZoomOut, CheckCircle2 } from 'lucide
 interface ProblemMapProps {
   challenges: Challenge[];
   selectedChallengeId?: string;
+  onSelectChallenge?: (challenge: Challenge) => void;
   height?: string;
   showFilters?: boolean;
+  className?: string;
 }
 
 // Custom Leaflet DivIcon generator
-const createCustomMarkerIcon = (challenge: Challenge, activeLayer: string) => {
+const createCustomMarkerIcon = (challenge: Challenge, activeLayer: string, isSelected: boolean = false) => {
   let color = '#4DAA78'; // Low (green)
   let ringColor = 'rgba(77, 170, 120, 0.4)';
   let label = challenge.priorityScore.toString();
@@ -39,9 +41,10 @@ const createCustomMarkerIcon = (challenge: Challenge, activeLayer: string) => {
   const isCritical = challenge.priorityLevel === 'CRITICAL' && challenge.status !== 'resolved';
 
   const html = `
-    <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;">
-      ${isCritical ? `<div style="position: absolute; width: 36px; height: 36px; border-radius: 50%; background: ${ringColor}; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>` : ''}
-      <div style="position: relative; width: 28px; height: 28px; border-radius: 50%; background: ${color}; border: 2.5px solid #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 11px; font-family: 'Plus Jakarta Sans', sans-serif;">
+    <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; cursor: pointer; transition: transform 0.2s ease;">
+      ${isCritical ? `<div style="position: absolute; width: 38px; height: 38px; border-radius: 50%; background: ${ringColor}; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>` : ''}
+      ${isSelected ? `<div style="position: absolute; width: 42px; height: 42px; border-radius: 50%; border: 3px solid #10B981; animation: pulse 2s infinite;"></div>` : ''}
+      <div style="position: relative; width: ${isSelected ? '32px' : '28px'}; height: ${isSelected ? '32px' : '28px'}; border-radius: 50%; background: ${color}; border: ${isSelected ? '3px solid #ffffff' : '2.5px solid #ffffff'}; box-shadow: ${isSelected ? '0 0 0 3px #10B981, 0 8px 16px rgba(0,0,0,0.35)' : '0 4px 8px rgba(0,0,0,0.25)'}; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: ${isSelected ? '12px' : '11px'}; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease;">
         ${label}
       </div>
     </div>
@@ -50,9 +53,9 @@ const createCustomMarkerIcon = (challenge: Challenge, activeLayer: string) => {
   return L.divIcon({
     html,
     className: 'custom-gis-pin',
-    iconSize: [36, 36],
-    iconAnchor: [18, 18],
-    popupAnchor: [0, -18],
+    iconSize: [42, 42],
+    iconAnchor: [21, 21],
+    popupAnchor: [0, -20],
   });
 };
 
@@ -70,8 +73,10 @@ const MapController: React.FC<{ targetLocation?: [number, number] }> = ({ target
 export const ProblemMap: React.FC<ProblemMapProps> = ({
   challenges,
   selectedChallengeId,
+  onSelectChallenge,
   height = '540px',
   showFilters = true,
+  className = '',
 }) => {
   const [districtFilter, setDistrictFilter] = useState<string>('All');
   const [categoryFilter, setCategoryFilter] = useState<string>('All');
@@ -111,7 +116,7 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
   }, [challenges, selectedChallengeId]);
 
   return (
-    <div className="bg-white rounded-xl border border-brand-border shadow-subtle overflow-hidden flex flex-col">
+    <div className={`bg-white rounded-xl border border-brand-border shadow-subtle overflow-hidden flex flex-col ${className}`}>
       {/* Top Filter Bar */}
       {showFilters && (
         <div className="p-3.5 bg-brand-bg border-b border-brand-border flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -200,7 +205,12 @@ export const ProblemMap: React.FC<ProblemMapProps> = ({
             <Marker
               key={challenge.id}
               position={[challenge.coordinates.lat, challenge.coordinates.lng]}
-              icon={createCustomMarkerIcon(challenge, activeLayer)}
+              icon={createCustomMarkerIcon(challenge, activeLayer, challenge.id === selectedChallengeId)}
+              eventHandlers={{
+                click: () => {
+                  onSelectChallenge?.(challenge);
+                }
+              }}
             >
               <Popup>
                 <MapPopupContent challenge={challenge} />

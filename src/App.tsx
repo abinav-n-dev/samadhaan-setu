@@ -12,6 +12,7 @@ import { SolutionsPage } from './pages/public/SolutionsPage';
 import { HowItWorksPage } from './pages/public/HowItWorksPage';
 import { VerifyCredentialPage } from './pages/public/VerifyCredentialPage';
 import { LoginPage } from './pages/public/LoginPage';
+import { LiveMapPage } from './pages/public/LiveMapPage';
 
 // Citizen pages
 import { CitizenDashboard } from './pages/citizen/CitizenDashboard';
@@ -54,6 +55,7 @@ export const App: React.FC = () => {
             {/* Public Ecosystem routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/explore" element={<ExploreChallengesPage />} />
+            <Route path="/map" element={<LiveMapPage />} />
             <Route path="/challenges/:id" element={<ChallengeDetailPage />} />
             <Route path="/solutions" element={<SolutionsPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />

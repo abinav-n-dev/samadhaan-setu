@@ -17,7 +17,8 @@ import {
   Building,
   HeartHandshake,
   Sun,
-  Moon
+  Moon,
+  MapPin
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -83,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
           </Link>
 
           {/* Global Search */}
-          <form onSubmit={handleSearchSubmit} className="relative hidden sm:block w-64 md:w-80">
+          <form onSubmit={handleSearchSubmit} className="relative hidden sm:block w-56 md:w-72 lg:w-80">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
             <input
               type="text"
@@ -93,6 +94,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
               className="w-full bg-brand-bg border border-brand-border rounded-xl pl-9 pr-3 py-1.5 text-xs text-brand-text placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-mint focus:bg-white"
             />
           </form>
+
+          {/* Live GIS Map Link */}
+          <Link
+            to="/map"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100/80 transition shadow-xs"
+            title="Open Live GIS Problem Map"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="hidden sm:inline">Live Map</span>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5">
